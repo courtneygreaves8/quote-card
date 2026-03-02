@@ -3,7 +3,7 @@ import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicyDrawer } from "@/components/PolicyDrawer"
 import { QuoteCard } from "@/components/QuoteCard"
-import { QuoteSidebar } from "@/components/QuoteSidebar"
+import { QuoteSidebar } from "./components/QuoteSidebar"
 import {
   Select,
   SelectContent,
