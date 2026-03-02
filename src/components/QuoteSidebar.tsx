@@ -195,7 +195,7 @@ export function QuoteSidebar({
               }
             />
           </div>
-          <div className="flex items-center justify-between gap-4 pl-2">
+          <div className="flex items-center justify-between gap-4">
             <Label htmlFor="buildings-accidental" className="font-normal text-muted-foreground text-sm">
               Buildings accidental damage
             </Label>
