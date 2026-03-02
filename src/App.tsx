@@ -3,7 +3,7 @@ import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicyDrawer } from "@/components/PolicyDrawer"
 import { QuoteCard } from "@/components/QuoteCard"
-import { QuoteSidebar } from "./components/QuoteSidebar"
+import { QuoteSidebar } from "@/components/QuoteSidebar"
 import {
   Select,
   SelectContent,
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { mockQuotes } from "@/data/quotes"
+import { EXCESS_OPTIONS } from "@/lib/constants"
+import { parseExcessNum } from "@/lib/utils"
 import { Quote, QuoteFilters as QuoteFiltersType } from "@/types/quote"
 
 type SortOption = "price-asc" | "price-desc" | "provider-az"
@@ -29,18 +31,17 @@ const defaultFilters: QuoteFiltersType = {
   homeEmergency: false,
 }
 
-const QUOTE_REF = "QR-" + Math.random().toString(36).slice(2, 10).toUpperCase()
-
-const EXCESS_OPTIONS = Array.from(
-  { length: 21 },
-  (_, i) => (i === 20 ? "£1,000" : `£${i * 50}`)
-)
+const QUOTE_REF =
+  "QR-" + Math.random().toString(36).slice(2, 10).toUpperCase()
 
 const MIN_QUOTES = 3
 const MAX_QUOTES = 7
 
-function parseExcessNum(s: string): number {
-  return parseInt(s.replace(/[£,]/g, ""), 10) || 0
+const FILTER_MAX_PRICE: Record<FilterOption, number | null> = {
+  all: null,
+  "under-20": 20,
+  "under-25": 25,
+  "under-30": 30,
 }
 
 function App() {
@@ -63,8 +64,7 @@ function App() {
         parseExcessNum(q.policyDetails.excess) <= selectedExcessNum &&
         q.policyDetails.policyType === filters.policyType
     )
-    const maxPrice =
-      filter === "under-20" ? 20 : filter === "under-25" ? 25 : filter === "under-30" ? 30 : null
+    const maxPrice = FILTER_MAX_PRICE[filter]
     if (maxPrice != null) {
       list = list.filter((q) => q.piklPrice <= maxPrice)
     }
@@ -98,8 +98,7 @@ function App() {
     }
     const includedIds = new Set(quotes.map((q) => q.id))
     const selectedExcessNum = parseExcessNum(filters.excess)
-    const maxPrice =
-      filter === "under-20" ? 20 : filter === "under-25" ? 25 : filter === "under-30" ? 30 : null
+    const maxPrice = FILTER_MAX_PRICE[filter]
     const others = mockQuotes
       .filter((q) => {
         if (q.policyDetails.policyType !== filters.policyType || includedIds.has(q.id)) return false
@@ -138,13 +137,13 @@ function App() {
         <Navbar />
         <div className="flex min-h-0 flex-1">
           <QuoteSidebar
-          quoteReference={QUOTE_REF}
-          filters={filters}
-          onFiltersChange={setFilters}
-          onEditAnswers={handleEditAnswers}
-        />
-        <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-5xl px-6 py-8">
+            quoteReference={QUOTE_REF}
+            filters={filters}
+            onFiltersChange={setFilters}
+            onEditAnswers={handleEditAnswers}
+          />
+          <main className="flex-1 overflow-y-auto">
+            <div className="mx-auto max-w-5xl px-6 py-8">
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground">
@@ -161,22 +160,22 @@ function App() {
                 <SelectTrigger className="w-[180px]" aria-label="Sort">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
-                  <SelectContent>
+                <SelectContent>
                     <SelectItem value="price-asc">Price: low to high</SelectItem>
                     <SelectItem value="price-desc">Price: high to low</SelectItem>
                     <SelectItem value="provider-az">Provider A–Z</SelectItem>
-                  </SelectContent>
+                </SelectContent>
               </Select>
               <Select value={filter} onValueChange={(v) => setFilter(v as FilterOption)}>
                 <SelectTrigger className="w-[160px]" aria-label="Filter">
                   <SelectValue placeholder="Filter" />
                 </SelectTrigger>
-                  <SelectContent>
+                <SelectContent>
                     <SelectItem value="all">All quotes</SelectItem>
                     <SelectItem value="under-20">Under £20/mo</SelectItem>
                     <SelectItem value="under-25">Under £25/mo</SelectItem>
                     <SelectItem value="under-30">Under £30/mo</SelectItem>
-                  </SelectContent>
+                </SelectContent>
               </Select>
             </div>
           </div>
@@ -205,9 +204,9 @@ function App() {
                 </p>
               </div>
             )}
-          </div>
-        </div>
-        </main>
+            </div>
+            </div>
+          </main>
         </div>
         <PolicyDrawer
           quote={selectedQuote}
