@@ -49,23 +49,8 @@ export function QuoteCard({
       <div className="flex min-h-[5rem] items-stretch justify-between gap-0 overflow-x-auto px-0 py-4">
         {/* Logo */}
         <div className="flex shrink-0 items-center px-4">
-          <div className="relative flex size-[4.8rem] items-center justify-center rounded-lg bg-muted/60 p-2">
-            <svg
-              className="pointer-events-none absolute inset-0 h-full w-full text-[hsl(0,0%,72%)]"
-              aria-hidden
-            >
-              <rect
-                width="100%"
-                height="100%"
-                rx="8"
-                ry="8"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeDasharray="8 8"
-              />
-            </svg>
-            <span className="relative text-sm font-bold text-muted-foreground">
+          <div className="flex size-[4.8rem] items-center justify-center rounded-lg bg-neutral-100 p-2">
+            <span className="text-sm font-bold text-muted-foreground">
               LOGO
             </span>
           </div>
@@ -170,14 +155,14 @@ export function QuoteCard({
 
         {/* CTAs */}
         <div className="flex shrink-0 flex-col items-center gap-2 px-4">
-          <Button size="sm" className="w-full text-sm">
+          <Button size="sm" className="w-full text-xs">
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
             Purchase
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-sm"
+            className="w-full text-xs"
             onClick={() => onMoreDetails(quote)}
           >
             <Info className="h-3.5 w-3.5 shrink-0" />

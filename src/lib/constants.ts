@@ -19,7 +19,7 @@ export const PAYMENT_ACTIVE_CLASS =
 
 /** Payment option button: inactive state */
 export const PAYMENT_INACTIVE_CLASS =
-  "flex-1 rounded-[8px] hover:bg-neutral-200"
+  "flex-1 rounded-[8px] hover:bg-neutral-100"
 
 /** Sidebar excess +/- button (square, soft border) */
 export const EXCESS_BTN_CLASS =

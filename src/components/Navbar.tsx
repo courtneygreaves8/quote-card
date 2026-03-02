@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CreateAccountDrawer } from "@/components/CreateAccountDrawer"
 import { LAYOUT_PADDING_X } from "@/lib/constants"
-import { HelpCircle, LogIn, Rocket, UserPlus } from "lucide-react"
+import { LogIn, Rocket, UserPlus } from "lucide-react"
 
 export function Navbar() {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
@@ -18,7 +18,7 @@ export function Navbar() {
             <Rocket className="h-4 w-4" stroke="url(#navbarRocketGrad)" strokeWidth={2} />
           </span>
           <span className="text-lg font-black uppercase tracking-tight text-black">
-            Pikl Prototype
+            Pikl <span className="font-light">Prototype</span>
           </span>
           <svg width={0} height={0} aria-hidden>
             <defs>
@@ -42,10 +42,6 @@ export function Navbar() {
           >
             <UserPlus className="h-4 w-4" />
             Create account
-          </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 border-border">
-            <HelpCircle className="h-4 w-4" />
-            Help
           </Button>
         </div>
     </header>

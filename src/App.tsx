@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react"
+import { Button } from "@/components/ui/button"
 import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicyDrawer } from "@/components/PolicyDrawer"
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { mockQuotes } from "@/data/quotes"
+import { HelpCircle } from "lucide-react"
 import { EXCESS_OPTIONS } from "@/lib/constants"
 import { parseExcessNum } from "@/lib/utils"
 import { Quote, QuoteFilters as QuoteFiltersType } from "@/types/quote"
@@ -218,6 +220,14 @@ function App() {
           open={showLoadingModal}
           onClose={() => setShowLoadingModal(false)}
         />
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed bottom-6 right-6 z-50 h-10 w-10 rounded-full border-border shadow-md"
+          aria-label="Help"
+        >
+          <HelpCircle className="h-5 w-5" />
+        </Button>
       </div>
     </TooltipProvider>
   )

@@ -9,38 +9,97 @@ import {
 import { Check, Loader2, Pencil, X, Zap } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const PREPOPULATED_USER = {
-  name: "John Smith",
-  email: "john.smith@example.com",
-  mobile: "07700 900123",
-  address: "123 Example Street, London, SW1A 1AA",
-}
-
 interface CreateAccountDrawerProps {
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const STEP_DURATION_MS = 450
+const FIELDS = [
+  {
+    id: "name",
+    label: "Full name",
+    inputId: "create-account-name",
+    type: "text" as const,
+    value: "John Smith",
+    placeholder: "Your full name",
+  },
+  {
+    id: "email",
+    label: "Email",
+    inputId: "create-account-email",
+    type: "email" as const,
+    value: "john.smith@example.com",
+    placeholder: "you@example.com",
+  },
+  {
+    id: "mobile",
+    label: "Mobile number",
+    inputId: "create-account-mobile",
+    type: "tel" as const,
+    value: "07700 900123",
+    placeholder: "07XXX XXXXXX",
+  },
+  {
+    id: "address",
+    label: "Address",
+    inputId: "create-account-address",
+    type: "text" as const,
+    value: "123 Example Street, London, SW1A 1AA",
+    placeholder: "Your address",
+  },
+]
 
-const inputClassName =
-  "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground transition-colors hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-background"
+const REVEAL_DELAY_BASE_MS = 400
+const REVEAL_DURATION_MS = 700
+/** Each field's reveal starts when the previous field's reveal has finished (and turned green). [1000, 2400, 3800, 5200] */
+const REVEAL_START_DELAYS = (() => {
+  const a: number[] = []
+  let t = REVEAL_DELAY_BASE_MS
+  for (let i = 0; i < FIELDS.length; i++) {
+    a.push(t)
+    t += REVEAL_DURATION_MS
+  }
+  return a
+})()
+/** Time when last field's reveal finishes. */
+const FORM_POPULATED_AFTER_MS = REVEAL_START_DELAYS[REVEAL_START_DELAYS.length - 1] + REVEAL_DURATION_MS
+
+const inputBaseClassName =
+  "flex h-10 w-full rounded-md border-2 bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground transition-colors hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-background"
 
 export function CreateAccountDrawer({
   open,
   onOpenChange,
 }: CreateAccountDrawerProps) {
-  const [progressStep, setProgressStep] = useState(0) // 0 = idle, 1–4 = that many fields checked
+  const [progressStep, setProgressStep] = useState(0)
+  const [formPopulated, setFormPopulated] = useState(false)
+  const [revealedCount, setRevealedCount] = useState(0)
   const progressCleanupRef = useRef<(() => void) | null>(null)
+
+  useEffect(() => {
+    if (!open) {
+      setProgressStep(0)
+      setFormPopulated(false)
+      setRevealedCount(0)
+      progressCleanupRef.current?.()
+      progressCleanupRef.current = null
+      return
+    }
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+    for (let i = 1; i <= FIELDS.length; i++) {
+      const ms = REVEAL_START_DELAYS[i - 1] + REVEAL_DURATION_MS
+      timeouts.push(setTimeout(() => setRevealedCount(i), ms))
+    }
+    timeouts.push(setTimeout(() => setFormPopulated(true), FORM_POPULATED_AFTER_MS))
+    return () => timeouts.forEach((t) => clearTimeout(t))
+  }, [open])
 
   const runProgress = useCallback(() => {
     setProgressStep(1)
-    const t1 = setTimeout(() => setProgressStep(2), STEP_DURATION_MS)
-    const t2 = setTimeout(() => setProgressStep(3), STEP_DURATION_MS * 2)
-    const t3 = setTimeout(() => setProgressStep(4), STEP_DURATION_MS * 3)
-    const t4 = setTimeout(() => {
-      onOpenChange(false)
-    }, STEP_DURATION_MS * 4 + 200)
+    const t1 = setTimeout(() => setProgressStep(2), 450)
+    const t2 = setTimeout(() => setProgressStep(3), 450 * 2)
+    const t3 = setTimeout(() => setProgressStep(4), 450 * 3)
+    const t4 = setTimeout(() => onOpenChange(false), 450 * 4 + 200)
     const cleanup = () => {
       clearTimeout(t1)
       clearTimeout(t2)
@@ -50,14 +109,6 @@ export function CreateAccountDrawer({
     progressCleanupRef.current = cleanup
     return cleanup
   }, [onOpenChange])
-
-  useEffect(() => {
-    if (!open) {
-      setProgressStep(0)
-      progressCleanupRef.current?.()
-      progressCleanupRef.current = null
-    }
-  }, [open])
 
   const isSubmitting = progressStep > 0
 
@@ -103,101 +154,79 @@ export function CreateAccountDrawer({
             </p>
           </div>
 
-          <div className="relative mt-6 overflow-hidden rounded-lg border border-border bg-background p-4">
-            {/* Scanning line overlay – runs once when drawer opens */}
-            {open && progressStep === 0 && (
-                <div
-                  className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-lg"
-                  aria-hidden
-                >
-                  <div
-                    className="animate-scanning-line absolute left-0 right-0 top-0 h-1 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20"
-                    style={{
-                      boxShadow: "0 0 16px 4px hsl(var(--primary) / 0.25)",
-                    }}
-                />
-              </div>
-            )}
-
-            <div className="relative animate-scanning-reveal space-y-4">
-              <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
-                <Check className="h-4 w-4 text-primary" aria-hidden />
-                <span>Pre-filled from your quote — edit as needed</span>
-              </div>
-              <div className="space-y-4">
-                {[
-                  {
-                    id: "name",
-                    label: "Full name",
-                    inputId: "create-account-name",
-                    type: "text",
-                    defaultValue: PREPOPULATED_USER.name,
-                    placeholder: "Your full name",
-                  },
-                  {
-                    id: "email",
-                    label: "Email",
-                    inputId: "create-account-email",
-                    type: "email",
-                    defaultValue: PREPOPULATED_USER.email,
-                    placeholder: "you@example.com",
-                  },
-                  {
-                    id: "mobile",
-                    label: "Mobile number",
-                    inputId: "create-account-mobile",
-                    type: "tel",
-                    defaultValue: PREPOPULATED_USER.mobile,
-                    placeholder: "07XXX XXXXXX",
-                  },
-                  {
-                    id: "address",
-                    label: "Address",
-                    inputId: "create-account-address",
-                    type: "text",
-                    defaultValue: PREPOPULATED_USER.address,
-                    placeholder: "Your address",
-                  },
-                ].map((field, index) => {
-                  const step = index + 1
-                  const isChecked = progressStep >= step
-                  return (
-                    <div key={field.id} className="space-y-2">
-                      <div className="flex items-center justify-between gap-2">
-                        <Label htmlFor={field.inputId}>{field.label}</Label>
-                        {isChecked && (
+<div className="mt-6 space-y-4 rounded-lg border border-border bg-background p-4">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+              <span>Pre-filled from your quote — edit as needed</span>
+            </div>
+            <div className="space-y-4">
+              {FIELDS.map((field, index) => {
+                const step = index + 1
+                const isChecked = progressStep >= step
+                const isRevealed = index < revealedCount
+                const revealDelayMs = open ? REVEAL_START_DELAYS[index] : 0
+                return (
+                  <div key={field.id} className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <Label htmlFor={field.inputId}>{field.label}</Label>
+                      {isChecked && (
+                        <span
+                          className="animate-field-check-in flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
+                          aria-hidden
+                        >
+                          <Check className="h-3 w-3" strokeWidth={3} />
+                        </span>
+                      )}
+                    </div>
+                    <div className="group relative overflow-hidden rounded-md">
+                      <input
+                        id={field.inputId}
+                        type={field.type}
+                        defaultValue={field.value}
+                        className={`${inputBaseClassName} border-input`}
+                        placeholder={field.placeholder}
+                        disabled={isSubmitting}
+                        readOnly={isSubmitting}
+                        aria-busy={isSubmitting && progressStep === step}
+                      />
+                      {open && (
+                        <div
+                          className="animate-details-reveal pointer-events-none absolute inset-0 z-[1] rounded-md bg-background"
+                          style={{
+                            animationDelay: `${revealDelayMs}ms`,
+                            animationFillMode: "forwards",
+                          }}
+                          aria-hidden
+                        />
+                      )}
+                      {isRevealed && (
+                        <>
                           <span
-                            className="animate-field-check-in flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
+                            className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-green-700 transition-opacity group-hover:opacity-0"
                             aria-hidden
                           >
-                            <Check className="h-3 w-3" strokeWidth={3} />
+                            <Check className="h-4 w-4" strokeWidth={2.5} />
                           </span>
-                        )}
-                      </div>
-                      <div className="group relative">
-                        <input
-                          id={field.inputId}
-                          type={field.type}
-                          defaultValue={field.defaultValue}
-                          className={inputClassName}
-                          placeholder={field.placeholder}
-                          disabled={isSubmitting}
-                          readOnly={isSubmitting}
-                          aria-busy={isSubmitting && progressStep === step}
-                        />
-                        {!isSubmitting && (
                           <span
-                            className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
+                            className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
                             aria-hidden
                           >
                             <Pencil className="h-4 w-4" />
                           </span>
-                        )}
-                      </div>
+                        </>
+                      )}
+                      {!isSubmitting && !isRevealed && (
+                        <span
+                          className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
+                          aria-hidden
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </span>
+                      )}
                     </div>
-                  )
-                })}
-              </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
@@ -206,11 +235,15 @@ export function CreateAccountDrawer({
             style={{ animationDelay: "0.4s" }}
           >
             <Button
-              className="w-full"
+              className={`w-full transition-colors disabled:opacity-100 disabled:shadow-none disabled:hover:opacity-100 ${
+                formPopulated && !isSubmitting
+                  ? ""
+                  : "bg-neutral-300 text-neutral-600 hover:bg-neutral-300 hover:text-neutral-600"
+              }`}
               size="lg"
               onClick={handleCreateAccount}
-              disabled={isSubmitting}
-              variant="default"
+              disabled={isSubmitting || !formPopulated}
+              variant={formPopulated && !isSubmitting ? "default" : "ghost"}
             >
               {isSubmitting ? (
                 <>

@@ -186,18 +186,6 @@ export function QuoteSidebar({
         <Label>Add-ons</Label>
         <div className="space-y-5">
           <div className={ADDON_ROW_CLASS}>
-            <Label htmlFor="home-emergency" className={ADDON_LABEL_CLASS}>
-              Home emergency
-            </Label>
-            <Switch
-              id="home-emergency"
-              checked={filters.homeEmergency}
-              onCheckedChange={(checked) =>
-                onFiltersChange({ ...filters, homeEmergency: checked })
-              }
-            />
-          </div>
-          <div className={ADDON_ROW_CLASS}>
             <Label htmlFor="buildings-accidental" className={`${ADDON_LABEL_CLASS} text-sm`}>
               Buildings accidental damage
             </Label>
@@ -206,6 +194,18 @@ export function QuoteSidebar({
               checked={filters.buildingsAccidentalDamage}
               onCheckedChange={(checked) =>
                 onFiltersChange({ ...filters, buildingsAccidentalDamage: checked })
+              }
+            />
+          </div>
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="home-emergency" className={ADDON_LABEL_CLASS}>
+              Home emergency
+            </Label>
+            <Switch
+              id="home-emergency"
+              checked={filters.homeEmergency}
+              onCheckedChange={(checked) =>
+                onFiltersChange({ ...filters, homeEmergency: checked })
               }
             />
           </div>

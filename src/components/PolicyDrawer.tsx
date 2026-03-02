@@ -187,6 +187,7 @@ function PolicyDrawerRight({
   const [openFees, setOpenFees] = useState(false)
   const [openExcess, setOpenExcess] = useState(false)
   const [openDocuments, setOpenDocuments] = useState(false)
+  const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
   return (
     <div className="flex min-h-0 w-2/3 flex-1 flex-col overflow-y-auto p-6 pr-4 pt-[5.5rem]">
@@ -309,25 +310,28 @@ function PolicyDrawerRight({
         </div>
       </DrawerSection>
 
-      <Card className="mt-6 overflow-hidden rounded-[8px] border border-border">
-        <CardContent className="p-4">
-          <span
-            className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground"
-            aria-hidden
-          >
-            <Building2 className="h-3.5 w-3.5" />
-          </span>
-          <h3 className="mb-2 text-sm font-semibold text-foreground">
-            About the insurer
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            {providerName} is a regulated insurance provider. This policy is
-            underwritten in accordance with UK insurance regulations. For
-            questions about your cover or to make a claim, contact the insurer
-            using the details in your policy documents.
-          </p>
-        </CardContent>
-      </Card>
+      <DrawerSection
+        title="About the insurer"
+        open={openAboutInsurer}
+        onToggle={() => setOpenAboutInsurer((v) => !v)}
+      >
+        <Card className="overflow-hidden rounded-[8px] border border-border">
+          <CardContent className="p-4">
+            <span
+              className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground"
+              aria-hidden
+            >
+              <Building2 className="h-3.5 w-3.5" />
+            </span>
+            <p className="text-sm text-muted-foreground">
+              {providerName} is a regulated insurance provider. This policy is
+              underwritten in accordance with UK insurance regulations. For
+              questions about your cover or to make a claim, contact the insurer
+              using the details in your policy documents.
+            </p>
+          </CardContent>
+        </Card>
+      </DrawerSection>
     </div>
   )
 }
