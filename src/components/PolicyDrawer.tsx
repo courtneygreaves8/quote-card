@@ -12,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 import { PolicyDetails as PolicyDetailsType, Quote } from "@/types/quote"
 import {
   Building2,
@@ -120,7 +121,10 @@ function DrawerSection({
       >
         <span className="font-semibold text-foreground">{title}</span>
         <ChevronDown
-          className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
+          className={cn(
+            "h-4 w-4 shrink-0 text-muted-foreground transition-transform",
+            open && "rotate-180"
+          )}
         />
       </button>
       {open && (
@@ -294,12 +298,12 @@ function PolicyDrawerRight({
         onToggle={() => setOpenDocuments((v) => !v)}
       >
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm">
-            <Download className="mr-1.5 h-3.5 w-3.5" />
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Download className="h-4 w-4" />
             Policy document
           </Button>
-          <Button variant="outline" size="sm">
-            <Download className="mr-1.5 h-3.5 w-3.5" />
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Download className="h-4 w-4" />
             Policy summary
           </Button>
         </div>

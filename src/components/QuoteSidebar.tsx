@@ -15,20 +15,23 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {
+  COVER_TYPES,
+  EXCESS_BTN_CLASS,
+  EXCESS_OPTIONS,
+  LAYOUT_PADDING_X,
+  PAYMENT_ACTIVE_CLASS,
+  PAYMENT_INACTIVE_CLASS,
+} from "@/lib/constants"
 import { QuoteFilters as QuoteFiltersType } from "@/types/quote"
 import { Calendar, Copy, Mail, Minus, Pencil, Plus } from "lucide-react"
 import { useCallback, useRef } from "react"
 
-const COVER_TYPES = [
-  "Buildings only",
-  "Contents only",
-  "Buildings & Contents",
-]
-
-const EXCESS_OPTIONS = Array.from(
-  { length: 21 },
-  (_, i) => (i === 20 ? "£1,000" : `£${i * 50}`)
-)
+const SIDEBAR_ICON_BTN_CLASS = "h-8 w-8 shrink-0"
+const ADDON_ROW_CLASS = "flex items-center justify-between gap-4"
+const ADDON_LABEL_CLASS = "font-normal text-muted-foreground"
+const COVER_DATE_INPUT_CLASS =
+  "flex h-full flex-1 rounded-md border-0 bg-transparent py-2.5 pl-3.5 pr-2 text-sm text-foreground placeholder:text-neutral-400 transition-colors [color-scheme:light] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE2A7B]/25 focus-visible:ring-offset-2 focus-visible:bg-white [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10 [&::-webkit-calendar-picker-indicator]:h-10 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
 
 interface QuoteSidebarProps {
   quoteReference: string
@@ -64,11 +67,10 @@ export function QuoteSidebar({
   }, [])
 
   return (
-    <aside className="flex w-[380px] shrink-0 flex-col gap-4 border-r border-border bg-white p-6">
+    <aside className={`flex w-[342px] shrink-0 flex-col gap-5 border-r border-border bg-white py-6 ${LAYOUT_PADDING_X}`}>
       <Button
         variant="outline"
-        size="sm"
-        className="w-full justify-center gap-2"
+        className="h-10 w-full justify-center gap-2 px-4 py-2 text-sm"
         onClick={onEditAnswers}
       >
         <Pencil className="h-4 w-4" />
@@ -88,7 +90,7 @@ export function QuoteSidebar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 shrink-0"
+                className={SIDEBAR_ICON_BTN_CLASS}
                 onClick={handleCopyRef}
                 aria-label="Copy quote reference"
               >
@@ -104,7 +106,7 @@ export function QuoteSidebar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 shrink-0"
+                className={SIDEBAR_ICON_BTN_CLASS}
                 onClick={handleEmailRef}
                 aria-label="Email quote reference"
               >
@@ -133,7 +135,7 @@ export function QuoteSidebar({
             onChange={(e) =>
               onFiltersChange({ ...filters, coverStartDate: e.target.value })
             }
-            className="flex h-full flex-1 rounded-md border-0 bg-transparent py-2.5 pl-3.5 pr-2 text-sm text-foreground placeholder:text-neutral-400 transition-colors [color-scheme:light] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE2A7B]/25 focus-visible:ring-offset-2 focus-visible:bg-white [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10 [&::-webkit-calendar-picker-indicator]:h-10 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+            className={COVER_DATE_INPUT_CLASS}
           />
           <Tooltip>
             <TooltipTrigger asChild>
@@ -141,7 +143,7 @@ export function QuoteSidebar({
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 shrink-0"
+                className={SIDEBAR_ICON_BTN_CLASS}
                 onClick={handleOpenDatePicker}
                 aria-label="Open calendar"
               >
@@ -183,8 +185,8 @@ export function QuoteSidebar({
       <div className="space-y-4">
         <Label>Add-ons</Label>
         <div className="space-y-5">
-          <div className="flex items-center justify-between gap-4">
-            <Label htmlFor="home-emergency" className="font-normal text-muted-foreground">
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="home-emergency" className={ADDON_LABEL_CLASS}>
               Home emergency
             </Label>
             <Switch
@@ -195,8 +197,8 @@ export function QuoteSidebar({
               }
             />
           </div>
-          <div className="flex items-center justify-between gap-4">
-            <Label htmlFor="buildings-accidental" className="font-normal text-muted-foreground text-sm">
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="buildings-accidental" className={`${ADDON_LABEL_CLASS} text-sm`}>
               Buildings accidental damage
             </Label>
             <Switch
@@ -207,8 +209,8 @@ export function QuoteSidebar({
               }
             />
           </div>
-          <div className="flex items-center justify-between gap-4">
-            <Label htmlFor="legal-cover" className="font-normal text-muted-foreground">
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="legal-cover" className={ADDON_LABEL_CLASS}>
               Legal cover
             </Label>
             <Switch
@@ -238,7 +240,7 @@ export function QuoteSidebar({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-8 w-8 shrink-0 rounded-md border-neutral-200 p-0"
+                className={EXCESS_BTN_CLASS}
                 disabled={safeExcessIndex <= 0}
                 onClick={() => {
                   if (safeExcessIndex > 0) {
@@ -271,7 +273,7 @@ export function QuoteSidebar({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-8 w-8 shrink-0 rounded-md border-neutral-200 p-0"
+                className={EXCESS_BTN_CLASS}
                 disabled={safeExcessIndex >= 20}
                 onClick={() => {
                   if (safeExcessIndex < 20) {
@@ -295,15 +297,15 @@ export function QuoteSidebar({
 
       <div className="space-y-2">
         <Label>Payment</Label>
-        <div className="flex h-10 w-full items-center rounded-[8px] border border-input bg-muted/30 p-0.5">
+        <div className="flex h-10 w-full items-center rounded-[8px] border border-input bg-muted/30 gap-0.5 p-0.5">
           <Button
             type="button"
             variant="ghost"
             size="sm"
             className={
               filters.paymentOption === "monthly"
-                ? "flex-1 rounded-[8px] bg-gradient-to-r from-[#EE2A7B] to-[#C91F6A] text-white hover:opacity-90 hover:bg-gradient-to-r hover:from-[#EE2A7B] hover:to-[#C91F6A] hover:text-white"
-                : "flex-1 rounded-[8px] hover:bg-neutral-200"
+                ? PAYMENT_ACTIVE_CLASS
+                : PAYMENT_INACTIVE_CLASS
             }
             onClick={() =>
               onFiltersChange({ ...filters, paymentOption: "monthly" })
@@ -317,8 +319,8 @@ export function QuoteSidebar({
             size="sm"
             className={
               filters.paymentOption === "annual"
-                ? "flex-1 rounded-[8px] bg-gradient-to-r from-[#EE2A7B] to-[#C91F6A] text-white hover:opacity-90 hover:bg-gradient-to-r hover:from-[#EE2A7B] hover:to-[#C91F6A] hover:text-white"
-                : "flex-1 rounded-[8px] hover:bg-neutral-200"
+                ? PAYMENT_ACTIVE_CLASS
+                : PAYMENT_INACTIVE_CLASS
             }
             onClick={() =>
               onFiltersChange({ ...filters, paymentOption: "annual" })

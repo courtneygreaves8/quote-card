@@ -9,6 +9,9 @@ import {
 import { Quote } from "@/types/quote"
 import { HelpCircle, Info, ShoppingCart } from "lucide-react"
 
+const TOOLTIP_TRIGGER_CLASS =
+  "inline-flex rounded text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+
 interface QuoteCardProps {
   quote: Quote
   legalCover: boolean
@@ -46,9 +49,24 @@ export function QuoteCard({
       <div className="flex min-h-[5rem] items-stretch justify-between gap-0 overflow-x-auto px-0 py-4">
         {/* Logo */}
         <div className="flex shrink-0 items-center px-4">
-          <div className="flex h-12 w-[4.8rem] items-center justify-center rounded border border-border bg-muted/60 p-2">
-            <span className="text-sm font-bold text-muted-foreground">
-              {quote.providerName.slice(0, 2).toUpperCase()}
+          <div className="relative flex size-[4.8rem] items-center justify-center rounded-lg bg-muted/60 p-2">
+            <svg
+              className="pointer-events-none absolute inset-0 h-full w-full text-[hsl(0,0%,72%)]"
+              aria-hidden
+            >
+              <rect
+                width="100%"
+                height="100%"
+                rx="8"
+                ry="8"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeDasharray="8 8"
+              />
+            </svg>
+            <span className="relative text-sm font-bold text-muted-foreground">
+              LOGO
             </span>
           </div>
         </div>
@@ -57,13 +75,13 @@ export function QuoteCard({
 
         {/* Standard cover price */}
         <div className="flex min-w-0 shrink flex-col justify-center px-4">
-          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
             Home insurance
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  className="inline-flex text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                  className={TOOLTIP_TRIGGER_CLASS}
                   aria-label="What is standard cover?"
                 >
                   <HelpCircle className="h-3.5 w-3.5" />
@@ -74,7 +92,7 @@ export function QuoteCard({
               </TooltipContent>
             </Tooltip>
           </p>
-          <p className="text-md font-medium text-foreground">
+          <p className="text-base font-medium text-foreground">
             £{quote.standardPrice}
           </p>
         </div>
@@ -83,13 +101,13 @@ export function QuoteCard({
 
         {/* Pikl cover price */}
         <div className="flex min-w-0 shrink flex-col justify-center px-4">
-          <p className="flex items-center align-top gap-1.5 text-xs text-muted-foreground">
+          <p className="flex items-center align-top gap-1.5 text-sm text-muted-foreground">
             Host insurance
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  className="inline-flex text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                  className={TOOLTIP_TRIGGER_CLASS}
                   aria-label="What is Pikl cover?"
                 >
                   <HelpCircle className="h-3.5 w-3.5" />
@@ -100,18 +118,18 @@ export function QuoteCard({
               </TooltipContent>
             </Tooltip>
           </p>
-          <p className="text-md font-medium text-foreground">
+          <p className="text-base font-medium text-foreground">
             £{quote.piklPrice}
           </p>
         </div>
 
         <ColumnDivider />
 
-        {/* Family legal add-on toggle + price */}
+        {/* Family legal add-on */}
         <div className="flex min-w-0 shrink items-center gap-3 px-4">
           <div className="flex flex-col gap-1">
-            <p className="text-xs text-muted-foreground">Legal cover</p>
-            <p className="text-md font-medium text-foreground">
+            <p className="text-sm text-muted-foreground">Legal cover</p>
+            <p className="text-base font-medium text-foreground">
               £{quote.familyLegalAddOnPrice}
             </p>
           </div>
@@ -124,11 +142,11 @@ export function QuoteCard({
 
         <ColumnDivider />
 
-        {/* Home emergency cover toggle + price */}
+        {/* Home emergency cover */}
         <div className="flex min-w-0 shrink items-center gap-3 px-4">
           <div className="flex flex-col gap-1">
-            <p className="text-xs text-muted-foreground">Home emergency</p>
-            <p className="text-md font-medium text-foreground">
+            <p className="text-sm text-muted-foreground">Home emergency</p>
+            <p className="text-base font-medium text-foreground">
               £{quote.homeEmergencyAddOnPrice}
             </p>
           </div>
@@ -139,12 +157,10 @@ export function QuoteCard({
           />
         </div>
 
-       
-
-              {/* Total price + excess */}
-              <div className="flex min-w-0 shrink flex-col justify-center rounded-[8px] bg-neutral-100 px-4 py-2">
-          <p className="text-xs whitespace-nowrap text-muted-foreground">Total price</p>
-          <p className="text-md font-semibold text-foreground">
+        {/* Total price + excess */}
+        <div className="flex min-w-0 shrink flex-col items-center justify-center rounded-[8px] bg-neutral-100 px-4 py-2 text-center">
+          <p className="text-sm whitespace-nowrap text-muted-foreground">Total price</p>
+          <p className="text-base font-semibold text-foreground">
             £{totalPrice}
           </p>
           <p className="mt-0.5 whitespace-nowrap text-xs text-muted-foreground">
@@ -152,25 +168,22 @@ export function QuoteCard({
           </p>
         </div>
 
-        
-
         {/* CTAs */}
         <div className="flex shrink-0 flex-col items-center gap-2 px-4">
-          <Button size="sm" className="w-full">
+          <Button size="sm" className="w-full text-sm">
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
             Purchase
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="w-full"
+            className="w-full text-sm"
             onClick={() => onMoreDetails(quote)}
           >
             <Info className="h-3.5 w-3.5 shrink-0" />
             More details
           </Button>
         </div>
-        
       </div>
     </Card>
   )
