@@ -186,14 +186,26 @@ export function QuoteSidebar({
         <Label>Add-ons</Label>
         <div className="space-y-5">
           <div className={ADDON_ROW_CLASS}>
-            <Label htmlFor="buildings-accidental" className={`${ADDON_LABEL_CLASS} text-sm`}>
-              Buildings accidental damage
+            <Label htmlFor="buildings-accidental" className={ADDON_LABEL_CLASS}>
+              Accidental damage (Buildings)
             </Label>
             <Switch
               id="buildings-accidental"
               checked={filters.buildingsAccidentalDamage}
               onCheckedChange={(checked) =>
                 onFiltersChange({ ...filters, buildingsAccidentalDamage: checked })
+              }
+            />
+          </div>
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="contents-accidental" className={ADDON_LABEL_CLASS}>
+              Accidental damage (Contents)
+            </Label>
+            <Switch
+              id="contents-accidental"
+              checked={filters.contentsAccidentalDamage}
+              onCheckedChange={(checked) =>
+                onFiltersChange({ ...filters, contentsAccidentalDamage: checked })
               }
             />
           </div>

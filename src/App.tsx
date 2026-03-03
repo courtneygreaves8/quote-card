@@ -23,6 +23,7 @@ const defaultFilters: QuoteFiltersType = {
   coverStartDate: new Date().toISOString().slice(0, 10),
   paymentOption: "monthly",
   buildingsAccidentalDamage: false,
+  contentsAccidentalDamage: false,
   legalCover: false,
   homeEmergency: false,
 }
