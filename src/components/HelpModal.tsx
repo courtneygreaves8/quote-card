@@ -51,7 +51,7 @@ export function HelpModal({ open, onOpenChange }: HelpModalProps) {
                 onClick={handleCall}
               >
                 <Phone className="h-4 w-4 shrink-0" />
-                Call {PHONE_NUMBER}
+                {PHONE_NUMBER}
               </Button>
               <Button
                 variant="outline"
