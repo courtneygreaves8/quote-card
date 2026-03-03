@@ -80,7 +80,7 @@ export function QuoteSidebar({
       <Separator />
 
       <div className="space-y-2">
-        <Label className="text-muted-foreground">Quote reference</Label>
+        <Label>Quote reference</Label>
         <div className="flex h-10 w-full items-center gap-2 rounded-lg border border-input bg-muted/30 pl-3.5 pr-1">
           <span className="flex-1 truncate font-mono text-sm font-medium">
             {quoteReference}
@@ -123,9 +123,7 @@ export function QuoteSidebar({
       <Separator />
 
       <div className="space-y-2">
-        <Label htmlFor="cover-start-date" className="text-muted-foreground font-normal">
-          Cover start date
-        </Label>
+        <Label htmlFor="cover-start-date">Cover start date</Label>
         <div className="relative flex h-10 w-full items-center rounded-lg border border-neutral-200 bg-neutral-50/80 pr-1">
           <input
             ref={dateInputRef}
