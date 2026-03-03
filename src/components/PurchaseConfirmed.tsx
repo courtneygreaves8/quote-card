@@ -71,9 +71,9 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
             >
               <Zap className="h-5 w-5" />
             </div>
-            <CardTitle>Create your account with one click.</CardTitle>
+            <CardTitle>You're covered!</CardTitle>
             <CardDescription>
-              We've pre-filled your details from your quote. Manage your account and policies online anytime.
+              Create your account with one click. We've pre-filled your details from your quote. Manage your account and policies online anytime.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
