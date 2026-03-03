@@ -15,7 +15,7 @@ export const COVER_TYPES = [
 
 /** Payment option button: active (selected) state */
 export const PAYMENT_ACTIVE_CLASS =
-  "flex-1 rounded-[8px] bg-gradient-to-r from-[#EE2A7B] to-[#C91F6A] text-white hover:opacity-90 hover:bg-gradient-to-r hover:from-[#EE2A7B] hover:to-[#C91F6A] hover:text-white"
+  "flex-1 rounded-[8px] bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white hover:opacity-90 hover:bg-gradient-to-r hover:from-[#1a1a1a] hover:to-[#0f0f0f] hover:text-white"
 
 /** Payment option button: inactive state */
 export const PAYMENT_INACTIVE_CLASS =

@@ -23,8 +23,8 @@ export function Navbar() {
           <svg width={0} height={0} aria-hidden>
             <defs>
               <linearGradient id="navbarRocketGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#EE2A7B" />
-                <stop offset="100%" stopColor="#C91F6A" />
+                <stop offset="0%" stopColor="#1a1a1a" />
+                <stop offset="100%" stopColor="#0f0f0f" />
               </linearGradient>
             </defs>
           </svg>
