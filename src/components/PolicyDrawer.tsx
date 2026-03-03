@@ -21,7 +21,6 @@ import {
   Copy,
   Download,
   Mail,
-  Pencil,
   Save,
   X,
 } from "lucide-react"
