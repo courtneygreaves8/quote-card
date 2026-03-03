@@ -165,6 +165,6 @@
 }
 
 .animate-details-reveal {
-  animation: details-reveal-left-right 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: details-reveal-left-right 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   transform-origin: right;
 }

@@ -50,14 +50,14 @@ const FIELDS = [
 ]
 
 const REVEAL_DELAY_BASE_MS = 400
-const REVEAL_DURATION_MS = 700
-/** Each field's reveal starts when the previous field's reveal has finished (and turned green). [1000, 2400, 3800, 5200] */
+/** Reveal typography (overlay wipe) duration — 500ms slower than before. */
+const REVEAL_DURATION_MS = 2200
+/** Stagger between each field's reveal start — next field starts sooner for faster overall progression. */
+const REVEAL_STAGGER_MS = 900
 const REVEAL_START_DELAYS = (() => {
   const a: number[] = []
-  let t = REVEAL_DELAY_BASE_MS
   for (let i = 0; i < FIELDS.length; i++) {
-    a.push(t)
-    t += REVEAL_DURATION_MS
+    a.push(REVEAL_DELAY_BASE_MS + i * REVEAL_STAGGER_MS)
   }
   return a
 })()
