@@ -29,7 +29,7 @@ export function Navbar() {
             </defs>
           </svg>
         </div>
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" size="sm" className="gap-1.5 border-border">
             <LogIn className="h-4 w-4" />
             Login
