@@ -9,7 +9,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Navbar } from "@/components/Navbar"
 import confetti from "canvas-confetti"
-import { FileText, KeyRound, Mail, Zap } from "lucide-react"
+import { FileText, KeyRound, Mail, Shield, Zap } from "lucide-react"
 import { useEffect } from "react"
 
 interface PurchaseConfirmedProps {
@@ -66,14 +66,20 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div
-              className="mx-auto mb-3 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
+              className="mx-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
               aria-hidden
             >
-              <Zap className="h-5 w-5" />
+              <Shield className="h-5 w-5" />
             </div>
-            <CardTitle>You're covered!</CardTitle>
+            <div className="flex flex-col gap-3">
+              <CardTitle>You&apos;re covered!</CardTitle>
+              <span className="mx-auto mt-1 flex w-fit items-center justify-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1.5 text-sm font-semibold text-foreground/80">
+                <Zap className="h-4 w-4 shrink-0" />
+                Create your account with one click.
+              </span>
+            </div>
             <CardDescription>
-              Create your account with one click. We've pre-filled your details from your quote. Manage your account and policies online anytime.
+              We've pre-filled your details from your quote. Manage your account and policies online anytime.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
