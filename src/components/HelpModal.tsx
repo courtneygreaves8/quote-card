@@ -42,9 +42,9 @@ export function HelpModal({ open, onOpenChange }: HelpModalProps) {
             <DialogTitle className="text-xl">How can we help?</DialogTitle>
           </CardHeader>
           <CardContent className="space-y-4 pt-0 px-[14.4px] pb-[14.4px]">
-            <p className="text-sm text-muted-foreground">{HELP_MESSAGE}</p>
+            <p className="mt-[-8px] text-sm text-muted-foreground">{HELP_MESSAGE}</p>
 
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="mt-1 flex flex-col gap-2 sm:flex-row">
               <Button
                 variant="default"
                 className="flex-1 gap-2"
