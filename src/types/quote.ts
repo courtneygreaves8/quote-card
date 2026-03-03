@@ -7,6 +7,7 @@ export interface QuoteFilters {
   coverStartDate: string
   paymentOption: PaymentOption
   buildingsAccidentalDamage: boolean
+  contentsAccidentalDamage: boolean
   legalCover: boolean
   homeEmergency: boolean
 }
