@@ -1,26 +1,19 @@
-import { useState, useMemo } from "react"
-import { Button } from "@/components/ui/button"
+import { useMemo, useState } from "react"
 import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicyDrawer } from "@/components/PolicyDrawer"
-import { QuoteCard } from "@/components/QuoteCard"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  QuotesContent,
+  type SortOption,
+  type FilterOption,
+} from "@/components/QuotesContent"
+import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { mockQuotes } from "@/data/quotes"
-import { HelpCircle } from "lucide-react"
 import { EXCESS_OPTIONS } from "@/lib/constants"
 import { parseExcessNum } from "@/lib/utils"
 import { Quote, QuoteFilters as QuoteFiltersType } from "@/types/quote"
-
-type SortOption = "price-asc" | "price-desc" | "provider-az"
-type FilterOption = "all" | "under-20" | "under-25" | "under-30"
 
 const defaultFilters: QuoteFiltersType = {
   coverAmount: 500000,
@@ -52,10 +45,10 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [sort, setSort] = useState<SortOption>("price-asc")
   const [filter, setFilter] = useState<FilterOption>("all")
-  const [showLoadingModal, setShowLoadingModal] = useState(true)
+  // Hidden for now – set to true to show "Finding quotes" loading animation
+  const [showLoadingModal, setShowLoadingModal] = useState(false)
 
   const handleEditAnswers = () => {
-    // Navigate back to form when implemented
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
   }
 
@@ -87,7 +80,10 @@ function App() {
     MIN_QUOTES,
     Math.min(
       MAX_QUOTES,
-      MAX_QUOTES - Math.round((excessIndex / (EXCESS_OPTIONS.length - 1)) * (MAX_QUOTES - MIN_QUOTES))
+      MAX_QUOTES -
+        Math.round(
+          (excessIndex / (EXCESS_OPTIONS.length - 1)) * (MAX_QUOTES - MIN_QUOTES)
+        )
     )
   )
 
@@ -103,14 +99,17 @@ function App() {
     const maxPrice = FILTER_MAX_PRICE[filter]
     const others = mockQuotes
       .filter((q) => {
-        if (q.policyDetails.policyType !== filters.policyType || includedIds.has(q.id)) return false
-        if (parseExcessNum(q.policyDetails.excess) <= selectedExcessNum) return false
+        if (q.policyDetails.policyType !== filters.policyType || includedIds.has(q.id))
+          return false
+        if (parseExcessNum(q.policyDetails.excess) <= selectedExcessNum)
+          return false
         if (maxPrice != null && q.piklPrice > maxPrice) return false
         return true
       })
       .sort(
         (a, b) =>
-          parseExcessNum(a.policyDetails.excess) - parseExcessNum(b.policyDetails.excess)
+          parseExcessNum(a.policyDetails.excess) -
+          parseExcessNum(b.policyDetails.excess)
       )
     const padCount = Math.min(
       displayCount - quotes.length,
@@ -145,69 +144,22 @@ function App() {
             onEditAnswers={handleEditAnswers}
           />
           <main className="flex-1 overflow-y-auto">
-            <div className="mx-auto max-w-5xl px-6 py-8">
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                {displayedQuotes.length === 0
-                  ? "No quotes match your filters"
-                  : `We've got ${displayedQuotes.length} quote${displayedQuotes.length === 1 ? "" : "s"} for you`}
-              </h1>
-              <p className="mt-1 text-muted-foreground">
-                Each quote comes with Pikl's Property Host Cover.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
-                <SelectTrigger className="w-[180px]" aria-label="Sort">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="price-asc">Price: low to high</SelectItem>
-                    <SelectItem value="price-desc">Price: high to low</SelectItem>
-                    <SelectItem value="provider-az">Provider A–Z</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={filter} onValueChange={(v) => setFilter(v as FilterOption)}>
-                <SelectTrigger className="w-[160px]" aria-label="Filter">
-                  <SelectValue placeholder="Filter" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">All quotes</SelectItem>
-                    <SelectItem value="under-20">Under £20/mo</SelectItem>
-                    <SelectItem value="under-25">Under £25/mo</SelectItem>
-                    <SelectItem value="under-30">Under £30/mo</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-1">
-            {displayedQuotes.length > 0 ? (
-              displayedQuotes.map((quote) => (
-                <QuoteCard
-                  key={quote.id}
-                  quote={quote}
-                  legalCover={filters.legalCover}
-                  homeEmergency={filters.homeEmergency}
-                  onLegalCoverChange={(checked) =>
-                    setFilters((f) => ({ ...f, legalCover: checked }))
-                  }
-                  onHomeEmergencyChange={(checked) =>
-                    setFilters((f) => ({ ...f, homeEmergency: checked }))
-                  }
-                  onMoreDetails={handleMoreDetails}
-                />
-              ))
-            ) : (
-              <div className="col-span-2 rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
-                <p className="text-muted-foreground">
-                  No quotes match your current filters. Try changing cover
-                  amount, excess or policy type.
-                </p>
-              </div>
-            )}
-            </div>
-            </div>
+            <QuotesContent
+              displayedQuotes={displayedQuotes}
+              sort={sort}
+              filter={filter}
+              onSortChange={setSort}
+              onFilterChange={setFilter}
+              legalCover={filters.legalCover}
+              homeEmergency={filters.homeEmergency}
+              onLegalCoverChange={(checked) =>
+                setFilters((f) => ({ ...f, legalCover: checked }))
+              }
+              onHomeEmergencyChange={(checked) =>
+                setFilters((f) => ({ ...f, homeEmergency: checked }))
+              }
+              onMoreDetails={handleMoreDetails}
+            />
           </main>
         </div>
         <PolicyDrawer
@@ -220,14 +172,7 @@ function App() {
           open={showLoadingModal}
           onClose={() => setShowLoadingModal(false)}
         />
-        <Button
-          variant="outline"
-          size="icon"
-          className="fixed bottom-6 right-6 z-50 h-10 w-10 rounded-full border-border shadow-md"
-          aria-label="Help"
-        >
-          <HelpCircle className="h-5 w-5" />
-        </Button>
+        <HelpFloatingButton />
       </div>
     </TooltipProvider>
   )

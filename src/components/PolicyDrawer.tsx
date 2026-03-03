@@ -196,15 +196,7 @@ function PolicyDrawerRight({
         open={openOverview}
         onToggle={() => setOpenOverview((v) => !v)}
       >
-        <div className="relative pt-10">
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute right-0 top-0 z-10 border-border"
-            aria-label="Edit overview"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+        <div>
           <ul className="mt-3 space-y-2 text-sm">
             <li className="flex justify-between gap-4 border-b border-border pb-2">
               <span className="text-muted-foreground">Property address</span>

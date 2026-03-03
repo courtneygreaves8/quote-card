@@ -6,7 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { Check, Loader2, Pencil, X, Zap } from "lucide-react"
+import { Check, Pencil, X, Zap } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 interface CreateAccountDrawerProps {
@@ -49,21 +49,6 @@ const FIELDS = [
   },
 ]
 
-const REVEAL_DELAY_BASE_MS = 400
-/** Reveal typography (overlay wipe) duration — 500ms slower than before. */
-const REVEAL_DURATION_MS = 2200
-/** Stagger between each field's reveal start — next field starts sooner for faster overall progression. */
-const REVEAL_STAGGER_MS = 900
-const REVEAL_START_DELAYS = (() => {
-  const a: number[] = []
-  for (let i = 0; i < FIELDS.length; i++) {
-    a.push(REVEAL_DELAY_BASE_MS + i * REVEAL_STAGGER_MS)
-  }
-  return a
-})()
-/** Time when last field's reveal finishes. */
-const FORM_POPULATED_AFTER_MS = REVEAL_START_DELAYS[REVEAL_START_DELAYS.length - 1] + REVEAL_DURATION_MS
-
 const inputBaseClassName =
   "flex h-10 w-full rounded-md border-2 bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground transition-colors hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-background"
 
@@ -72,26 +57,16 @@ export function CreateAccountDrawer({
   onOpenChange,
 }: CreateAccountDrawerProps) {
   const [progressStep, setProgressStep] = useState(0)
-  const [formPopulated, setFormPopulated] = useState(false)
-  const [revealedCount, setRevealedCount] = useState(0)
+  const [values, setValues] = useState<string[]>(() => FIELDS.map((f) => f.value))
   const progressCleanupRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     if (!open) {
       setProgressStep(0)
-      setFormPopulated(false)
-      setRevealedCount(0)
+      setValues(FIELDS.map((f) => f.value))
       progressCleanupRef.current?.()
       progressCleanupRef.current = null
-      return
     }
-    const timeouts: ReturnType<typeof setTimeout>[] = []
-    for (let i = 1; i <= FIELDS.length; i++) {
-      const ms = REVEAL_START_DELAYS[i - 1] + REVEAL_DURATION_MS
-      timeouts.push(setTimeout(() => setRevealedCount(i), ms))
-    }
-    timeouts.push(setTimeout(() => setFormPopulated(true), FORM_POPULATED_AFTER_MS))
-    return () => timeouts.forEach((t) => clearTimeout(t))
   }, [open])
 
   const runProgress = useCallback(() => {
@@ -139,7 +114,7 @@ export function CreateAccountDrawer({
         <div className="flex flex-1 flex-col pt-14">
           <div className="flex flex-col">
             <div
-              className="mb-3 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#EE2A7B] to-[#C91F6A] text-white"
+              className="mb-3 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
               aria-hidden
             >
               <Zap className="h-5 w-5" />
@@ -163,8 +138,6 @@ export function CreateAccountDrawer({
               {FIELDS.map((field, index) => {
                 const step = index + 1
                 const isChecked = progressStep >= step
-                const isRevealed = index < revealedCount
-                const revealDelayMs = open ? REVEAL_START_DELAYS[index] : 0
                 return (
                   <div key={field.id} className="space-y-2">
                     <div className="flex items-center justify-between gap-2">
@@ -178,31 +151,32 @@ export function CreateAccountDrawer({
                         </span>
                       )}
                     </div>
-                    <div className="group relative overflow-hidden rounded-md">
+                    <div className="group relative rounded-md">
                       <input
                         id={field.inputId}
                         type={field.type}
-                        defaultValue={field.value}
+                        value={values[index]}
+                        readOnly={isSubmitting}
+                        onChange={
+                          !isSubmitting
+                            ? (e) => {
+                                setValues((prev) => {
+                                  const next = [...prev]
+                                  next[index] = e.target.value
+                                  return next
+                                })
+                              }
+                            : undefined
+                        }
                         className={`${inputBaseClassName} border-input`}
                         placeholder={field.placeholder}
                         disabled={isSubmitting}
-                        readOnly={isSubmitting}
                         aria-busy={isSubmitting && progressStep === step}
                       />
-                      {open && (
-                        <div
-                          className="animate-details-reveal pointer-events-none absolute inset-0 z-[1] rounded-md bg-background"
-                          style={{
-                            animationDelay: `${revealDelayMs}ms`,
-                            animationFillMode: "forwards",
-                          }}
-                          aria-hidden
-                        />
-                      )}
-                      {isRevealed && (
+                      {!isSubmitting && (
                         <>
                           <span
-                            className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-green-700 transition-opacity group-hover:opacity-0"
+                            className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-[#1a1a1a] transition-opacity group-hover:opacity-0"
                             aria-hidden
                           >
                             <Check className="h-4 w-4" strokeWidth={2.5} />
@@ -215,14 +189,6 @@ export function CreateAccountDrawer({
                           </span>
                         </>
                       )}
-                      {!isSubmitting && !isRevealed && (
-                        <span
-                          className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
-                          aria-hidden
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </span>
-                      )}
                     </div>
                   </div>
                 )
@@ -230,29 +196,14 @@ export function CreateAccountDrawer({
             </div>
           </div>
 
-          <div
-            className="mt-8 flex flex-col gap-0 animate-prefilled-fade-in"
-            style={{ animationDelay: "0.4s" }}
-          >
+          <div className="mt-8 flex flex-col gap-0">
             <Button
-              className={`w-full transition-colors disabled:opacity-100 disabled:shadow-none disabled:hover:opacity-100 ${
-                formPopulated && !isSubmitting
-                  ? ""
-                  : "bg-neutral-300 text-neutral-600 hover:bg-neutral-300 hover:text-neutral-600"
-              }`}
+              className="w-full"
               size="lg"
               onClick={handleCreateAccount}
-              disabled={isSubmitting || !formPopulated}
-              variant={formPopulated && !isSubmitting ? "default" : "ghost"}
+              variant="default"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating account…
-                </>
-              ) : (
-                "Send me a secure link"
-              )}
+              Send me a secure link
             </Button>
 
             <div className="flex items-center gap-3 py-2">
@@ -268,7 +219,6 @@ export function CreateAccountDrawer({
               size="lg"
               className="w-full"
               onClick={handleCreateAccount}
-              disabled={isSubmitting}
             >
               Create a password
             </Button>
