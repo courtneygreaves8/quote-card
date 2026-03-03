@@ -22,6 +22,7 @@ interface QuotesContentProps {
   onLegalCoverChange: (checked: boolean) => void
   onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
+  onPurchase?: (quote: Quote) => void
 }
 
 export function QuotesContent({
@@ -35,6 +36,7 @@ export function QuotesContent({
   onLegalCoverChange,
   onHomeEmergencyChange,
   onMoreDetails,
+  onPurchase,
 }: QuotesContentProps) {
   return (
     <div className="mx-auto max-w-5xl px-6 py-8">
@@ -85,6 +87,7 @@ export function QuotesContent({
               onLegalCoverChange={onLegalCoverChange}
               onHomeEmergencyChange={onHomeEmergencyChange}
               onMoreDetails={onMoreDetails}
+              onPurchase={onPurchase}
             />
           ))
         ) : (

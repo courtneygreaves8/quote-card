@@ -2,6 +2,7 @@ import { useMemo, useState } from "react"
 import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicyDrawer } from "@/components/PolicyDrawer"
+import { PurchaseConfirmed } from "@/components/PurchaseConfirmed"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
 import {
   QuotesContent,
@@ -47,6 +48,7 @@ function App() {
   const [filter, setFilter] = useState<FilterOption>("all")
   // Hidden for now – set to true to show "Finding quotes" loading animation
   const [showLoadingModal, setShowLoadingModal] = useState(false)
+  const [showPurchaseConfirmed, setShowPurchaseConfirmed] = useState(false)
 
   const handleEditAnswers = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
@@ -132,6 +134,18 @@ function App() {
     setDrawerOpen(true)
   }
 
+  const handlePurchase = () => {
+    setShowPurchaseConfirmed(true)
+  }
+
+  if (showPurchaseConfirmed) {
+    return (
+      <TooltipProvider>
+        <PurchaseConfirmed onSkip={() => setShowPurchaseConfirmed(false)} />
+      </TooltipProvider>
+    )
+  }
+
   return (
     <TooltipProvider>
       <div className="flex h-screen flex-col bg-neutral-50">
@@ -159,6 +173,7 @@ function App() {
                 setFilters((f) => ({ ...f, homeEmergency: checked }))
               }
               onMoreDetails={handleMoreDetails}
+              onPurchase={handlePurchase}
             />
           </main>
         </div>
