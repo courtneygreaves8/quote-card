@@ -19,6 +19,7 @@ interface QuoteCardProps {
   onLegalCoverChange: (checked: boolean) => void
   onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
+  onPurchase?: (quote: Quote) => void
 }
 
 function ColumnDivider() {
@@ -37,6 +38,7 @@ export function QuoteCard({
   onLegalCoverChange,
   onHomeEmergencyChange,
   onMoreDetails,
+  onPurchase,
 }: QuoteCardProps) {
   const totalPrice =
     quote.standardPrice +
@@ -155,7 +157,11 @@ export function QuoteCard({
 
         {/* CTAs */}
         <div className="flex shrink-0 flex-col items-center gap-2 px-4">
-          <Button size="sm" className="w-full text-xs">
+          <Button
+            size="sm"
+            className="w-full text-xs"
+            onClick={() => onPurchase?.(quote)}
+          >
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
             Purchase
           </Button>
