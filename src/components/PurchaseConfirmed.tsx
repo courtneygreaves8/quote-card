@@ -81,8 +81,8 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
 
             <div className="space-y-3">
               <Button variant="default" size="lg" className="w-full gap-2">
-                <KeyRound className="h-4 w-4" />
-                Create a password
+                <Mail className="h-4 w-4" />
+                Send me a secure link
               </Button>
               <div className="flex items-center gap-3 py-0">
                 <div className="h-px flex-1 bg-border" aria-hidden />
@@ -92,8 +92,8 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
                 <div className="h-px flex-1 bg-border" aria-hidden />
               </div>
               <Button variant="outline" size="lg" className="w-full gap-2">
-                <Mail className="h-4 w-4" />
-                Send me a secure magic link
+                <KeyRound className="h-4 w-4" />
+                Create a password
               </Button>
             </div>
 
