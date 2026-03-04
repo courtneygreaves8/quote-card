@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -94,6 +95,34 @@ export function QuoteCardLg({
         ? "px-4 py-3"
         : "px-4 py-4"
 
+  // #region agent log
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const card = document.querySelector("[data-debug-card]")
+      if (!card) return
+      const stackedDepositRow = card.querySelector("[data-debug-monthly-stacked]")
+      if (stackedDepositRow) {
+        const label = stackedDepositRow.querySelector("span:first-of-type")
+        const price = stackedDepositRow.querySelector("span:last-of-type")
+        const getData = (el: Element | null) => {
+          if (!el) return null
+          const s = window.getComputedStyle(el)
+          return { fontSize: s.fontSize, className: el.className, parentClassName: el.parentElement?.className?.slice(0, 80) }
+        }
+        fetch("http://127.0.0.1:7243/ingest/fe71717d-8c8f-4399-8308-a1d78489b4ab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ location: "QuoteCardLg.tsx:stacked", message: "Stacked monthly breakdown computed styles", data: { label: getData(label), price: getData(price), pricingMode }, timestamp: Date.now(), hypothesisId: "H1_H3" }) }).catch(() => {})
+      }
+      const desktopCol = card.querySelector("[data-debug-monthly-desktop]")
+      if (desktopCol) {
+        const s = window.getComputedStyle(desktopCol)
+        const firstP = desktopCol.querySelector("p")
+        const pStyle = firstP ? window.getComputedStyle(firstP) : null
+        fetch("http://127.0.0.1:7243/ingest/fe71717d-8c8f-4399-8308-a1d78489b4ab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ location: "QuoteCardLg.tsx:desktop", message: "Desktop monthly column layout", data: { columnHeight: s.height, justifyContent: s.justifyContent, alignItems: s.alignItems, display: s.display, firstPMarginBlock: pStyle?.marginBlock ?? null, firstPClassName: firstP?.className?.slice(0, 60) }, timestamp: Date.now(), hypothesisId: "H4_H5" }) }).catch(() => {})
+      }
+    }, 150)
+    return () => clearTimeout(t)
+  }, [pricingMode])
+  // #endregion
+
   return (
     <div className="flex min-w-0 w-full max-w-[1024px] flex-col">
       {/* Pricing tabs attached to top-left, in-flow for large layout only */}
@@ -127,7 +156,7 @@ export function QuoteCardLg({
         </div>
       </div>
 
-      <Card className="min-w-0 overflow-hidden rounded-[8px] qc:rounded-tl-none qc:rounded-tr-[8px] bg-white shadow-sm transition-shadow hover:shadow-md">
+      <Card className="min-w-0 overflow-hidden rounded-[8px] qc:rounded-tl-none qc:rounded-tr-[8px] bg-white shadow-sm transition-shadow hover:shadow-md" data-debug-card>
         {/* Stacked layout: 0–1339px (hidden from 1340px up) */}
         <div className={`flex min-w-0 flex-col gap-3 px-4 py-4 qc:hidden`}>
           {/* Header: logo + pricing toggle + insurer name */}
@@ -155,13 +184,13 @@ export function QuoteCardLg({
 
         {/* Core breakdown */}
         <div className="mt-2 flex min-w-0 flex-col">
-          <div className="flex min-w-0 items-center justify-between gap-2 py-2">
+          <div className="flex min-w-0 items-baseline justify-between gap-2 py-2">
             <span className="min-w-0 truncate text-sm text-muted-foreground">Home insurance</span>
             <span className="shrink-0 text-sm font-medium tabular-nums text-foreground">
               {toDisplay(quote.standardPrice)}
             </span>
           </div>
-          <div className="flex min-w-0 items-center justify-between gap-2 border-t border-border py-2">
+          <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
             <span className="min-w-0 truncate text-sm text-muted-foreground">Host insurance</span>
             <span className="shrink-0 text-sm font-medium tabular-nums text-foreground">
               {toDisplay(quote.piklPrice)}
@@ -169,21 +198,21 @@ export function QuoteCardLg({
           </div>
 
           {pricingMode === "monthly" && (
-            <div className="border-t border-border py-2 text-xs text-muted-foreground">
-              <div className="flex items-center justify-between">
-                <span>Deposit</span>
-                <span className="font-medium text-foreground tabular-nums">
+            <div className="text-[14px]" data-debug-monthly-stacked>
+              <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
+                <span className="min-w-0 truncate text-[14px] text-muted-foreground">Deposit</span>
+                <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
-              <div className="mt-1 flex items-center justify-between">
-                <span className="flex items-center gap-1">
+              <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
+                <span className="flex min-w-0 items-baseline gap-1 text-[14px] text-muted-foreground">
                   × 1
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
                         type="button"
-                        className={TOOLTIP_TRIGGER_CLASS}
+                        className={cn(TOOLTIP_TRIGGER_CLASS, "inline-flex align-baseline")}
                         aria-label="Admin fee info"
                       >
                         <HelpCircle className="h-3 w-3" />
@@ -194,20 +223,20 @@ export function QuoteCardLg({
                     </TooltipContent>
                   </Tooltip>
                 </span>
-                <span className="font-medium text-foreground tabular-nums">
+                <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
-              <div className="mt-1 flex items-center justify-between">
-                <span>× 9</span>
-                <span className="font-medium text-foreground tabular-nums">
+              <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
+                <span className="min-w-0 truncate text-[14px] text-muted-foreground">× 9</span>
+                <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
             </div>
           )}
 
-          <div className="flex min-w-0 items-center justify-between gap-2 border-t border-border py-2">
+          <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
             <span className="min-w-0 text-sm text-muted-foreground">Excess</span>
             <span className="shrink-0 text-sm font-medium text-foreground">
               {quote.policyDetails.excess}
@@ -395,15 +424,15 @@ export function QuoteCardLg({
 
           {/* Monthly breakdown column — same style as other columns, only when monthly */}
           {pricingMode === "monthly" && (
-            <div className="hidden flex-col justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
-              <div className="flex justify-between gap-2 border-b border-border pb-1.5">
-                <p className="text-sm text-muted-foreground">Deposit</p>
-                <p className="shrink-0 text-xs font-medium tabular-nums text-foreground">
+            <div className="hidden flex-col justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3" data-debug-monthly-desktop>
+              <div className="flex items-center justify-between gap-2 border-b border-border pb-1.5">
+                <span className="m-0 text-sm text-muted-foreground">Deposit</span>
+                <span className="m-0 shrink-0 text-sm font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
-                </p>
+                </span>
               </div>
-              <div className="flex justify-between gap-2 border-b border-border py-1.5">
-                <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <div className="flex items-center justify-between gap-2 border-b border-border py-1.5">
+                <span className="m-0 flex items-center gap-1.5 text-sm text-muted-foreground">
                   × 1
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -419,16 +448,16 @@ export function QuoteCardLg({
                       Our insurer PremFina charges a £5 admin fee.
                     </TooltipContent>
                   </Tooltip>
-                </p>
-                <p className="shrink-0 text-xs font-medium tabular-nums text-foreground">
+                </span>
+                <span className="m-0 shrink-0 text-sm font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
-                </p>
+                </span>
               </div>
-              <div className="flex justify-between gap-2 pt-1.5">
-                <p className="text-sm text-muted-foreground">× 9</p>
-                <p className={cn("shrink-0 tabular-nums", priceClass)}>
+              <div className="flex items-center justify-between gap-2 pt-1.5">
+                <span className="m-0 text-sm text-muted-foreground">× 9</span>
+                <span className={cn("m-0 shrink-0 tabular-nums text-sm font-medium text-foreground")}>
                   {formatPounds(monthlyAmount)}
-                </p>
+                </span>
               </div>
             </div>
           )}

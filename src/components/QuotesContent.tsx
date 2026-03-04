@@ -48,7 +48,7 @@ export function QuotesContent({
 }: QuotesContentProps) {
   return (
     <div className="mx-auto w-full min-w-0 max-w-[1024px] overflow-x-hidden py-8 px-4 min-[1025px]:px-0">
-      <div className="mb-8 flex flex-col gap-4 hd:flex-row hd:items-start hd:justify-between">
+      <div className="mb-8 flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {displayedQuotes.length === 0
@@ -59,8 +59,8 @@ export function QuotesContent({
             Each quote comes with Pikl's Property Host Cover.
           </p>
         </div>
-        <div className="flex w-full flex-row gap-3 hd:w-auto hd:flex-row hd:flex-none hd:items-center hd:justify-end">
-          <div className="flex-1">
+        <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
+          <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
             <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
               <SelectTrigger className="w-full" aria-label="Sort">
                 <SelectValue placeholder="Sort by" />
@@ -72,7 +72,7 @@ export function QuotesContent({
               </SelectContent>
             </Select>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
             <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
               <SelectTrigger className="w-full" aria-label="Filter">
                 <SelectValue placeholder="Filter" />
