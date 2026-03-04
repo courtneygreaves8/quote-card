@@ -10,6 +10,8 @@ export default {
       screens: {
         // Quote card desktop layout breakpoint (>= 949px)
         qc: "949px",
+        // Sort/filter layout breakpoint (>= 784px)
+        sf: "784px",
       },
       borderRadius: {
         lg: 'var(--radius)',

@@ -40,8 +40,8 @@ export function QuotesContent({
 }: QuotesContentProps) {
   return (
     <div className="mx-auto max-w-5xl px-6 py-8">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
+      <div className="mb-8 flex flex-col gap-4 sf:flex-row sf:items-start sf:justify-between">
+        <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {displayedQuotes.length === 0
               ? "No quotes match your filters"
@@ -51,9 +51,9 @@ export function QuotesContent({
             Each quote comes with Pikl's Property Host Cover.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex w-full flex-col gap-3 sf:w-auto sf:flex-row sf:flex-none sf:items-center sf:justify-end">
           <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
-            <SelectTrigger className="w-[180px]" aria-label="Sort">
+            <SelectTrigger className="w-full sf:w-[180px]" aria-label="Sort">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -63,7 +63,7 @@ export function QuotesContent({
             </SelectContent>
           </Select>
           <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
-            <SelectTrigger className="w-[160px]" aria-label="Filter">
+            <SelectTrigger className="w-full sf:w-[160px]" aria-label="Filter">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
             <SelectContent>
