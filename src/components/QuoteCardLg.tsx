@@ -66,31 +66,60 @@ export function QuoteCardLg({
         : "px-4 py-4"
 
   return (
-    <Card className="overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-md">
-      {/* Stacked layout: 0–1023px (hidden from 1024px up) */}
-      <div className={`flex flex-col gap-3 px-4 py-4 qc:hidden`}>
-        {/* Header: logo + pricing toggle + insurer name */}
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
-            <span className="text-xs font-bold text-muted-foreground">LOGO</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground">
-              {pricingMode === "annual" ? "Annual" : "Monthly"}
-            </span>
-            <Switch
-              checked={pricingMode === "monthly"}
-              onCheckedChange={(checked) =>
-                setPricingMode(checked ? "monthly" : "annual")
-              }
-              aria-label="Toggle pricing mode"
-            />
-          </div>
+    <div className="flex flex-col">
+      {/* Pricing tabs attached to top-left, in-flow for large layout only */}
+      <div className="hidden qc:block">
+        <div className="inline-flex rounded-t-[8px] rounded-b-none border border-b-0 border-border bg-muted/40 text-xs font-medium text-muted-foreground">
+          <button
+            type="button"
+            onClick={() => setPricingMode("annual")}
+            className={`rounded-t-[8px] px-4 py-2 transition-colors ${
+              pricingMode === "annual"
+                ? "bg-white text-foreground"
+                : "bg-transparent text-muted-foreground"
+            }`}
+          >
+            Annual
+          </button>
+          <button
+            type="button"
+            onClick={() => setPricingMode("monthly")}
+            className={`rounded-t-[8px] px-4 py-2 transition-colors ${
+              pricingMode === "monthly"
+                ? "bg-white text-foreground"
+                : "bg-transparent text-muted-foreground"
+            }`}
+          >
+            Monthly
+          </button>
         </div>
+      </div>
 
-        <div className="mt-1 text-base font-semibold text-foreground">
-          {quote.providerName}
-        </div>
+      <Card className="overflow-hidden rounded-tl-none rounded-tr-[8px] bg-white shadow-sm transition-shadow hover:shadow-md">
+        {/* Stacked layout: 0–1339px (hidden from 1340px up) */}
+        <div className={`flex flex-col gap-3 px-4 py-4 qc:hidden`}>
+          {/* Header: logo + pricing toggle + insurer name */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
+              <span className="text-xs font-bold text-muted-foreground">LOGO</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-muted-foreground">
+                {pricingMode === "annual" ? "Annual" : "Monthly"}
+              </span>
+              <Switch
+                checked={pricingMode === "monthly"}
+                onCheckedChange={(checked) =>
+                  setPricingMode(checked ? "monthly" : "annual")
+                }
+                aria-label="Toggle pricing mode"
+              />
+            </div>
+          </div>
+
+          <div className="mt-1 text-base font-semibold text-foreground">
+            {quote.providerName}
+          </div>
 
         {/* Core breakdown */}
         <div className="mt-2 flex flex-col">
@@ -296,5 +325,6 @@ export function QuoteCardLg({
         </div>
       </div>
     </Card>
+  </div>
   )
 }
