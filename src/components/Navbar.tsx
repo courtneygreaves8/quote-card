@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CreateAccountModal } from "@/components/CreateAccountModal"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
 // To test drawer instead: use CreateAccountDrawer from "@/components/CreateAccountDrawer" and render it here
 import { LAYOUT_PADDING_X } from "@/lib/constants"
 import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 
 export function Navbar() {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
 
   return (
     <>
@@ -53,15 +55,41 @@ export function Navbar() {
             size="icon"
             className="border-border md:hidden"
             aria-label="Open navigation"
+            onClick={() => setNavOpen(true)}
           >
             <Menu className="h-5 w-5" />
           </Button>
         </div>
     </header>
-    <CreateAccountModal
-      open={createAccountOpen}
-      onOpenChange={setCreateAccountOpen}
-    />
+      <CreateAccountModal
+        open={createAccountOpen}
+        onOpenChange={setCreateAccountOpen}
+      />
+      {/* Mobile nav menu */}
+      <Sheet open={navOpen} onOpenChange={setNavOpen}>
+        <SheetContent side="right" className="flex h-full w-full max-w-xs flex-col bg-white p-4">
+          <div className="mt-8 flex flex-col gap-3">
+            <Button
+              variant="outline"
+              className="h-10 w-full justify-center gap-1.5 border-border"
+            >
+              <LogIn className="h-4 w-4" />
+              Login
+            </Button>
+            <Button
+              variant="outline"
+              className="h-10 w-full justify-center gap-1.5 border-border"
+              onClick={() => {
+                setNavOpen(false)
+                setCreateAccountOpen(true)
+              }}
+            >
+              <UserPlus className="h-4 w-4" />
+              Create account
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </>
   )
 }
