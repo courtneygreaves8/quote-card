@@ -6,6 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 import { Quote } from "@/types/quote"
 import type { PaymentOption } from "@/types/quote"
 import { CheckSquare, HelpCircle, Info, ShoppingCart, Square } from "lucide-react"
@@ -70,8 +71,8 @@ export function QuoteCardLg({
   )
   const scaleFactor = totalPrice > 0 ? displayedAnnualTotal / totalPrice : 1
 
-  /** Monthly payment = displayed annual total / 9; deposit and 1st month each = one payment, then 7 more. */
-  const MONTHLY_DIVISOR = 9
+  /** Monthly payment = displayed annual total / 11; 1 deposit + 1st month + 9 more installments. */
+  const MONTHLY_DIVISOR = 11
   const monthlyAmount = displayedAnnualTotal / MONTHLY_DIVISOR
 
   const formatPounds = (n: number) => `£${n.toFixed(2)}`
@@ -168,9 +169,35 @@ export function QuoteCardLg({
               {toDisplay(quote.piklPrice)}
             </span>
           </div>
+
+          {pricingMode === "monthly" && (
+            <div className="border-t border-border py-2 text-xs text-muted-foreground">
+              <div className="flex items-center justify-between">
+                <span>Deposit</span>
+                <span className="font-medium text-foreground">
+                  {formatPounds(monthlyAmount)}
+                </span>
+              </div>
+              <div className="mt-1 flex items-center justify-between">
+                <span>1st month</span>
+                <span className="font-medium text-foreground">
+                  {formatPounds(monthlyAmount)}
+                </span>
+              </div>
+              <div className="mt-1 flex items-center justify-between">
+                <span>9 ×</span>
+                <span className="font-medium text-foreground tabular-nums">
+                  {formatPounds(monthlyAmount)}
+                </span>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between border-t border-border py-2">
             <span className="flex items-center gap-2 text-sm text-muted-foreground">Excess</span>
-            <span className="text-sm font-medium text-foreground">{quote.policyDetails.excess}</span>
+            <span className="text-sm font-medium text-foreground">
+              {quote.policyDetails.excess}
+            </span>
           </div>
         </div>
 
@@ -330,7 +357,7 @@ export function QuoteCardLg({
           </div>
 
           {/* Home emergency */}
-          <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:px-5 qc:py-3">
+          <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
             <div className="flex flex-col gap-1">
               <p className="text-sm text-muted-foreground">Home emergency</p>
               <p className={priceClass}>
@@ -345,35 +372,43 @@ export function QuoteCardLg({
               aria-label="Home emergency cover"
             />
           </div>
+
+          {/* Monthly breakdown column — same style as other columns, only when monthly */}
+          {pricingMode === "monthly" && (
+            <div className="hidden flex-col justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
+              <div className="flex justify-between gap-2 border-b border-border pb-1.5">
+                <p className="text-sm text-muted-foreground">Deposit</p>
+                <p className={cn("shrink-0 tabular-nums", priceClass)}>
+                  {formatPounds(monthlyAmount)}
+                </p>
+              </div>
+              <div className="flex justify-between gap-2 border-b border-border py-1.5">
+                <p className="text-sm text-muted-foreground">1st month</p>
+                <p className={cn("shrink-0 tabular-nums", priceClass)}>
+                  {formatPounds(monthlyAmount)}
+                </p>
+              </div>
+              <div className="flex justify-between gap-2 pt-1.5">
+                <p className="text-sm text-muted-foreground">9 ×</p>
+                <p className={cn("shrink-0 tabular-nums", priceClass)}>
+                  {formatPounds(monthlyAmount)}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Total price + CTAs — stacked on mobile, side-by-side on desktop */}
         <div className="mt-3 flex w-full flex-col gap-3 qc:mt-0 qc:w-auto qc:shrink-0 qc:flex-row qc:items-stretch qc:gap-4 qc:pl-5 qc:pr-5">
           {/* Total price column — 5.4rem tall on desktop */}
           <div className="flex h-auto flex-col items-center justify-center rounded-lg bg-neutral-100 px-3 py-2 text-center qc:h-[5.4rem]">
-            {pricingMode === "annual" ? (
-              <>
-                <p className="text-sm text-muted-foreground">Total price</p>
-                <p className="text-md font-semibold text-foreground tabular-nums">
-                  {formatPounds(displayedAnnualTotal)}
-                </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  Excess {quote.policyDetails.excess}
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="text-[10px] font-medium text-muted-foreground">
-                  Deposit {formatPounds(monthlyAmount)}
-                </p>
-                <p className="text-[10px] font-medium text-muted-foreground">
-                  1st month {formatPounds(monthlyAmount)}
-                </p>
-                <p className="mt-0.5 text-xs font-semibold text-foreground tabular-nums">
-                  7 × {formatPounds(monthlyAmount)}
-                </p>
-              </>
-            )}
+            <p className="text-sm text-muted-foreground">Total price</p>
+            <p className="text-md font-semibold text-foreground tabular-nums">
+              {formatPounds(displayedAnnualTotal)}
+            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Excess {quote.policyDetails.excess}
+            </p>
           </div>
 
           {/* Action buttons column — stretches to match total height */}
