@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { CreateAccountModal } from "@/components/CreateAccountModal"
 // To test drawer instead: use CreateAccountDrawer from "@/components/CreateAccountDrawer" and render it here
 import { LAYOUT_PADDING_X } from "@/lib/constants"
-import { LogIn, Rocket, UserPlus } from "lucide-react"
+import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 
 export function Navbar() {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
@@ -31,18 +31,30 @@ export function Navbar() {
           </svg>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-1.5 border-border">
-            <LogIn className="h-4 w-4" />
-            Login
-          </Button>
+          {/* Desktop / tablet buttons */}
+          <div className="hidden md:flex items-center gap-2">
+            <Button variant="outline" size="sm" className="gap-1.5 border-border">
+              <LogIn className="h-4 w-4" />
+              Login
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 border-border"
+              onClick={() => setCreateAccountOpen(true)}
+            >
+              <UserPlus className="h-4 w-4" />
+              Create account
+            </Button>
+          </div>
+          {/* Mobile hamburger when we show a single card */}
           <Button
             variant="outline"
-            size="sm"
-            className="gap-1.5 border-border"
-            onClick={() => setCreateAccountOpen(true)}
+            size="icon"
+            className="border-border md:hidden"
+            aria-label="Open navigation"
           >
-            <UserPlus className="h-4 w-4" />
-            Create account
+            <Menu className="h-5 w-5" />
           </Button>
         </div>
     </header>

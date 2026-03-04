@@ -372,9 +372,9 @@ export function PolicyDrawer({
           <X className="h-4 w-4" />
         </Button>
 
-        <div className="flex min-h-0 flex-1">
-          {/* Left: 1/3 – branding, annual, monthly table, validity, CTAs, quote ref */}
-          <div className="flex w-1/3 flex-col border-r border-border bg-white p-6">
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+          {/* Pricing + actions header now full-width above details */}
+          <div className="border-b border-border bg-white p-6">
             <div className="flex flex-col items-center text-center">
               <span
                 className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground"
@@ -393,9 +393,7 @@ export function PolicyDrawer({
             </div>
 
             <div className="mt-6 flex flex-col">
-              <p className="mb-3 text-sm text-muted-foreground">
-                Or pay monthly
-              </p>
+              <p className="mb-3 text-sm text-muted-foreground">Or pay monthly</p>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Deposit</span>
@@ -418,10 +416,7 @@ export function PolicyDrawer({
               need to refresh your results to get the latest price.
             </p>
 
-            <Button
-              className="mt-6 w-full"
-              onClick={() => onOpenChange(false)}
-            >
+            <Button className="mt-6 w-full" onClick={() => onOpenChange(false)}>
               Continue
             </Button>
 
@@ -480,7 +475,7 @@ export function PolicyDrawer({
             </div>
           </div>
 
-          {/* Right: 2/3 – linear journey with headings + chevron, expand to show list items */}
+          {/* Details sections now take full width below pricing header */}
           <PolicyDrawerRight
             policyDetails={policyDetails}
             propertyAddress={MOCK_PROPERTY_ADDRESS}
