@@ -11,7 +11,9 @@ import {
 } from "@/components/QuotesContent"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import { X } from "lucide-react"
 import { mockQuotes } from "@/data/quotes"
 import { EXCESS_OPTIONS } from "@/lib/constants"
 import { parseExcessNum } from "@/lib/utils"
@@ -154,12 +156,14 @@ function App() {
       <div className="flex h-screen flex-col bg-neutral-50">
         <Navbar />
         <div className="flex min-h-0 flex-1">
-          <QuoteSidebar
-            quoteReference={QUOTE_REF}
-            filters={filters}
-            onFiltersChange={setFilters}
-            onEditAnswers={handleEditAnswers}
-          />
+          <div className="hidden qc:flex">
+            <QuoteSidebar
+              quoteReference={QUOTE_REF}
+              filters={filters}
+              onFiltersChange={setFilters}
+              onEditAnswers={handleEditAnswers}
+            />
+          </div>
           <main className="flex-1 overflow-y-auto">
             <QuotesContent
               displayedQuotes={displayedQuotes}
@@ -181,16 +185,18 @@ function App() {
             />
           </main>
         </div>
-        <Dialog open={optionsOpen} onOpenChange={setOptionsOpen}>
-          <DialogContent className="fixed inset-y-0 right-0 flex h-full w-full max-w-sm flex-col rounded-none border-l border-border bg-white p-0">
+        <Sheet open={optionsOpen} onOpenChange={setOptionsOpen}>
+          <SheetContent side="right" className="flex h-full w-full max-w-sm flex-col overflow-y-auto bg-white p-0">
             <QuoteSidebar
               quoteReference={QUOTE_REF}
               filters={filters}
               onFiltersChange={setFilters}
               onEditAnswers={handleEditAnswers}
+              isDrawer
+              onCloseDrawer={() => setOptionsOpen(false)}
             />
-          </DialogContent>
-        </Dialog>
+          </SheetContent>
+        </Sheet>
         <PolicyDrawer
           quote={selectedQuote}
           quoteReference={QUOTE_REF}

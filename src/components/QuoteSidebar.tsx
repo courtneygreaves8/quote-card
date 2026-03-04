@@ -24,7 +24,7 @@ import {
   PAYMENT_INACTIVE_CLASS,
 } from "@/lib/constants"
 import { QuoteFilters as QuoteFiltersType } from "@/types/quote"
-import { Calendar, Copy, Mail, Minus, Pencil, Plus } from "lucide-react"
+import { Calendar, Copy, Mail, Minus, Pencil, Plus, X } from "lucide-react"
 import { useCallback, useRef } from "react"
 
 const SIDEBAR_ICON_BTN_CLASS = "h-8 w-8 shrink-0"
@@ -38,6 +38,8 @@ interface QuoteSidebarProps {
   filters: QuoteFiltersType
   onFiltersChange: (f: QuoteFiltersType) => void
   onEditAnswers: () => void
+  isDrawer?: boolean
+  onCloseDrawer?: () => void
 }
 
 export function QuoteSidebar({
@@ -45,6 +47,8 @@ export function QuoteSidebar({
   filters,
   onFiltersChange,
   onEditAnswers,
+  isDrawer = false,
+  onCloseDrawer,
 }: QuoteSidebarProps) {
   const excessIndex = EXCESS_OPTIONS.indexOf(filters.excess)
   const safeExcessIndex = excessIndex >= 0 ? excessIndex : 0
@@ -66,8 +70,30 @@ export function QuoteSidebar({
     dateInputRef.current?.showPicker?.() ?? dateInputRef.current?.click()
   }, [])
 
+  const containerClass = [
+    "flex min-h-0 shrink-0 flex-col gap-4 overflow-y-auto bg-white py-6",
+    isDrawer ? "w-full" : "w-[308px] border-r border-border",
+    LAYOUT_PADDING_X,
+  ].join(" ")
+
   return (
-    <aside className={`hidden min-h-0 w-[342px] shrink-0 flex-col gap-4 overflow-y-auto border-r border-border bg-white py-6 qc:flex qc:w-[308px] ${LAYOUT_PADDING_X}`}>
+    <aside className={containerClass}>
+      {isDrawer && (
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-md font-semibold text-foreground">
+            You can adjust your quote below.
+          </span>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 border-border"
+            onClick={onCloseDrawer}
+            aria-label="Close options"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
       <Button
         variant="outline"
         className="h-10 w-full justify-center gap-2 px-4 py-2 text-sm"

@@ -42,7 +42,7 @@ export function QuotesContent({
 }: QuotesContentProps) {
   return (
     <div className="mx-auto max-w-5xl px-6 py-8">
-      <div className="mb-8 flex flex-col gap-4 sf:flex-row sf:items-start sf:justify-between">
+      <div className="mb-8 flex flex-col gap-4 hd:flex-row hd:items-start hd:justify-between">
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {displayedQuotes.length === 0
@@ -53,32 +53,36 @@ export function QuotesContent({
             Each quote comes with Pikl's Property Host Cover.
           </p>
         </div>
-        <div className="flex w-full flex-col gap-3 sf:w-auto sf:flex-row sf:flex-none sf:items-center sf:justify-end">
-          <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
-            <SelectTrigger className="w-full sf:w-[180px]" aria-label="Sort">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="price-asc">Price: low to high</SelectItem>
-              <SelectItem value="price-desc">Price: high to low</SelectItem>
-              <SelectItem value="provider-az">Provider A–Z</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
-            <SelectTrigger className="w-full sf:w-[160px]" aria-label="Filter">
-              <SelectValue placeholder="Filter" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All quotes</SelectItem>
-              <SelectItem value="under-20">Under £20/mo</SelectItem>
-              <SelectItem value="under-25">Under £25/mo</SelectItem>
-              <SelectItem value="under-30">Under £30/mo</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex w-full flex-row gap-3 hd:w-auto hd:flex-row hd:flex-none hd:items-center hd:justify-end">
+          <div className="flex-1">
+            <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
+              <SelectTrigger className="w-full" aria-label="Sort">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="price-asc">Price: low to high</SelectItem>
+                <SelectItem value="price-desc">Price: high to low</SelectItem>
+                <SelectItem value="provider-az">Provider A–Z</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex-1">
+            <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
+              <SelectTrigger className="w-full" aria-label="Filter">
+                <SelectValue placeholder="Filter" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All quotes</SelectItem>
+                <SelectItem value="under-20">Under £20/mo</SelectItem>
+                <SelectItem value="under-25">Under £25/mo</SelectItem>
+                <SelectItem value="under-30">Under £30/mo</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           {onOpenOptions && (
             <button
               type="button"
-              className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 qc:hidden"
+              className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 qc:hidden"
               onClick={onOpenOptions}
             >
               Options
