@@ -12,8 +12,6 @@ import {
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
-import { X } from "lucide-react"
 import { mockQuotes } from "@/data/quotes"
 import { EXCESS_OPTIONS } from "@/lib/constants"
 import { parseExcessNum } from "@/lib/utils"
