@@ -22,15 +22,6 @@ interface QuoteCardProps {
   onPurchase?: (quote: Quote) => void
 }
 
-function ColumnDivider() {
-  return (
-    <div
-      className="w-px shrink-0 self-stretch bg-neutral-200"
-      aria-hidden
-    />
-  )
-}
-
 export function QuoteCard({
   quote,
   legalCover,
@@ -48,9 +39,9 @@ export function QuoteCard({
 
   return (
     <Card className="overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-md">
-      <div className="flex min-h-[5rem] items-stretch justify-between gap-0 overflow-x-auto px-0 py-4">
+      <div className="flex flex-col gap-4 px-4 py-4 qc:flex-row qc:items-stretch qc:gap-0 qc:px-0">
         {/* Logo */}
-        <div className="flex shrink-0 items-center px-4">
+        <div className="flex shrink-0 items-start qc:items-center qc:px-4">
           <div className="flex size-[4.8rem] items-center justify-center rounded-lg bg-neutral-100 p-2">
             <span className="text-sm font-bold text-muted-foreground">
               LOGO
@@ -58,122 +49,118 @@ export function QuoteCard({
           </div>
         </div>
 
-        <ColumnDivider />
-
-        {/* Standard cover price */}
-        <div className="flex min-w-0 shrink flex-col justify-center px-4">
-          <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            Home insurance
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  className={TOOLTIP_TRIGGER_CLASS}
-                  aria-label="What is standard cover?"
-                >
-                  <HelpCircle className="h-3.5 w-3.5" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="max-w-[220px]">
-                General home insurance covering buildings and contents.
-              </TooltipContent>
-            </Tooltip>
-          </p>
-          <p className="text-base font-medium text-foreground">
-            £{quote.standardPrice}
-          </p>
-        </div>
-
-        <ColumnDivider />
-
-        {/* Pikl cover price */}
-        <div className="flex min-w-0 shrink flex-col justify-center px-4">
-          <p className="flex items-center align-top gap-1.5 text-sm text-muted-foreground">
-            Host insurance
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  className={TOOLTIP_TRIGGER_CLASS}
-                  aria-label="What is Pikl cover?"
-                >
-                  <HelpCircle className="h-3.5 w-3.5" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="max-w-[220px]">
-                Host insurance for short-term letting and home sharing.
-              </TooltipContent>
-            </Tooltip>
-          </p>
-          <p className="text-base font-medium text-foreground">
-            £{quote.piklPrice}
-          </p>
-        </div>
-
-        <ColumnDivider />
-
-        {/* Family legal add-on */}
-        <div className="flex min-w-0 shrink items-center gap-3 px-4">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm text-muted-foreground">Legal cover</p>
+        {/* Middle: 2×2 grid of cover blocks */}
+        <div className="mt-2 grid flex-1 gap-3 sm:grid-cols-2 qc:mt-0 qc:px-4">
+          {/* Home insurance */}
+          <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2">
+            <p className="mb-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+              Home insurance
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className={TOOLTIP_TRIGGER_CLASS}
+                    aria-label="What is standard cover?"
+                  >
+                    <HelpCircle className="h-3.5 w-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="max-w-[220px]">
+                  General home insurance covering buildings and contents.
+                </TooltipContent>
+              </Tooltip>
+            </p>
             <p className="text-base font-medium text-foreground">
-              £{quote.familyLegalAddOnPrice}
+              £{quote.standardPrice}
             </p>
           </div>
-          <Switch
-            checked={legalCover}
-            onCheckedChange={onLegalCoverChange}
-            aria-label="Legal cover"
-          />
-        </div>
 
-        <ColumnDivider />
-
-        {/* Home emergency cover */}
-        <div className="flex min-w-0 shrink items-center gap-3 px-4">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm text-muted-foreground">Home emergency</p>
+          {/* Host insurance */}
+          <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2">
+            <p className="mb-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+              Host insurance
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className={TOOLTIP_TRIGGER_CLASS}
+                    aria-label="What is Pikl cover?"
+                  >
+                    <HelpCircle className="h-3.5 w-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="max-w-[220px]">
+                  Host insurance for short-term letting and home sharing.
+                </TooltipContent>
+              </Tooltip>
+            </p>
             <p className="text-base font-medium text-foreground">
-              £{quote.homeEmergencyAddOnPrice}
+              £{quote.piklPrice}
             </p>
           </div>
-          <Switch
-            checked={homeEmergency}
-            onCheckedChange={onHomeEmergencyChange}
-            aria-label="Home emergency cover"
-          />
+
+          {/* Family legal add-on */}
+          <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm text-muted-foreground">Legal cover</p>
+              <p className="text-base font-medium text-foreground">
+                £{quote.familyLegalAddOnPrice}
+              </p>
+            </div>
+            <Switch
+              checked={legalCover}
+              onCheckedChange={onLegalCoverChange}
+              aria-label="Legal cover"
+            />
+          </div>
+
+          {/* Home emergency cover */}
+          <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm text-muted-foreground">Home emergency</p>
+              <p className="text-base font-medium text-foreground">
+                £{quote.homeEmergencyAddOnPrice}
+              </p>
+            </div>
+            <Switch
+              checked={homeEmergency}
+              onCheckedChange={onHomeEmergencyChange}
+              aria-label="Home emergency cover"
+            />
+          </div>
         </div>
 
-        {/* Total price + excess */}
-        <div className="flex min-w-0 shrink flex-col items-center justify-center rounded-[8px] bg-neutral-100 px-4 py-2 text-center">
-          <p className="text-sm whitespace-nowrap text-muted-foreground">Total price</p>
-          <p className="text-base font-semibold text-foreground">
-            £{totalPrice}
-          </p>
-          <p className="mt-0.5 whitespace-nowrap text-xs text-muted-foreground">
-            Excess {quote.policyDetails.excess}
-          </p>
-        </div>
+        {/* Right: total price + CTAs */}
+        <div className="mt-3 flex w-full flex-col gap-3 qc:mt-0 qc:w-[11rem] qc:px-4">
+          <div className="rounded-[8px] bg-neutral-100 px-4 py-2 text-center">
+            <p className="text-sm text-muted-foreground">Total price</p>
+            <p className="text-base font-semibold text-foreground">
+              £{totalPrice}
+            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Excess {quote.policyDetails.excess}
+            </p>
+          </div>
 
-        {/* CTAs */}
-        <div className="flex shrink-0 flex-col items-center gap-2 px-4">
-          <Button
-            size="sm"
-            className="w-full text-xs"
-            onClick={() => onPurchase?.(quote)}
-          >
-            <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
-            Purchase
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full text-xs"
-            onClick={() => onMoreDetails(quote)}
-          >
-            <Info className="h-3.5 w-3.5 shrink-0" />
-            More details
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button
+              size="sm"
+              className="w-full text-xs"
+              onClick={() => onPurchase?.(quote)}
+            >
+              <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
+              Purchase
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-xs"
+              onClick={() => onMoreDetails(quote)}
+            >
+              <Info className="h-3.5 w-3.5 shrink-0" />
+              More details
+            </Button>
+          </div>
         </div>
       </div>
     </Card>
