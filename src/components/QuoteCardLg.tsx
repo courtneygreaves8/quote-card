@@ -481,7 +481,7 @@ export function QuoteCardLg({
               <>
                 <p className="text-sm text-muted-foreground">Monthly Price</p>
                 <p className="text-md font-semibold text-foreground tabular-nums">
-                  {formatPounds(monthlyAmount)}/mo.
+                  {formatPounds(monthlyAmount)}<span className="text-xs font-normal">/mo.</span>
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   Excess {quote.policyDetails.excess}
