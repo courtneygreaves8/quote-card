@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { CreateAccountDrawer } from "@/components/CreateAccountDrawer"
+import { CreateAccountModal } from "@/components/CreateAccountModal"
+// To test drawer instead: use CreateAccountDrawer from "@/components/CreateAccountDrawer" and render it here
 import { LAYOUT_PADDING_X } from "@/lib/constants"
 import { LogIn, Rocket, UserPlus } from "lucide-react"
 
@@ -45,7 +46,7 @@ export function Navbar() {
           </Button>
         </div>
     </header>
-    <CreateAccountDrawer
+    <CreateAccountModal
       open={createAccountOpen}
       onOpenChange={setCreateAccountOpen}
     />
