@@ -67,8 +67,11 @@ export function Navbar() {
       />
       {/* Mobile nav menu */}
       <Sheet open={navOpen} onOpenChange={setNavOpen}>
-        <SheetContent side="right" className="flex h-full w-full max-w-xs flex-col bg-white p-4">
-          <div className="mt-8 flex flex-col gap-3">
+        <SheetContent
+          side="top"
+          className="flex w-full max-w-none flex-col border-b border-border bg-white p-4 pt-16"
+        >
+          <div className="flex flex-col gap-3">
             <Button
               variant="outline"
               className="h-10 w-full justify-center gap-1.5 border-border"
