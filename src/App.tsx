@@ -11,6 +11,7 @@ import {
 } from "@/components/QuotesContent"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { mockQuotes } from "@/data/quotes"
 import { EXCESS_OPTIONS } from "@/lib/constants"
 import { parseExcessNum } from "@/lib/utils"
@@ -45,6 +46,7 @@ function App() {
   const [filters, setFilters] = useState<QuoteFiltersType>(defaultFilters)
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [optionsOpen, setOptionsOpen] = useState(false)
   const [sort, setSort] = useState<SortOption>("price-asc")
   const [filter, setFilter] = useState<FilterOption>("all")
   // Hidden for now – set to true to show "Finding quotes" loading animation
@@ -175,9 +177,20 @@ function App() {
               }
               onMoreDetails={handleMoreDetails}
               onPurchase={handlePurchase}
+              onOpenOptions={() => setOptionsOpen(true)}
             />
           </main>
         </div>
+        <Dialog open={optionsOpen} onOpenChange={setOptionsOpen}>
+          <DialogContent className="fixed inset-y-0 right-0 flex h-full w-full max-w-sm flex-col rounded-none border-l border-border bg-white p-0">
+            <QuoteSidebar
+              quoteReference={QUOTE_REF}
+              filters={filters}
+              onFiltersChange={setFilters}
+              onEditAnswers={handleEditAnswers}
+            />
+          </DialogContent>
+        </Dialog>
         <PolicyDrawer
           quote={selectedQuote}
           quoteReference={QUOTE_REF}

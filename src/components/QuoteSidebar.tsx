@@ -67,7 +67,7 @@ export function QuoteSidebar({
   }, [])
 
   return (
-    <aside className={`flex min-h-0 w-[342px] shrink-0 flex-col gap-4 overflow-y-auto border-r border-border bg-white py-6 ${LAYOUT_PADDING_X}`}>
+    <aside className={`hidden min-h-0 w-[342px] shrink-0 flex-col gap-4 overflow-y-auto border-r border-border bg-white py-6 qc:flex qc:w-[308px] ${LAYOUT_PADDING_X}`}>
       <Button
         variant="outline"
         className="h-10 w-full justify-center gap-2 px-4 py-2 text-sm"

@@ -23,6 +23,7 @@ interface QuotesContentProps {
   onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
+  onOpenOptions?: () => void
 }
 
 export function QuotesContent({
@@ -37,6 +38,7 @@ export function QuotesContent({
   onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
+  onOpenOptions,
 }: QuotesContentProps) {
   return (
     <div className="mx-auto max-w-5xl px-6 py-8">
@@ -73,10 +75,19 @@ export function QuotesContent({
               <SelectItem value="under-30">Under £30/mo</SelectItem>
             </SelectContent>
           </Select>
+          {onOpenOptions && (
+            <button
+              type="button"
+              className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 qc:hidden"
+              onClick={onOpenOptions}
+            >
+              Options
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 qc:grid-cols-1">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 card3:grid-cols-3 qc:grid-cols-1">
         {displayedQuotes.length > 0 ? (
           displayedQuotes.map((quote) => (
             <QuoteCardLg
