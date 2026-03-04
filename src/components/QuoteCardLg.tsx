@@ -168,18 +168,13 @@ export function QuoteCardLg({
         </div>
 
         <div className="flex flex-col gap-2 pt-2">
-          <Button
-            size="sm"
-            className="w-full gap-1.5"
-            onClick={() => onPurchase?.(quote)}
-          >
+          <Button className="h-10 w-full gap-1.5" onClick={() => onPurchase?.(quote)}>
             <ShoppingCart className="h-4 w-4 shrink-0" />
             Purchase
           </Button>
           <Button
             variant="outline"
-            size="sm"
-            className="w-full gap-1.5"
+            className="h-10 w-full gap-1.5"
             onClick={() => onMoreDetails(quote)}
           >
             <Info className="h-4 w-4 shrink-0" />
@@ -285,18 +280,13 @@ export function QuoteCardLg({
 
           {/* Action buttons column — stretches to match total height */}
           <div className="flex h-auto flex-col justify-between gap-2 qc:w-[8rem] qc:rounded-br-lg qc:py-0">
-            <Button
-              size="sm"
-              className="w-full gap-1.5"
-              onClick={() => onPurchase?.(quote)}
-            >
+            <Button className="h-10 w-full gap-1.5" onClick={() => onPurchase?.(quote)}>
               <ShoppingCart className="h-4 w-4 shrink-0" />
               Purchase
             </Button>
             <Button
               variant="outline"
-              size="sm"
-              className="w-full gap-1.5"
+              className="h-10 w-full gap-1.5"
               onClick={() => onMoreDetails(quote)}
             >
               <Info className="h-4 w-4 shrink-0" />
