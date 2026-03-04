@@ -366,6 +366,17 @@ export function QuoteSidebar({
           </Button>
         </div>
       </div>
+
+      {isDrawer && (
+        <div className="mt-4 mb-3 block card3:hidden">
+          <Button
+            className="h-10 w-full justify-center gap-2 text-sm"
+            onClick={onCloseDrawer}
+          >
+            Apply changes
+          </Button>
+        </div>
+      )}
     </aside>
   )
 }

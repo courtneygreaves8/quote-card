@@ -24,7 +24,7 @@ import {
   Save,
   X,
 } from "lucide-react"
-import { type ReactNode, useCallback, useState } from "react"
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
 
 const MOCK_PROPERTY_ADDRESS = "123 Example Street, London, SW1A 1AA"
 const MOCK_PROPOSER_NAME = "John Smith"
@@ -189,7 +189,7 @@ function PolicyDrawerRight({
   const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
   return (
-    <div className="flex min-h-0 w-2/3 flex-1 flex-col overflow-y-auto p-6 pr-4 pt-[5.5rem]">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[5.5rem]">
       <DrawerSection
         title="Overview"
         open={openOverview}
@@ -333,6 +333,9 @@ export function PolicyDrawer({
   open,
   onOpenChange,
 }: PolicyDrawerProps) {
+  const [showStickyBar, setShowStickyBar] = useState(false)
+  const scrollRef = useRef<HTMLDivElement | null>(null)
+
   const handleCopyRef = useCallback(() => {
     navigator.clipboard.writeText(quoteReference)
   }, [quoteReference])
@@ -344,6 +347,23 @@ export function PolicyDrawer({
     )
     window.location.href = `mailto:?subject=${subject}&body=${body}`
   }, [quoteReference])
+
+  useEffect(() => {
+    const container = scrollRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const shouldShow = container.scrollTop > 120
+      setShowStickyBar(shouldShow)
+    }
+
+    handleScroll()
+    container.addEventListener("scroll", handleScroll)
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll)
+    }
+  }, [open])
 
   if (!quote) return null
 
@@ -372,9 +392,48 @@ export function PolicyDrawer({
           <X className="h-4 w-4" />
         </Button>
 
-        <div className="flex min-h-0 flex-1">
-          {/* Left: 1/3 – branding, annual, monthly table, validity, CTAs, quote ref */}
-          <div className="flex w-1/3 flex-col border-r border-border bg-white p-6">
+        <div
+          ref={scrollRef}
+          className="flex min-h-0 flex-1 flex-col overflow-y-auto md:flex-row"
+        >
+          {/* Mobile sticky price + primary CTA + close button when scrolling */}
+          <div
+            className={cn(
+              "sticky top-0 z-20 -mt-px border-b border-border bg-white/95 px-4 py-2 backdrop-blur transition-all duration-200 md:hidden",
+              showStickyBar
+                ? "translate-y-0 opacity-100"
+                : "-translate-y-2 opacity-0"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 border-border"
+                onClick={() => onOpenChange(false)}
+                aria-label="Close policy details"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              <div className="flex flex-1 flex-col">
+                <span className="text-[11px] font-medium text-muted-foreground">
+                  Pay annually
+                </span>
+                <span className="text-base font-semibold tabular-nums text-foreground">
+                  £{annualPrice.toFixed(2)}
+                </span>
+              </div>
+              <Button
+                className="h-9 whitespace-nowrap px-3 text-xs"
+                onClick={() => onOpenChange(false)}
+              >
+                Continue
+              </Button>
+            </div>
+          </div>
+
+          {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
+          <div className="flex w-full flex-col border-b border-border bg-white p-6 md:w-1/3 md:border-b-0 md:border-r">
             <div className="flex flex-col items-center text-center">
               <span
                 className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground"
@@ -480,13 +539,15 @@ export function PolicyDrawer({
             </div>
           </div>
 
-          {/* Right: 2/3 – linear journey with headings + chevron, expand to show list items */}
-          <PolicyDrawerRight
-            policyDetails={policyDetails}
-            propertyAddress={MOCK_PROPERTY_ADDRESS}
-            proposerName={MOCK_PROPOSER_NAME}
-            providerName={providerName}
-          />
+          {/* Right: details – full width on small screens, 2/3 on md+ */}
+          <div className="w-full md:w-2/3">
+            <PolicyDrawerRight
+              policyDetails={policyDetails}
+              propertyAddress={MOCK_PROPERTY_ADDRESS}
+              proposerName={MOCK_PROPOSER_NAME}
+              providerName={providerName}
+            />
+          </div>
         </div>
       </SheetContent>
     </Sheet>
