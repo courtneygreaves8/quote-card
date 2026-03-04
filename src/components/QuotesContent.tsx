@@ -47,7 +47,7 @@ export function QuotesContent({
   onOpenOptions,
 }: QuotesContentProps) {
   return (
-    <div className="mx-auto w-full max-w-[1024px] py-8 px-4 min-[1025px]:px-0">
+    <div className="mx-auto w-full min-w-0 max-w-[1024px] overflow-x-hidden py-8 px-4 min-[1025px]:px-0">
       <div className="mb-8 flex flex-col gap-4 hd:flex-row hd:items-start hd:justify-between">
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
@@ -97,7 +97,7 @@ export function QuotesContent({
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 card3:grid-cols-3 qc:grid-cols-1">
+      <div className="grid min-w-0 gap-6 sm:grid-cols-1 md:grid-cols-2 card3:grid-cols-3 qc:grid-cols-1">
         {displayedQuotes.length > 0 ? (
           displayedQuotes.map((quote) => (
             <QuoteCardLg
