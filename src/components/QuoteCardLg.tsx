@@ -7,7 +7,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Quote } from "@/types/quote"
-import { HelpCircle, Info, ShoppingCart } from "lucide-react"
+import { CheckSquare, HelpCircle, Info, ShoppingCart, Square } from "lucide-react"
+import { useState } from "react"
 
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
@@ -45,6 +46,11 @@ export function QuoteCardLg({
     (legalCover ? quote.familyLegalAddOnPrice : 0) +
     (homeEmergency ? quote.homeEmergencyAddOnPrice : 0)
 
+  const [pricingMode, setPricingMode] = useState<"annual" | "monthly">("annual")
+
+  const toDisplay = (value: number) =>
+    pricingMode === "annual" ? value : Math.round(value / 12)
+
   const coverLabelClass =
     "mb-1 flex items-center gap-1.5 text-sm text-muted-foreground"
   const priceClass =
@@ -61,9 +67,130 @@ export function QuoteCardLg({
 
   return (
     <Card className="overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-md">
-      {/* qc: = 1024px+ only; large layout is locked — do not alter qc: classes */}
+      {/* Stacked layout: 0–1023px (hidden from 1024px up) */}
+      <div className={`flex flex-col gap-3 px-4 py-4 qc:hidden`}>
+        {/* Header: logo + pricing toggle + insurer name */}
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
+            <span className="text-xs font-bold text-muted-foreground">LOGO</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground">
+              {pricingMode === "annual" ? "Annual" : "Monthly"}
+            </span>
+            <Switch
+              checked={pricingMode === "monthly"}
+              onCheckedChange={(checked) =>
+                setPricingMode(checked ? "monthly" : "annual")
+              }
+              aria-label="Toggle pricing mode"
+            />
+          </div>
+        </div>
+
+        <div className="mt-1 text-base font-semibold text-foreground">
+          {quote.providerName}
+        </div>
+
+        {/* Core breakdown */}
+        <div className="mt-2 flex flex-col">
+          <div className="flex items-center justify-between py-2">
+            <span className="text-sm text-muted-foreground">Home insurance</span>
+            <span className="text-sm font-medium text-foreground">
+              £{toDisplay(quote.standardPrice)}
+            </span>
+          </div>
+          <div className="flex items-center justify-between border-t border-border py-2">
+            <span className="text-sm text-muted-foreground">Host insurance</span>
+            <span className="text-sm font-medium text-foreground">
+              £{toDisplay(quote.piklPrice)}
+            </span>
+          </div>
+          <div className="flex items-center justify-between border-t border-border py-2">
+            <span className="flex items-center gap-2 text-sm text-muted-foreground">Excess</span>
+            <span className="text-sm font-medium text-foreground">{quote.policyDetails.excess}</span>
+          </div>
+        </div>
+
+        {/* Extras divider */}
+        <div className="mt-4 flex items-center gap-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <div className="h-px flex-1 bg-border" />
+          <span>Extras</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        {/* Home emergency toggle card */}
+        <button
+          type="button"
+          onClick={() => onHomeEmergencyChange(!homeEmergency)}
+          className="flex w-full items-center justify-between rounded-lg border border-border bg-white px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted"
+          aria-pressed={homeEmergency}
+          aria-label="Toggle Home emergency"
+        >
+          <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+            {homeEmergency ? (
+              <CheckSquare className="h-5 w-5 shrink-0 text-foreground" aria-hidden />
+            ) : (
+              <Square className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+            )}
+            Home emergency
+          </span>
+          <span className="text-sm font-medium text-foreground">
+            £{toDisplay(quote.homeEmergencyAddOnPrice)}
+          </span>
+        </button>
+
+        {/* Legal cover toggle card */}
+        <button
+          type="button"
+          onClick={() => onLegalCoverChange(!legalCover)}
+          className="flex w-full items-center justify-between rounded-lg border border-border bg-white px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted"
+          aria-pressed={legalCover}
+          aria-label="Toggle Legal cover"
+        >
+          <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+            {legalCover ? (
+              <CheckSquare className="h-5 w-5 shrink-0 text-foreground" aria-hidden />
+            ) : (
+              <Square className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+            )}
+            Legal cover
+          </span>
+          <span className="text-sm font-medium text-foreground">
+            £{toDisplay(quote.familyLegalAddOnPrice)}
+          </span>
+        </button>
+
+        {/* Total & actions */}
+        <div className="mt-2 flex items-center justify-between border-t border-border pt-3">
+          <span className="text-sm font-medium text-muted-foreground">Total price</span>
+          <span className="text-lg font-semibold text-foreground">£{toDisplay(totalPrice)}</span>
+        </div>
+
+        <div className="flex flex-col gap-2 pt-2">
+          <Button
+            size="sm"
+            className="w-full gap-1.5"
+            onClick={() => onPurchase?.(quote)}
+          >
+            <ShoppingCart className="h-4 w-4 shrink-0" />
+            Purchase
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-1.5"
+            onClick={() => onMoreDetails(quote)}
+          >
+            <Info className="h-4 w-4 shrink-0" />
+            More details
+          </Button>
+        </div>
+      </div>
+
+      {/* Locked large layout: 1024px+ only (qc breakpoint) */}
       <div
-        className={`flex flex-col gap-4 ${basePadding} qc:flex-row qc:items-center qc:gap-0 qc:px-0 qc:py-4`}
+        className={`hidden qc:flex flex-col gap-4 ${basePadding} qc:flex-row qc:items-center qc:gap-0 qc:px-0 qc:py-4`}
       >
         {/* Logo — same column padding and height as total/buttons on desktop */}
         <div className="flex shrink-0 items-start qc:flex qc:h-[4.8rem] qc:items-center qc:border-r qc:border-border qc:px-5">

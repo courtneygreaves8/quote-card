@@ -76,7 +76,7 @@ export function QuotesContent({
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-1">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 qc:grid-cols-1">
         {displayedQuotes.length > 0 ? (
           displayedQuotes.map((quote) => (
             <QuoteCardLg
