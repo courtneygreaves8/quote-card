@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       screens: {
-        // QuoteCardLg horizontal layout (>= 1024px)
+        // LOCKED: QuoteCardLg large layout — do not change. Layout at 1024px+ must stay as-is.
         qc: "1024px",
         // Sort/filter layout breakpoint (>= 784px)
         sf: "784px",

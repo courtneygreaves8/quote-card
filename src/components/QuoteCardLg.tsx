@@ -12,7 +12,12 @@ import { HelpCircle, Info, ShoppingCart } from "lucide-react"
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
 
-/** QuoteCardLg: horizontal layout with logo, cover columns, total, and buttons. Used at 1024px (qc) and above. */
+/**
+ * QuoteCardLg — LOCKED LAYOUT
+ * Horizontal layout (logo | cover columns | total | buttons) is fixed for viewport >= 1024px.
+ * Tailwind breakpoint: `qc` in tailwind.config.js = 1024px. Do not change this breakpoint or
+ * the structure of the large layout; responsive behavior below 1024px may be adjusted separately.
+ */
 interface QuoteCardLgProps {
   quote: Quote
   legalCover: boolean
@@ -56,6 +61,7 @@ export function QuoteCardLg({
 
   return (
     <Card className="overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-md">
+      {/* qc: = 1024px+ only; large layout is locked — do not alter qc: classes */}
       <div
         className={`flex flex-col gap-4 ${basePadding} qc:flex-row qc:items-center qc:gap-0 qc:px-0 qc:py-4`}
       >
