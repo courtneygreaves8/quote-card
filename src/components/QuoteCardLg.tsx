@@ -97,7 +97,7 @@ export function QuoteCardLg({
         : "px-4 py-4"
 
   return (
-    <div className="flex flex-col">
+    <div className="flex w-[1024px] max-w-full flex-col">
       {/* Pricing tabs attached to top-left, in-flow for large layout only */}
       <div className="hidden qc:block">
         <div className="inline-flex rounded-t-[8px] rounded-b-none border border-b-0 border-border bg-muted/40 text-xs font-medium text-muted-foreground">
@@ -129,7 +129,7 @@ export function QuoteCardLg({
         </div>
       </div>
 
-      <Card className="overflow-hidden rounded-tl-none rounded-tr-[8px] bg-white shadow-sm transition-shadow hover:shadow-md">
+      <Card className="overflow-hidden rounded-[8px] qc:rounded-tl-none qc:rounded-tr-[8px] bg-white shadow-sm transition-shadow hover:shadow-md">
         {/* Stacked layout: 0–1339px (hidden from 1340px up) */}
         <div className={`flex flex-col gap-3 px-4 py-4 qc:hidden`}>
           {/* Header: logo + pricing toggle + insurer name */}
@@ -174,13 +174,13 @@ export function QuoteCardLg({
             <div className="border-t border-border py-2 text-xs text-muted-foreground">
               <div className="flex items-center justify-between">
                 <span>Deposit</span>
-                <span className="font-medium text-foreground">
+                <span className="text-[10px] font-medium text-foreground tabular-nums">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
               <div className="mt-1 flex items-center justify-between">
-                <span>1st month</span>
-                <span className="font-medium text-foreground">
+                <span>1x</span>
+                <span className="text-[10px] font-medium text-foreground tabular-nums">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
@@ -356,35 +356,35 @@ export function QuoteCardLg({
             />
           </div>
 
-          {/* Home emergency */}
-          <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm text-muted-foreground">Home emergency</p>
-              <p className={priceClass}>
-                {pricingMode === "annual"
-                  ? toDisplayAnnual(quote.homeEmergencyAddOnPrice)
-                  : toDisplayMonthly(quote.homeEmergencyAddOnPrice)}
-              </p>
+          {/* Home emergency — hidden on monthly so breakdown column can follow Legal */}
+          {pricingMode === "annual" && (
+            <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:px-5 qc:py-3">
+              <div className="flex flex-col gap-1">
+                <p className="text-sm text-muted-foreground">Home emergency</p>
+                <p className={priceClass}>
+                  {toDisplayAnnual(quote.homeEmergencyAddOnPrice)}
+                </p>
+              </div>
+              <Switch
+                checked={homeEmergency}
+                onCheckedChange={onHomeEmergencyChange}
+                aria-label="Home emergency cover"
+              />
             </div>
-            <Switch
-              checked={homeEmergency}
-              onCheckedChange={onHomeEmergencyChange}
-              aria-label="Home emergency cover"
-            />
-          </div>
+          )}
 
           {/* Monthly breakdown column — same style as other columns, only when monthly */}
           {pricingMode === "monthly" && (
             <div className="hidden flex-col justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
               <div className="flex justify-between gap-2 border-b border-border pb-1.5">
                 <p className="text-sm text-muted-foreground">Deposit</p>
-                <p className={cn("shrink-0 tabular-nums", priceClass)}>
+                <p className="shrink-0 text-xs font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
                 </p>
               </div>
               <div className="flex justify-between gap-2 border-b border-border py-1.5">
-                <p className="text-sm text-muted-foreground">1st month</p>
-                <p className={cn("shrink-0 tabular-nums", priceClass)}>
+                <p className="text-sm text-muted-foreground">1x</p>
+                <p className="shrink-0 text-xs font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
                 </p>
               </div>

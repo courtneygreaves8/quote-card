@@ -97,7 +97,9 @@ export function QuotesContent({
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 card3:grid-cols-3 qc:grid-cols-1">
+      {/* Grid extends into parent padding so QuoteCardLg can render at full 1024px */}
+      <div className="-mx-6">
+        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 card3:grid-cols-3 qc:grid-cols-1">
         {displayedQuotes.length > 0 ? (
           displayedQuotes.map((quote) => (
             <QuoteCardLg
@@ -122,6 +124,7 @@ export function QuotesContent({
             </p>
           </div>
         )}
+        </div>
       </div>
     </div>
   )

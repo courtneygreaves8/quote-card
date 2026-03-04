@@ -12,7 +12,7 @@ import {
   CardHeader,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Check, Pencil, Zap } from "lucide-react"
+import { Check, Pencil, X, Zap } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 interface CreateAccountModalProps {
@@ -90,12 +90,22 @@ export function CreateAccountModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md border-none bg-transparent p-0 pt-12 px-4 sm:p-4">
+      <DialogContent className="max-w-md border-none bg-transparent p-0 pt-12 px-4 sm:p-4" showCloseButton={false}>
         <DialogHeader className="sr-only">
           <DialogTitle>Create account</DialogTitle>
         </DialogHeader>
 
-        <Card className="w-full">
+        <Card className="relative w-full">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="absolute right-2 top-2 h-8 w-8 border-border"
+            onClick={() => onOpenChange(false)}
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </Button>
           <CardHeader className="text-center">
             <div
               className="mx-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
