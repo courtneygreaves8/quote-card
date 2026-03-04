@@ -95,7 +95,7 @@ export function QuoteCardLg({
         : "px-4 py-4"
 
   return (
-    <div className="flex w-[1024px] max-w-full flex-col">
+    <div className="flex min-w-0 w-full max-w-[1024px] flex-col">
       {/* Pricing tabs attached to top-left, in-flow for large layout only */}
       <div className="hidden qc:block">
         <div className="inline-flex rounded-t-[8px] rounded-b-none border border-b-0 border-border bg-muted/40 text-xs font-medium text-muted-foreground">
@@ -127,11 +127,11 @@ export function QuoteCardLg({
         </div>
       </div>
 
-      <Card className="overflow-hidden rounded-[8px] qc:rounded-tl-none qc:rounded-tr-[8px] bg-white shadow-sm transition-shadow hover:shadow-md">
+      <Card className="min-w-0 overflow-hidden rounded-[8px] qc:rounded-tl-none qc:rounded-tr-[8px] bg-white shadow-sm transition-shadow hover:shadow-md">
         {/* Stacked layout: 0–1339px (hidden from 1340px up) */}
-        <div className={`flex flex-col gap-3 px-4 py-4 qc:hidden`}>
+        <div className={`flex min-w-0 flex-col gap-3 px-4 py-4 qc:hidden`}>
           {/* Header: logo + pricing toggle + insurer name */}
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center justify-between gap-3">
             <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
               <span className="text-xs font-bold text-muted-foreground">LOGO</span>
             </div>
@@ -149,21 +149,21 @@ export function QuoteCardLg({
             </div>
           </div>
 
-          <div className="mt-1 text-base font-semibold text-foreground">
+          <div className="mt-1 min-w-0 break-words text-base font-semibold text-foreground">
             {quote.providerName}
           </div>
 
         {/* Core breakdown */}
-        <div className="mt-2 flex flex-col">
-          <div className="flex items-center justify-between py-2">
-            <span className="text-sm text-muted-foreground">Home insurance</span>
-            <span className="text-sm font-medium text-foreground">
+        <div className="mt-2 flex min-w-0 flex-col">
+          <div className="flex min-w-0 items-center justify-between gap-2 py-2">
+            <span className="min-w-0 truncate text-sm text-muted-foreground">Home insurance</span>
+            <span className="shrink-0 text-sm font-medium tabular-nums text-foreground">
               {toDisplay(quote.standardPrice)}
             </span>
           </div>
-          <div className="flex items-center justify-between border-t border-border py-2">
-            <span className="text-sm text-muted-foreground">Host insurance</span>
-            <span className="text-sm font-medium text-foreground">
+          <div className="flex min-w-0 items-center justify-between gap-2 border-t border-border py-2">
+            <span className="min-w-0 truncate text-sm text-muted-foreground">Host insurance</span>
+            <span className="shrink-0 text-sm font-medium tabular-nums text-foreground">
               {toDisplay(quote.piklPrice)}
             </span>
           </div>
@@ -172,7 +172,7 @@ export function QuoteCardLg({
             <div className="border-t border-border py-2 text-xs text-muted-foreground">
               <div className="flex items-center justify-between">
                 <span>Deposit</span>
-                <span className="text-[10px] font-medium text-foreground tabular-nums">
+                <span className="font-medium text-foreground tabular-nums">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
@@ -194,7 +194,7 @@ export function QuoteCardLg({
                     </TooltipContent>
                   </Tooltip>
                 </span>
-                <span className="text-[10px] font-medium text-foreground tabular-nums">
+                <span className="font-medium text-foreground tabular-nums">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
@@ -207,9 +207,9 @@ export function QuoteCardLg({
             </div>
           )}
 
-          <div className="flex items-center justify-between border-t border-border py-2">
-            <span className="flex items-center gap-2 text-sm text-muted-foreground">Excess</span>
-            <span className="text-sm font-medium text-foreground">
+          <div className="flex min-w-0 items-center justify-between gap-2 border-t border-border py-2">
+            <span className="min-w-0 text-sm text-muted-foreground">Excess</span>
+            <span className="shrink-0 text-sm font-medium text-foreground">
               {quote.policyDetails.excess}
             </span>
           </div>
@@ -265,12 +265,12 @@ export function QuoteCardLg({
         </button>
 
         {/* Total & actions */}
-        <div className="mt-2 flex items-center justify-between border-t border-border pt-3">
-          <span className="text-sm font-medium text-muted-foreground">Total price</span>
-          <span className="text-lg font-semibold text-foreground">{toDisplay(totalPrice)}</span>
+        <div className="mt-2 flex min-w-0 items-center justify-between gap-2 border-t border-border pt-3">
+          <span className="min-w-0 text-sm font-medium text-muted-foreground">Total price</span>
+          <span className="shrink-0 text-lg font-semibold tabular-nums text-foreground">{toDisplay(totalPrice)}</span>
         </div>
 
-        <div className="flex flex-col gap-2 pt-2">
+        <div className="flex min-w-0 flex-col gap-2 pt-2">
           <Button className="h-10 w-full gap-1.5" onClick={() => onPurchase?.(quote)}>
             <ShoppingCart className="h-4 w-4 shrink-0" />
             Purchase
