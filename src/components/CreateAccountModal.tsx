@@ -90,7 +90,7 @@ export function CreateAccountModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md border-none bg-transparent p-0 sm:p-4">
+      <DialogContent className="max-w-md border-none bg-transparent p-0 pt-12 px-4 sm:p-4">
         <DialogHeader className="sr-only">
           <DialogTitle>Create account</DialogTitle>
         </DialogHeader>

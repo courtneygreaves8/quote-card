@@ -339,21 +339,6 @@ export function QuoteSidebar({
             variant="ghost"
             size="sm"
             className={
-              filters.paymentOption === "monthly"
-                ? PAYMENT_ACTIVE_CLASS
-                : PAYMENT_INACTIVE_CLASS
-            }
-            onClick={() =>
-              onFiltersChange({ ...filters, paymentOption: "monthly" })
-            }
-          >
-            Monthly
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className={
               filters.paymentOption === "annual"
                 ? PAYMENT_ACTIVE_CLASS
                 : PAYMENT_INACTIVE_CLASS
@@ -363,6 +348,21 @@ export function QuoteSidebar({
             }
           >
             Annual
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className={
+              filters.paymentOption === "monthly"
+                ? PAYMENT_ACTIVE_CLASS
+                : PAYMENT_INACTIVE_CLASS
+            }
+            onClick={() =>
+              onFiltersChange({ ...filters, paymentOption: "monthly" })
+            }
+          >
+            Monthly
           </Button>
         </div>
       </div>

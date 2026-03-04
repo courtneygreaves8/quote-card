@@ -22,7 +22,7 @@ const defaultFilters: QuoteFiltersType = {
   excess: "£250",
   policyType: "Buildings & Contents",
   coverStartDate: new Date().toISOString().slice(0, 10),
-  paymentOption: "monthly",
+  paymentOption: "annual",
   buildingsAccidentalDamage: false,
   contentsAccidentalDamage: false,
   legalCover: false,
@@ -169,6 +169,10 @@ function App() {
               filter={filter}
               onSortChange={setSort}
               onFilterChange={setFilter}
+              paymentOption={filters.paymentOption}
+              onPaymentOptionChange={(option) =>
+                setFilters((f) => ({ ...f, paymentOption: option }))
+              }
               legalCover={filters.legalCover}
               homeEmergency={filters.homeEmergency}
               onLegalCoverChange={(checked) =>

@@ -1,4 +1,5 @@
 import { QuoteCardLg } from "@/components/QuoteCardLg"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
@@ -7,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Quote } from "@/types/quote"
+import type { PaymentOption } from "@/types/quote"
 
 export type SortOption = "price-asc" | "price-desc" | "provider-az"
 export type FilterOption = "all" | "under-20" | "under-25" | "under-30"
@@ -17,6 +19,8 @@ interface QuotesContentProps {
   filter: FilterOption
   onSortChange: (value: SortOption) => void
   onFilterChange: (value: FilterOption) => void
+  paymentOption: PaymentOption
+  onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
   homeEmergency: boolean
   onLegalCoverChange: (checked: boolean) => void
@@ -32,6 +36,8 @@ export function QuotesContent({
   filter,
   onSortChange,
   onFilterChange,
+  paymentOption,
+  onPaymentOptionChange,
   legalCover,
   homeEmergency,
   onLegalCoverChange,
@@ -80,13 +86,13 @@ export function QuotesContent({
             </Select>
           </div>
           {onOpenOptions && (
-            <button
+            <Button
               type="button"
-              className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 qc:hidden"
+              className="flex-1 qc:hidden"
               onClick={onOpenOptions}
             >
               Options
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -98,6 +104,8 @@ export function QuotesContent({
               key={quote.id}
               size="lg"
               quote={quote}
+              paymentOption={paymentOption}
+              onPaymentOptionChange={onPaymentOptionChange}
               legalCover={legalCover}
               homeEmergency={homeEmergency}
               onLegalCoverChange={onLegalCoverChange}

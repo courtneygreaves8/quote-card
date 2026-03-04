@@ -349,19 +349,26 @@ export function PolicyDrawer({
   }, [quoteReference])
 
   useEffect(() => {
-    const container = scrollRef.current
-    if (!container) return
+    if (!open) return
 
+    let container: HTMLDivElement | null = null
     const handleScroll = () => {
+      if (!container) return
       const shouldShow = container.scrollTop > 120
       setShowStickyBar(shouldShow)
     }
 
-    handleScroll()
-    container.addEventListener("scroll", handleScroll)
+    const frameId = requestAnimationFrame(() => {
+      container = scrollRef.current
+      if (!container) return
+      handleScroll()
+      container.addEventListener("scroll", handleScroll)
+    })
 
     return () => {
-      container.removeEventListener("scroll", handleScroll)
+      cancelAnimationFrame(frameId)
+      const el = scrollRef.current
+      if (el) el.removeEventListener("scroll", handleScroll)
     }
   }, [open])
 
@@ -399,10 +406,11 @@ export function PolicyDrawer({
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
             className={cn(
-              "sticky top-0 z-20 -mt-px border-b border-border bg-white/95 px-4 py-2 backdrop-blur transition-all duration-200 md:hidden",
+              "sticky top-0 z-20 -mt-px border-b border-border bg-white/95 px-4 py-2 backdrop-blur md:hidden",
+              "transition-[transform,opacity] duration-200 ease-out",
               showStickyBar
                 ? "translate-y-0 opacity-100"
-                : "-translate-y-2 opacity-0"
+                : "-translate-y-2 opacity-0 pointer-events-none"
             )}
           >
             <div className="flex items-center gap-3">

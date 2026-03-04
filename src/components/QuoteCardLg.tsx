@@ -7,11 +7,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Quote } from "@/types/quote"
+import type { PaymentOption } from "@/types/quote"
 import { CheckSquare, HelpCircle, Info, ShoppingCart, Square } from "lucide-react"
-import { useState } from "react"
 
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+
+/** Annual pricing display range (quotes are scaled into this range). */
+const ANNUAL_DISPLAY_MIN = 170.77
+const ANNUAL_DISPLAY_MAX = 344.77
+const SOURCE_TOTAL_MIN = 15
+const SOURCE_TOTAL_MAX = 80
 
 /**
  * QuoteCardLg — LOCKED LAYOUT
@@ -21,6 +27,8 @@ const TOOLTIP_TRIGGER_CLASS =
  */
 interface QuoteCardLgProps {
   quote: Quote
+  paymentOption: PaymentOption
+  onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
   homeEmergency: boolean
   onLegalCoverChange: (checked: boolean) => void
@@ -32,6 +40,8 @@ interface QuoteCardLgProps {
 
 export function QuoteCardLg({
   quote,
+  paymentOption,
+  onPaymentOptionChange,
   legalCover,
   homeEmergency,
   onLegalCoverChange,
@@ -46,10 +56,30 @@ export function QuoteCardLg({
     (legalCover ? quote.familyLegalAddOnPrice : 0) +
     (homeEmergency ? quote.homeEmergencyAddOnPrice : 0)
 
-  const [pricingMode, setPricingMode] = useState<"annual" | "monthly">("annual")
+  const pricingMode = paymentOption
 
+  /** Scale annual total into [ANNUAL_DISPLAY_MIN, ANNUAL_DISPLAY_MAX]; line items scale proportionally. */
+  const displayedAnnualTotal = Math.min(
+    ANNUAL_DISPLAY_MAX,
+    Math.max(
+      ANNUAL_DISPLAY_MIN,
+      ANNUAL_DISPLAY_MIN +
+        ((totalPrice - SOURCE_TOTAL_MIN) * (ANNUAL_DISPLAY_MAX - ANNUAL_DISPLAY_MIN)) /
+          (SOURCE_TOTAL_MAX - SOURCE_TOTAL_MIN)
+    )
+  )
+  const scaleFactor = totalPrice > 0 ? displayedAnnualTotal / totalPrice : 1
+
+  /** Monthly payment = displayed annual total / 9; deposit and 1st month each = one payment, then 7 more. */
+  const MONTHLY_DIVISOR = 9
+  const monthlyAmount = displayedAnnualTotal / MONTHLY_DIVISOR
+
+  const formatPounds = (n: number) => `£${n.toFixed(2)}`
+  const toDisplayAnnual = (value: number) => formatPounds(value * scaleFactor)
+  const toDisplayMonthly = (value: number) =>
+    formatPounds((value * scaleFactor) / MONTHLY_DIVISOR)
   const toDisplay = (value: number) =>
-    pricingMode === "annual" ? value : Math.round(value / 12)
+    pricingMode === "annual" ? toDisplayAnnual(value) : toDisplayMonthly(value)
 
   const coverLabelClass =
     "mb-1 flex items-center gap-1.5 text-sm text-muted-foreground"
@@ -72,18 +102,21 @@ export function QuoteCardLg({
         <div className="inline-flex rounded-t-[8px] rounded-b-none border border-b-0 border-border bg-muted/40 text-xs font-medium text-muted-foreground">
           <button
             type="button"
-            onClick={() => setPricingMode("annual")}
-            className={`rounded-t-[8px] px-4 py-2 transition-colors ${
+            onClick={() => onPaymentOptionChange("annual")}
+            className={`flex items-center gap-1.5 rounded-t-[8px] px-4 py-2 transition-colors ${
               pricingMode === "annual"
                 ? "bg-white text-foreground"
                 : "bg-transparent text-muted-foreground"
             }`}
           >
             Annual
+            <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+              10% cheaper
+            </span>
           </button>
           <button
             type="button"
-            onClick={() => setPricingMode("monthly")}
+            onClick={() => onPaymentOptionChange("monthly")}
             className={`rounded-t-[8px] px-4 py-2 transition-colors ${
               pricingMode === "monthly"
                 ? "bg-white text-foreground"
@@ -110,7 +143,7 @@ export function QuoteCardLg({
               <Switch
                 checked={pricingMode === "monthly"}
                 onCheckedChange={(checked) =>
-                  setPricingMode(checked ? "monthly" : "annual")
+                  onPaymentOptionChange(checked ? "monthly" : "annual")
                 }
                 aria-label="Toggle pricing mode"
               />
@@ -126,13 +159,13 @@ export function QuoteCardLg({
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-muted-foreground">Home insurance</span>
             <span className="text-sm font-medium text-foreground">
-              £{toDisplay(quote.standardPrice)}
+              {toDisplay(quote.standardPrice)}
             </span>
           </div>
           <div className="flex items-center justify-between border-t border-border py-2">
             <span className="text-sm text-muted-foreground">Host insurance</span>
             <span className="text-sm font-medium text-foreground">
-              £{toDisplay(quote.piklPrice)}
+              {toDisplay(quote.piklPrice)}
             </span>
           </div>
           <div className="flex items-center justify-between border-t border-border py-2">
@@ -165,7 +198,7 @@ export function QuoteCardLg({
             Home emergency
           </span>
           <span className="text-sm font-medium text-foreground">
-            £{toDisplay(quote.homeEmergencyAddOnPrice)}
+            {toDisplay(quote.homeEmergencyAddOnPrice)}
           </span>
         </button>
 
@@ -186,14 +219,14 @@ export function QuoteCardLg({
             Legal cover
           </span>
           <span className="text-sm font-medium text-foreground">
-            £{toDisplay(quote.familyLegalAddOnPrice)}
+            {toDisplay(quote.familyLegalAddOnPrice)}
           </span>
         </button>
 
         {/* Total & actions */}
         <div className="mt-2 flex items-center justify-between border-t border-border pt-3">
           <span className="text-sm font-medium text-muted-foreground">Total price</span>
-          <span className="text-lg font-semibold text-foreground">£{toDisplay(totalPrice)}</span>
+          <span className="text-lg font-semibold text-foreground">{toDisplay(totalPrice)}</span>
         </div>
 
         <div className="flex flex-col gap-2 pt-2">
@@ -246,7 +279,11 @@ export function QuoteCardLg({
                 </TooltipContent>
               </Tooltip>
             </p>
-            <p className={priceClass}>£{quote.standardPrice}</p>
+            <p className={priceClass}>
+              {pricingMode === "annual"
+                ? toDisplayAnnual(quote.standardPrice)
+                : toDisplayMonthly(quote.standardPrice)}
+            </p>
           </div>
 
           {/* Host insurance */}
@@ -268,14 +305,22 @@ export function QuoteCardLg({
                 </TooltipContent>
               </Tooltip>
             </p>
-            <p className={priceClass}>£{quote.piklPrice}</p>
+            <p className={priceClass}>
+              {pricingMode === "annual"
+                ? toDisplayAnnual(quote.piklPrice)
+                : toDisplayMonthly(quote.piklPrice)}
+            </p>
           </div>
 
           {/* Legal cover */}
           <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
             <div className="flex flex-col gap-1">
               <p className="text-sm text-muted-foreground">Legal cover</p>
-              <p className={priceClass}>£{quote.familyLegalAddOnPrice}</p>
+              <p className={priceClass}>
+                {pricingMode === "annual"
+                  ? toDisplayAnnual(quote.familyLegalAddOnPrice)
+                  : toDisplayMonthly(quote.familyLegalAddOnPrice)}
+              </p>
             </div>
             <Switch
               checked={legalCover}
@@ -288,7 +333,11 @@ export function QuoteCardLg({
           <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:px-5 qc:py-3">
             <div className="flex flex-col gap-1">
               <p className="text-sm text-muted-foreground">Home emergency</p>
-              <p className={priceClass}>£{quote.homeEmergencyAddOnPrice}</p>
+              <p className={priceClass}>
+                {pricingMode === "annual"
+                  ? toDisplayAnnual(quote.homeEmergencyAddOnPrice)
+                  : toDisplayMonthly(quote.homeEmergencyAddOnPrice)}
+              </p>
             </div>
             <Switch
               checked={homeEmergency}
@@ -301,10 +350,30 @@ export function QuoteCardLg({
         {/* Total price + CTAs — stacked on mobile, side-by-side on desktop */}
         <div className="mt-3 flex w-full flex-col gap-3 qc:mt-0 qc:w-auto qc:shrink-0 qc:flex-row qc:items-stretch qc:gap-4 qc:pl-5 qc:pr-5">
           {/* Total price column — 5.4rem tall on desktop */}
-          <div className="flex h-auto flex-col items-center justify-center rounded-lg bg-neutral-100 px-3 text-center qc:h-[5.4rem]">
-            <p className="text-sm text-muted-foreground">Total price</p>
-            <p className="text-md font-semibold text-foreground">£{totalPrice}</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">Excess {quote.policyDetails.excess}</p>
+          <div className="flex h-auto flex-col items-center justify-center rounded-lg bg-neutral-100 px-3 py-2 text-center qc:h-[5.4rem]">
+            {pricingMode === "annual" ? (
+              <>
+                <p className="text-sm text-muted-foreground">Total price</p>
+                <p className="text-md font-semibold text-foreground tabular-nums">
+                  {formatPounds(displayedAnnualTotal)}
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Excess {quote.policyDetails.excess}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-[10px] font-medium text-muted-foreground">
+                  Deposit {formatPounds(monthlyAmount)}
+                </p>
+                <p className="text-[10px] font-medium text-muted-foreground">
+                  1st month {formatPounds(monthlyAmount)}
+                </p>
+                <p className="mt-0.5 text-xs font-semibold text-foreground tabular-nums">
+                  7 × {formatPounds(monthlyAmount)}
+                </p>
+              </>
+            )}
           </div>
 
           {/* Action buttons column — stretches to match total height */}
