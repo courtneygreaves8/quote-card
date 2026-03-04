@@ -39,14 +39,6 @@ const FIELDS = [
     value: "07700 900123",
     placeholder: "07XXX XXXXXX",
   },
-  {
-    id: "address",
-    label: "Address",
-    inputId: "create-account-modal-address",
-    type: "text" as const,
-    value: "123 Example Street, London, SW1A 1AA",
-    placeholder: "Your address",
-  },
 ]
 
 const inputBaseClassName =
@@ -73,13 +65,11 @@ export function CreateAccountModal({
     setProgressStep(1)
     const t1 = setTimeout(() => setProgressStep(2), 450)
     const t2 = setTimeout(() => setProgressStep(3), 450 * 2)
-    const t3 = setTimeout(() => setProgressStep(4), 450 * 3)
-    const t4 = setTimeout(() => onOpenChange(false), 450 * 4 + 200)
+    const t3 = setTimeout(() => onOpenChange(false), 450 * 3 + 200)
     const cleanup = () => {
       clearTimeout(t1)
       clearTimeout(t2)
       clearTimeout(t3)
-      clearTimeout(t4)
     }
     progressCleanupRef.current = cleanup
     return cleanup

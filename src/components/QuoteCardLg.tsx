@@ -12,7 +12,8 @@ import { HelpCircle, Info, ShoppingCart } from "lucide-react"
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
 
-interface QuoteCardProps {
+/** QuoteCardLg: horizontal layout with logo, cover columns, total, and buttons. Used at 1024px (qc) and above. */
+interface QuoteCardLgProps {
   quote: Quote
   legalCover: boolean
   homeEmergency: boolean
@@ -23,7 +24,7 @@ interface QuoteCardProps {
   size?: "sm" | "md" | "lg"
 }
 
-export function QuoteCard({
+export function QuoteCardLg({
   quote,
   legalCover,
   homeEmergency,
@@ -32,7 +33,7 @@ export function QuoteCard({
   onMoreDetails,
   onPurchase,
   size = "lg",
-}: QuoteCardProps) {
+}: QuoteCardLgProps) {
   const totalPrice =
     quote.standardPrice +
     quote.piklPrice +
@@ -56,7 +57,7 @@ export function QuoteCard({
   return (
     <Card className="overflow-hidden bg-white shadow-sm transition-shadow hover:shadow-md">
       <div
-        className={`flex flex-col gap-4 ${basePadding} qc:flex-row qc:items-stretch qc:gap-0 qc:px-0 qc:py-4`}
+        className={`flex flex-col gap-4 ${basePadding} qc:flex-row qc:items-center qc:gap-0 qc:px-0 qc:py-4`}
       >
         {/* Logo — same column padding and height as total/buttons on desktop */}
         <div className="flex shrink-0 items-start qc:flex qc:h-[4.8rem] qc:items-center qc:border-r qc:border-border qc:px-5">
@@ -142,15 +143,15 @@ export function QuoteCard({
 
         {/* Total price + CTAs — stacked on mobile, side-by-side on desktop */}
         <div className="mt-3 flex w-full flex-col gap-3 qc:mt-0 qc:w-auto qc:shrink-0 qc:flex-row qc:items-stretch qc:gap-4 qc:pl-5 qc:pr-5">
-          {/* Total price column — match divider/column height */}
-          <div className="flex h-[5.4rem] flex-col items-center justify-center rounded-lg bg-neutral-100 px-3 text-center">
+          {/* Total price column — 5.4rem tall on desktop */}
+          <div className="flex h-auto flex-col items-center justify-center rounded-lg bg-neutral-100 px-3 text-center qc:h-[5.4rem]">
             <p className="text-sm text-muted-foreground">Total price</p>
             <p className="text-md font-semibold text-foreground">£{totalPrice}</p>
             <p className="mt-0.5 text-xs text-muted-foreground">Excess {quote.policyDetails.excess}</p>
           </div>
 
-          {/* Action buttons column — match total price height on desktop */}
-          <div className="flex h-auto flex-col justify-between gap-2 qc:h-[5.4rem] qc:w-[8rem] qc:rounded-br-lg qc:py-0">
+          {/* Action buttons column — stretches to match total height */}
+          <div className="flex h-auto flex-col justify-between gap-2 qc:w-[8rem] qc:rounded-br-lg qc:py-0">
             <Button
               size="sm"
               className="w-full gap-1.5"

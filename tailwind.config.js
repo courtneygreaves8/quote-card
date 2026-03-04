@@ -8,8 +8,8 @@ export default {
   theme: {
     extend: {
       screens: {
-        // Quote card desktop layout breakpoint (>= 949px)
-        qc: "949px",
+        // QuoteCardLg horizontal layout (>= 1024px)
+        qc: "1024px",
         // Sort/filter layout breakpoint (>= 784px)
         sf: "784px",
       },

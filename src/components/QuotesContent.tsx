@@ -1,4 +1,4 @@
-import { QuoteCard } from "@/components/QuoteCard"
+import { QuoteCardLg } from "@/components/QuoteCardLg"
 import {
   Select,
   SelectContent,
@@ -79,8 +79,9 @@ export function QuotesContent({
       <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-1">
         {displayedQuotes.length > 0 ? (
           displayedQuotes.map((quote) => (
-            <QuoteCard
+            <QuoteCardLg
               key={quote.id}
+              size="lg"
               quote={quote}
               legalCover={legalCover}
               homeEmergency={homeEmergency}
