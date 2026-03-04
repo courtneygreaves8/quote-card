@@ -82,8 +82,6 @@ export function QuoteCardLg({
   const toDisplay = (value: number) =>
     pricingMode === "annual" ? toDisplayAnnual(value) : toDisplayMonthly(value)
 
-  const coverLabelClass =
-    "mb-1 flex items-center gap-1.5 text-sm text-muted-foreground"
   const priceClass =
     size === "sm"
       ? "text-sm font-medium text-foreground"
@@ -179,13 +177,29 @@ export function QuoteCardLg({
                 </span>
               </div>
               <div className="mt-1 flex items-center justify-between">
-                <span>1x</span>
+                <span className="flex items-center gap-1">
+                  × 1
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS}
+                        aria-label="Admin fee info"
+                      >
+                        <HelpCircle className="h-3 w-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-[220px]">
+                      Our insurer PremFina charges a £5 admin fee.
+                    </TooltipContent>
+                  </Tooltip>
+                </span>
                 <span className="text-[10px] font-medium text-foreground tabular-nums">
                   {formatPounds(monthlyAmount)}
                 </span>
               </div>
               <div className="mt-1 flex items-center justify-between">
-                <span>9 ×</span>
+                <span>× 9</span>
                 <span className="font-medium text-foreground tabular-nums">
                   {formatPounds(monthlyAmount)}
                 </span>
@@ -289,22 +303,25 @@ export function QuoteCardLg({
         <div className="mt-2 grid flex-1 gap-3 sm:grid-cols-2 qc:mt-0 qc:flex qc:flex-row qc:items-stretch qc:gap-0">
           {/* Home insurance */}
           <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
-            <p className={coverLabelClass}>
-              Home insurance
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className={TOOLTIP_TRIGGER_CLASS}
-                    aria-label="What is standard cover?"
-                  >
-                    <HelpCircle className="h-3.5 w-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-[220px]">
-                  General home insurance covering buildings and contents.
-                </TooltipContent>
-              </Tooltip>
+            <p className="mb-1 flex flex-col gap-0 text-sm text-muted-foreground">
+              <span>Home</span>
+              <span className="inline-flex items-center gap-1.5">
+                insurance
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className={TOOLTIP_TRIGGER_CLASS}
+                      aria-label="What is standard cover?"
+                    >
+                      <HelpCircle className="h-3.5 w-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[220px]">
+                    General home insurance covering buildings and contents.
+                  </TooltipContent>
+                </Tooltip>
+              </span>
             </p>
             <p className={priceClass}>
               {pricingMode === "annual"
@@ -315,22 +332,25 @@ export function QuoteCardLg({
 
           {/* Host insurance */}
           <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
-            <p className={coverLabelClass}>
-              Host insurance
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className={TOOLTIP_TRIGGER_CLASS}
-                    aria-label="What is Pikl cover?"
-                  >
-                    <HelpCircle className="h-3.5 w-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-[220px]">
-                  Host insurance for short-term letting and home sharing.
-                </TooltipContent>
-              </Tooltip>
+            <p className="mb-1 flex flex-col gap-0 text-sm text-muted-foreground">
+              <span>Host</span>
+              <span className="inline-flex items-center gap-1.5">
+                insurance
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className={TOOLTIP_TRIGGER_CLASS}
+                      aria-label="What is Pikl cover?"
+                    >
+                      <HelpCircle className="h-3.5 w-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[220px]">
+                    Host insurance for short-term letting and home sharing.
+                  </TooltipContent>
+                </Tooltip>
+              </span>
             </p>
             <p className={priceClass}>
               {pricingMode === "annual"
@@ -383,13 +403,29 @@ export function QuoteCardLg({
                 </p>
               </div>
               <div className="flex justify-between gap-2 border-b border-border py-1.5">
-                <p className="text-sm text-muted-foreground">1x</p>
+                <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  × 1
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS}
+                        aria-label="Admin fee info"
+                      >
+                        <HelpCircle className="h-3.5 w-3.5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-[220px]">
+                      Our insurer PremFina charges a £5 admin fee.
+                    </TooltipContent>
+                  </Tooltip>
+                </p>
                 <p className="shrink-0 text-xs font-medium tabular-nums text-foreground">
                   {formatPounds(monthlyAmount)}
                 </p>
               </div>
               <div className="flex justify-between gap-2 pt-1.5">
-                <p className="text-sm text-muted-foreground">9 ×</p>
+                <p className="text-sm text-muted-foreground">× 9</p>
                 <p className={cn("shrink-0 tabular-nums", priceClass)}>
                   {formatPounds(monthlyAmount)}
                 </p>
@@ -402,13 +438,27 @@ export function QuoteCardLg({
         <div className="mt-3 flex w-full flex-col gap-3 qc:mt-0 qc:w-auto qc:shrink-0 qc:flex-row qc:items-stretch qc:gap-4 qc:pl-5 qc:pr-5">
           {/* Total price column — 5.4rem tall on desktop */}
           <div className="flex h-auto flex-col items-center justify-center rounded-lg bg-neutral-100 px-3 py-2 text-center qc:h-[5.4rem]">
-            <p className="text-sm text-muted-foreground">Total price</p>
-            <p className="text-md font-semibold text-foreground tabular-nums">
-              {formatPounds(displayedAnnualTotal)}
-            </p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Excess {quote.policyDetails.excess}
-            </p>
+            {pricingMode === "annual" ? (
+              <>
+                <p className="text-sm text-muted-foreground">Total price</p>
+                <p className="text-md font-semibold text-foreground tabular-nums">
+                  {formatPounds(displayedAnnualTotal)}
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Excess {quote.policyDetails.excess}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-muted-foreground">Monthly Price</p>
+                <p className="text-md font-semibold text-foreground tabular-nums">
+                  {formatPounds(monthlyAmount)}/mo.
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Excess {quote.policyDetails.excess}
+                </p>
+              </>
+            )}
           </div>
 
           {/* Action buttons column — stretches to match total height */}
