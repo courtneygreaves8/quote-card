@@ -5,6 +5,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Check, Pencil, Zap } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
@@ -84,15 +90,15 @@ export function CreateAccountModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-md overflow-y-auto p-6">
+      <DialogContent className="max-w-md border-none bg-transparent p-0 sm:p-4">
         <DialogHeader className="sr-only">
           <DialogTitle>Create account</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col pt-2">
-          <div className="flex flex-col">
+        <Card className="w-full">
+          <CardHeader className="text-center">
             <div
-              className="mb-3 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
+              className="mx-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
               aria-hidden
             >
               <Zap className="h-5 w-5" />
@@ -100,112 +106,110 @@ export function CreateAccountModal({
             <h2 className="text-xl font-semibold text-foreground">
               Create your account in seconds
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              We&apos;ve pre-filled your details from your quote. Edit anything
-              you like, then create your account with one click — quick and
-              hassle-free.
-            </p>
-          </div>
-
-          <div className="mt-6 space-y-4 rounded-lg border border-border bg-background p-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              <span>Pre-filled from your quote — edit as needed</span>
-            </div>
-            <div className="space-y-4">
-              {FIELDS.map((field, index) => {
-                const step = index + 1
-                const isChecked = progressStep >= step
-                return (
-                  <div key={field.id} className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <Label htmlFor={field.inputId}>{field.label}</Label>
-                      {isChecked && (
-                        <span
-                          className="animate-field-check-in flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
-                          aria-hidden
-                        >
-                          <Check className="h-3 w-3" strokeWidth={3} />
-                        </span>
-                      )}
-                    </div>
-                    <div className="group relative rounded-md">
-                      <input
-                        id={field.inputId}
-                        type={field.type}
-                        value={values[index]}
-                        readOnly={isSubmitting}
-                        onChange={
-                          !isSubmitting
-                            ? (e) => {
-                                setValues((prev) => {
-                                  const next = [...prev]
-                                  next[index] = e.target.value
-                                  return next
-                                })
-                              }
-                            : undefined
-                        }
-                        className={`${inputBaseClassName} border-input`}
-                        placeholder={field.placeholder}
-                        disabled={isSubmitting}
-                        aria-busy={isSubmitting && progressStep === step}
-                      />
-                      {!isSubmitting && (
-                        <>
+            <CardDescription>
+              We&apos;ve pre-filled your details from your quote. Edit anything you like, then create your
+              account with one click — quick and hassle-free.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4 rounded-lg border border-border bg-background p-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                <span>Pre-filled from your quote — edit as needed</span>
+              </div>
+              <div className="space-y-4">
+                {FIELDS.map((field, index) => {
+                  const step = index + 1
+                  const isChecked = progressStep >= step
+                  return (
+                    <div key={field.id} className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <Label htmlFor={field.inputId}>{field.label}</Label>
+                        {isChecked && (
                           <span
-                            className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-[#1a1a1a] transition-opacity group-hover:opacity-0"
+                            className="animate-field-check-in flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
                             aria-hidden
                           >
-                            <Check className="h-4 w-4" strokeWidth={2.5} />
+                            <Check className="h-3 w-3" strokeWidth={3} />
                           </span>
-                          <span
-                            className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
-                            aria-hidden
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </span>
-                        </>
-                      )}
+                        )}
+                      </div>
+                      <div className="group relative rounded-md">
+                        <input
+                          id={field.inputId}
+                          type={field.type}
+                          value={values[index]}
+                          readOnly={isSubmitting}
+                          onChange={
+                            !isSubmitting
+                              ? (e) => {
+                                  setValues((prev) => {
+                                    const next = [...prev]
+                                    next[index] = e.target.value
+                                    return next
+                                  })
+                                }
+                              : undefined
+                          }
+                          className={`${inputBaseClassName} border-input`}
+                          placeholder={field.placeholder}
+                          disabled={isSubmitting}
+                          aria-busy={isSubmitting && progressStep === step}
+                        />
+                        {!isSubmitting && (
+                          <>
+                            <span
+                              className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-[#1a1a1a] transition-opacity group-hover:opacity-0"
+                              aria-hidden
+                            >
+                              <Check className="h-4 w-4" strokeWidth={2.5} />
+                            </span>
+                            <span
+                              className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
+                              aria-hidden
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </span>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col gap-0">
-            <Button
-              className="w-full"
-              size="lg"
-              onClick={handleCreateAccount}
-              variant="default"
-            >
-              Send me a secure link
-            </Button>
-
-            <div className="flex items-center gap-3 py-2">
-              <div className="h-px flex-1 bg-border" aria-hidden />
-              <span className="text-xs font-medium text-muted-foreground">
-                Or
-              </span>
-              <div className="h-px flex-1 bg-border" aria-hidden />
+                  )
+                })}
+              </div>
             </div>
 
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full"
-              onClick={handleCreateAccount}
-            >
-              Create a password
-            </Button>
+            <div className="space-y-3">
+              <Button
+                className="w-full gap-2"
+                size="lg"
+                onClick={handleCreateAccount}
+                variant="default"
+              >
+                Send me a secure link
+              </Button>
 
-            <p className="mt-2 text-center text-xs text-muted-foreground">
+              <div className="flex items-center gap-3 py-0">
+                <div className="h-px flex-1 bg-border" aria-hidden />
+                <span className="text-xs font-medium text-muted-foreground">Or</span>
+                <div className="h-px flex-1 bg-border" aria-hidden />
+              </div>
+
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full gap-2"
+                onClick={handleCreateAccount}
+              >
+                Create a password
+              </Button>
+            </div>
+
+            <p className="mt-1 text-center text-xs text-muted-foreground">
               One click — quick and hassle-free.
             </p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </DialogContent>
     </Dialog>
   )

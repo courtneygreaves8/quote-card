@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CreateAccountModal } from "@/components/CreateAccountModal"
+import { HelpModal } from "@/components/HelpModal"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 // To test drawer instead: use CreateAccountDrawer from "@/components/CreateAccountDrawer" and render it here
 import { LAYOUT_PADDING_X } from "@/lib/constants"
@@ -9,6 +10,7 @@ import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 export function Navbar() {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
 
   return (
     <>
@@ -65,6 +67,7 @@ export function Navbar() {
         open={createAccountOpen}
         onOpenChange={setCreateAccountOpen}
       />
+      <HelpModal open={helpOpen} onOpenChange={setHelpOpen} />
       {/* Mobile nav menu */}
       <Sheet open={navOpen} onOpenChange={setNavOpen}>
         <SheetContent
@@ -89,6 +92,16 @@ export function Navbar() {
             >
               <UserPlus className="h-4 w-4" />
               Create account
+            </Button>
+            <Button
+              variant="outline"
+              className="h-10 w-full justify-center gap-1.5 border-border"
+              onClick={() => {
+                setNavOpen(false)
+                setHelpOpen(true)
+              }}
+            >
+              Contact support
             </Button>
           </div>
         </SheetContent>
