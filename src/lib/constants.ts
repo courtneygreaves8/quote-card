@@ -38,7 +38,7 @@ export const FILTER_MAX_PRICE: Record<FilterOption, number | null> = {
   "under-30": 30,
 }
 
-/** Compulsory excess amount used in policy drawer */
+/** Compulsory excess amount used in policy sheet */
 export const COMPULSORY_EXCESS = 100
 
 /** Quote card pricing: annual display range (reflects 10% discount) */

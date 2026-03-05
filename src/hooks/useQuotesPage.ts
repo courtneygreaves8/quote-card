@@ -26,7 +26,7 @@ function getDefaultFilters(): QuoteFilters {
 export function useQuotesPage() {
   const [filters, setFilters] = useState<QuoteFilters>(getDefaultFilters)
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
-  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
   const [optionsOpen, setOptionsOpen] = useState(false)
   const [sort, setSort] = useState<SortOption>("price-asc")
   const [filter, setFilter] = useState<FilterOption>("all")
@@ -130,7 +130,7 @@ export function useQuotesPage() {
 
   const handleMoreDetails = (quote: Quote) => {
     setSelectedQuote(quote)
-    setDrawerOpen(true)
+    setSheetOpen(true)
   }
 
   const handlePurchase = () => {
@@ -146,8 +146,8 @@ export function useQuotesPage() {
     filters,
     setFilters,
     selectedQuote,
-    drawerOpen,
-    setDrawerOpen,
+    sheetOpen,
+    setSheetOpen,
     optionsOpen,
     setOptionsOpen,
     sort,

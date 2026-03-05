@@ -1,7 +1,7 @@
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
-import { PolicyDrawer } from "@/components/PolicyDrawer"
+import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
 import { QuotesContent } from "@/components/QuotesContent"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
@@ -14,8 +14,8 @@ export function QuotesPageLayout({
   filters,
   setFilters,
   selectedQuote,
-  drawerOpen,
-  setDrawerOpen,
+  sheetOpen,
+  setSheetOpen,
   optionsOpen,
   setOptionsOpen,
   sort,
@@ -76,16 +76,16 @@ export function QuotesPageLayout({
             filters={filters}
             onFiltersChange={setFilters}
             onEditAnswers={handleEditAnswers}
-            isDrawer
-            onCloseDrawer={() => setOptionsOpen(false)}
+            isSheet
+            onCloseSheet={() => setOptionsOpen(false)}
           />
         </SheetContent>
       </Sheet>
-      <PolicyDrawer
+      <PolicySheet
         quote={selectedQuote}
         quoteReference={quoteReference}
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
       />
       <LoadingModal open={showLoadingModal} onClose={() => setShowLoadingModal(false)} />
       <HelpFloatingButton />

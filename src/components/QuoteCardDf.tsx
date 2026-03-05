@@ -15,7 +15,7 @@ import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
-interface QuoteCardAltProps {
+interface QuoteCardDfProps {
   quote: Quote
   paymentOption: PaymentOption
   onPaymentOptionChange: (option: PaymentOption) => void
@@ -30,7 +30,7 @@ interface QuoteCardAltProps {
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
 
-export function QuoteCardAlt({
+export function QuoteCardDf({
   quote,
   paymentOption,
   onPaymentOptionChange,
@@ -40,7 +40,7 @@ export function QuoteCardAlt({
   onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
-}: QuoteCardAltProps) {
+}: QuoteCardDfProps) {
   const pricingMode = paymentOption
 
   const totalPriceRaw =
@@ -233,7 +233,7 @@ export function QuoteCardAlt({
           </div>
         </div>
 
-        {/* Horizontal layout (QuoteCardAlt) — 1440px and above */}
+        {/* Horizontal layout (QuoteCardDf) — 1440px and above */}
         <div className="hidden min-w-0 w-full flex-col gap-6 min-[1440px]:flex">
         {/* Header */}
         <div className="flex w-full items-center justify-between">
