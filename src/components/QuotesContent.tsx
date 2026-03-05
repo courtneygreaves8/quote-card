@@ -99,7 +99,7 @@ export function QuotesContent({
           </div>
         </div>
 
-        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 card3:grid-cols-3 min-[1513px]:grid-cols-1 min-[1513px]:w-max min-[1513px]:max-w-none">
+        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 card3:grid-cols-2 min-[1220px]:grid-cols-3 min-[1513px]:grid-cols-1 min-[1513px]:w-max min-[1513px]:max-w-none">
           {displayedQuotes.length > 0 ? (
             displayedQuotes.map((quote) => (
               <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
