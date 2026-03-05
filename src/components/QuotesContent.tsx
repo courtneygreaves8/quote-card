@@ -48,7 +48,7 @@ export function QuotesContent({
 }: QuotesContentProps) {
   return (
     <div className="w-full overflow-x-hidden py-8 px-4 md:px-6 card3:px-6">
-      {/* Centre stage: wider for 3-col stacked cards; hugs content at 1513px+ for horizontal card */}
+      {/* Centre stage: 3-col stacked up to 1512px; single horizontal card at 1513px+ */}
       <div className="mx-auto flex w-full max-w-[1200px] flex-col min-[1513px]:w-fit min-[1513px]:max-w-none min-[1513px]:items-center">
         <div className="mb-8 w-full flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
           <div className="flex-1 min-w-0">

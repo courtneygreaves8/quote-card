@@ -1,14 +1,13 @@
 import {
-  Building2,
   CheckSquare,
   HelpCircle,
   Home,
   Info,
   Scale,
-  Wrench,
   ShoppingCart,
   Square,
   Users,
+  Wrench,
 } from "lucide-react"
 import {
   ANNUAL_DISPLAY_MAX,
@@ -41,6 +40,11 @@ interface QuoteCardDfProps {
 
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
+
+const COLUMN_ICON_CLASS =
+  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-700"
+const COLUMN_BOX_CLASS =
+  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 p-3"
 
 export function QuoteCardDf({
   quote,
@@ -88,8 +92,8 @@ export function QuoteCardDf({
 
   return (
     <div className="flex min-w-0 w-full">
-      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 min-[1513px]:gap-6">
-        {/* Stacked layout (QuoteCardSm) — 1439px and below */}
+      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 min-[1513px]:gap-3">
+        {/* Stacked layout — 1512px and below */}
         <div className="flex min-w-0 w-full flex-col gap-3 p-0 min-[1513px]:hidden">
           <div className="flex min-w-0 items-center justify-between gap-3">
             <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-[#FAFAFA]">
@@ -246,7 +250,7 @@ export function QuoteCardDf({
           </div>
         </div>
 
-        {/* Horizontal layout (QuoteCardDf) — 1513px and above */}
+        {/* Horizontal layout — 1513px and above */}
         <div className="hidden min-w-0 w-full flex-col gap-3 min-[1513px]:flex">
         {/* Header */}
         <div className="flex w-full items-center justify-between">
@@ -310,170 +314,193 @@ export function QuoteCardDf({
         {/* Content */}
         <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-4 overflow-x-auto">
           {/* Home column */}
-          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+          <div className={COLUMN_BOX_CLASS}>
             <div className="flex items-center justify-between gap-2">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
-                <Home className="h-4 w-4 text-neutral-600" aria-hidden />
+              <div className={COLUMN_ICON_CLASS}>
+                <Home className="h-4 w-4" />
               </div>
-              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Included
               </span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                Home insurance
-              </span>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className={TOOLTIP_TRIGGER_CLASS}
-                    aria-label="What is standard cover?"
-                  >
-                    <HelpCircle className="h-4 w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-[220px]">
-                  General home insurance covering buildings and contents.
-                </TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="text-[18px] font-semibold text-[#1E1E1E]">
-                {toDisplay(quote.standardPrice)}
-              </span>
-              <span className="text-[14px] font-medium text-[#1E1E1E]">
-                Excess:{" "}
-                <span className="font-semibold">
-                  {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-1">
+                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                  Home insurance
                 </span>
-              </span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className={TOOLTIP_TRIGGER_CLASS}
+                      aria-label="What is standard cover?"
+                    >
+                      <HelpCircle className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[220px]">
+                    General home insurance covering buildings and contents.
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                  {toDisplay(quote.standardPrice)}
+                </span>
+                <span className="text-[14px] font-medium text-[#1E1E1E]">
+                  Excess:{" "}
+                  <span className="font-semibold">
+                    {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Host column */}
-          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+          <div className={COLUMN_BOX_CLASS}>
             <div className="flex items-center justify-between gap-2">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
-                <Users className="h-4 w-4 text-neutral-600" aria-hidden />
+              <div className={COLUMN_ICON_CLASS}>
+                <Users className="h-4 w-4" />
               </div>
-              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Included
               </span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                Host insurance
-              </span>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className={TOOLTIP_TRIGGER_CLASS}
-                    aria-label="What is Pikl cover?"
-                  >
-                    <HelpCircle className="h-4 w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-[220px]">
-                  Host insurance for short-term letting and home sharing.
-                </TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="text-[18px] font-semibold text-[#1E1E1E]">
-                {toDisplay(quote.piklPrice)}
-              </span>
-              <span className="text-[14px] font-medium text-[#1E1E1E]">
-                Excess: <span className="font-semibold">£50</span>
-              </span>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-1">
+                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                  Host insurance
+                </span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className={TOOLTIP_TRIGGER_CLASS}
+                      aria-label="What is Pikl cover?"
+                    >
+                      <HelpCircle className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[220px]">
+                    Host insurance for short-term letting and home sharing.
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                  {toDisplay(quote.piklPrice)}
+                </span>
+                <span className="text-[14px] font-medium text-[#1E1E1E]">
+                  Excess: <span className="font-semibold">£50</span>
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Family legal column */}
-          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+          <div className={COLUMN_BOX_CLASS}>
             <div className="flex items-center justify-between gap-2">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
-                <Scale className="h-4 w-4 text-neutral-600" aria-hidden />
+              <div className={COLUMN_ICON_CLASS}>
+                <Scale className="h-4 w-4" />
               </div>
-              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Optional
               </span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                Family legal protection
-              </span>
-              <HelpCircle className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-[18px] font-semibold text-[#1E1E1E]">
-                {toDisplay(quote.familyLegalAddOnPrice)}
-              </span>
-              <Switch
-                checked={legalCover}
-                onCheckedChange={onLegalCoverChange}
-                aria-label="Family legal protection"
-              />
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-1">
+                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                  Family legal protection
+                </span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className={TOOLTIP_TRIGGER_CLASS}
+                      aria-label="Family legal protection"
+                    >
+                      <HelpCircle className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[220px]">
+                    Optional family legal protection add-on.
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                  {toDisplay(quote.familyLegalAddOnPrice)}
+                </span>
+                <Switch
+                  checked={legalCover}
+                  onCheckedChange={onLegalCoverChange}
+                  aria-label="Family legal protection"
+                />
+              </div>
             </div>
           </div>
 
           {/* Home emergency column */}
-          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+          <div className={COLUMN_BOX_CLASS}>
             <div className="flex items-center justify-between gap-2">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
-                <Wrench className="h-4 w-4 text-neutral-600" aria-hidden />
+              <div className={COLUMN_ICON_CLASS}>
+                <Wrench className="h-4 w-4" />
               </div>
-              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Optional
               </span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                Home emergency cover
-              </span>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className={TOOLTIP_TRIGGER_CLASS}
-                    aria-label="What is home emergency cover?"
-                  >
-                    <HelpCircle className="h-4 w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-[220px]">
-                  Optional home emergency cover add-on.
-                </TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-[18px] font-semibold text-[#1E1E1E]">
-                {toDisplay(quote.homeEmergencyAddOnPrice)}
-              </span>
-              <Switch
-                checked={homeEmergency}
-                onCheckedChange={onHomeEmergencyChange}
-                aria-label="Home emergency cover"
-              />
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-1">
+                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                  Home emergency cover
+                </span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className={TOOLTIP_TRIGGER_CLASS}
+                      aria-label="What is home emergency cover?"
+                    >
+                      <HelpCircle className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[220px]">
+                    Optional home emergency cover add-on.
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                  {toDisplay(quote.homeEmergencyAddOnPrice)}
+                </span>
+                <Switch
+                  checked={homeEmergency}
+                  onCheckedChange={onHomeEmergencyChange}
+                  aria-label="Home emergency cover"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Vertical divider after home emergency */}
-          <div className="h-auto w-px flex-shrink-0 self-stretch bg-neutral-200" aria-hidden />
+          {/* Divider after Home emergency */}
+          <div
+            className="h-auto w-px flex-shrink-0 self-stretch bg-neutral-200"
+            aria-hidden
+          />
 
           {pricingMode === "monthly" && (
-            <div className="flex flex-none self-stretch items-center py-2">
-              <div className="flex w-full flex-col">
-                <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
-                  <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit:</span>
-                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
-                    {formatPounds(depositAmount)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
+            <div className="flex w-fit flex-none flex-col justify-center self-stretch py-2">
+              <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
+                <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
+                <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                  {formatPounds(depositAmount)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                 <div className="flex items-center gap-1">
-                  <span className="text-[14px] font-medium text-[#1E1E1E]">×1</span>
+                  <span className="text-[14px] font-medium text-[#1E1E1E]">× 1</span>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
@@ -492,32 +519,26 @@ export function QuoteCardDf({
                 <span className="text-[14px] font-semibold text-[#1E1E1E]">
                   {formatPounds(x1Amount)}
                 </span>
-                </div>
-                <div className="flex items-center justify-between gap-4 py-2">
-                  <span className="text-[14px] font-medium text-[#1E1E1E]">×9</span>
-                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
-                    {formatPounds(monthlyAmount)}
-                  </span>
-                </div>
+              </div>
+              <div className="flex items-center justify-between gap-4 py-2">
+                <span className="text-[14px] font-medium text-[#1E1E1E]">× 9</span>
+                <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                  {formatPounds(monthlyAmount)}
+                </span>
               </div>
             </div>
           )}
 
           {/* Total price block */}
-          <div className="flex w-[120px] min-w-[120px] flex-none flex-col items-center justify-center gap-4 self-stretch rounded-[12px] border border-neutral-200 bg-white p-3 text-center">
-            <div className="text-[14px] font-medium text-[#1E1E1E]">
-              {pricingMode === "annual" ? "Total price" : "Monthly Price"}
-            </div>
-            <div className="text-[14px] font-semibold text-[#1E1E1E]">
+          <div className="flex w-[120px] min-w-[120px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-white p-3 text-center">
+            <span className="text-[14px] font-medium text-[#1E1E1E]">
+              {pricingMode === "annual" ? "Total price" : "Monthly price"}
+            </span>
+            <span className="text-[14px] font-semibold text-[#1E1E1E]">
               {pricingMode === "annual"
                 ? formatPounds(displayedAnnualTotal)
-                : (
-                    <>
-                      {formatPounds(monthlyAmount)}
-                      <span className="text-xs font-normal">/mo.</span>
-                    </>
-                  )}
-            </div>
+                : `${formatPounds(monthlyAmount)}/mo.`}
+            </span>
           </div>
         </div>
         </div>
