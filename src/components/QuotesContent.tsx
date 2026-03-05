@@ -45,7 +45,7 @@ export function QuotesContent({
   onOpenOptions,
 }: QuotesContentProps) {
   return (
-    <div className="w-full overflow-x-hidden py-8 px-4 card3:px-0">
+    <div className="w-full overflow-x-hidden py-8 px-4 md:px-6 card3:px-6">
       {/* Centre stage: wider for 3-col stacked cards; hugs content at 1440px+ for horizontal card */}
       <div className="mx-auto flex w-full max-w-[1200px] flex-col min-[1440px]:w-fit min-[1440px]:max-w-none min-[1440px]:items-center">
         <div className="mb-8 w-full flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
@@ -56,7 +56,7 @@ export function QuotesContent({
                 : `We've got ${displayedQuotes.length} quote${displayedQuotes.length === 1 ? "" : "s"} for you`}
             </h1>
             <p className="mt-1 text-muted-foreground">
-              Compare your options and select a quote below to find the right cover for you.
+              Find the cover right for you.
             </p>
           </div>
           <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
