@@ -1,10 +1,19 @@
+import { CheckSquare, HelpCircle, Info, ShoppingCart, Square } from "lucide-react"
+import {
+  ANNUAL_DISPLAY_MAX,
+  ANNUAL_DISPLAY_MIN,
+  MONTHLY_DEPOSIT_EXTRA,
+  MONTHLY_DIVISOR,
+  MONTHLY_X1_EXTRA,
+  SOURCE_TOTAL_MAX,
+  SOURCE_TOTAL_MIN,
+} from "@/lib/constants"
+import { Quote } from "@/types/quote"
+import type { PaymentOption } from "@/types/quote"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { Quote } from "@/types/quote"
-import type { PaymentOption } from "@/types/quote"
-import { CheckSquare, HelpCircle, Info, ShoppingCart, Square } from "lucide-react"
 
 interface QuoteCardAltProps {
   quote: Quote
@@ -20,14 +29,6 @@ interface QuoteCardAltProps {
 
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
-
-/** Annual pricing display range (quotes scaled into this range; reflects 10% discount). */
-const ANNUAL_DISPLAY_MIN = 170.77
-const ANNUAL_DISPLAY_MAX = 247.77
-const SOURCE_TOTAL_MIN = 15
-const SOURCE_TOTAL_MAX = 80
-
-const MONTHLY_DIVISOR = 11
 
 export function QuoteCardAlt({
   quote,
@@ -62,8 +63,8 @@ export function QuoteCardAlt({
 
   /** Monthly: 1 deposit + 1× first month + 9 more. Base instalment = displayedAnnualTotal / 11. */
   const monthlyAmount = displayedAnnualTotal / MONTHLY_DIVISOR
-  const depositAmount = monthlyAmount + 20
-  const x1Amount = monthlyAmount + 5
+  const depositAmount = monthlyAmount + MONTHLY_DEPOSIT_EXTRA
+  const x1Amount = monthlyAmount + MONTHLY_X1_EXTRA
 
   const formatPounds = (n: number) => `£${n.toFixed(2)}`
   const toDisplayAnnual = (value: number) => formatPounds(value * scaleFactor)

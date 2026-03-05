@@ -1,3 +1,17 @@
+import {
+  Building2,
+  Check,
+  ChevronDown,
+  Copy,
+  Download,
+  Mail,
+  Save,
+  X,
+} from "lucide-react"
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
+import { COMPULSORY_EXCESS } from "@/lib/constants"
+import { cn, parseExcessNum } from "@/lib/utils"
+import { PolicyDetails as PolicyDetailsType, Quote } from "@/types/quote"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -12,19 +26,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
-import { PolicyDetails as PolicyDetailsType, Quote } from "@/types/quote"
-import {
-  Building2,
-  Check,
-  ChevronDown,
-  Copy,
-  Download,
-  Mail,
-  Save,
-  X,
-} from "lucide-react"
-import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
 
 const MOCK_PROPERTY_ADDRESS = "123 Example Street, London, SW1A 1AA"
 const MOCK_PROPOSER_NAME = "John Smith"
@@ -135,19 +136,12 @@ function DrawerSection({
   )
 }
 
-const COMPULSORY_EXCESS = 100
-
-function parseExcessTotal(excessStr: string): number {
-  const match = excessStr.replace(/[£,]/g, "").match(/\d+/)
-  return match ? parseInt(match[0], 10) : 0
-}
-
 function ExcessTable({
   policyDetails,
 }: {
   policyDetails: PolicyDetailsType
 }) {
-  const total = parseExcessTotal(policyDetails.excess)
+  const total = parseExcessNum(policyDetails.excess)
   const voluntary = Math.max(0, total - COMPULSORY_EXCESS)
   const displayTotal = COMPULSORY_EXCESS + voluntary
 
