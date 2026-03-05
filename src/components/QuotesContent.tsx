@@ -1,3 +1,4 @@
+import type { FilterOption, PaymentOption, Quote, SortOption } from "@/types/quote"
 import { QuoteCardAlt } from "@/components/QuoteCardAlt"
 import { Button } from "@/components/ui/button"
 import {
@@ -7,11 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Quote } from "@/types/quote"
-import type { PaymentOption } from "@/types/quote"
 
-export type SortOption = "price-asc" | "price-desc" | "provider-az"
-export type FilterOption = "all" | "under-20" | "under-25" | "under-30"
+export type { SortOption, FilterOption }
 
 interface QuotesContentProps {
   displayedQuotes: Quote[]

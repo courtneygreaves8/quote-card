@@ -43,9 +43,8 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="absolute left-1/2 top-1/2 h-24 w-24 rounded-full border-4 border-foreground/25"
+              className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-foreground/25"
               style={{
-                transform: "translate(-50%, -50%)",
                 animation: "loading-ripple 3s ease-out infinite",
                 animationDelay: `${i * 0.7}s`,
               }}

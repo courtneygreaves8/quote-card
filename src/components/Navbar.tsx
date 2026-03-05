@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import { CreateAccountModal } from "@/components/CreateAccountModal"
 import { HelpModal } from "@/components/HelpModal"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
-// To test drawer instead: use CreateAccountDrawer from "@/components/CreateAccountDrawer" and render it here
 import { LAYOUT_PADDING_X } from "@/lib/constants"
 import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 

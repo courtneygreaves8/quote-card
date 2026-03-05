@@ -1,3 +1,5 @@
+import type { FilterOption } from "@/types/quote"
+
 /** Horizontal padding for navbar and sidebar (aligns nav content with sidebar content) */
 export const LAYOUT_PADDING_X = "px-6"
 
@@ -24,3 +26,28 @@ export const PAYMENT_INACTIVE_CLASS =
 /** Sidebar excess +/- button (square, soft border) */
 export const EXCESS_BTN_CLASS =
   "h-8 w-8 shrink-0 rounded-md border-neutral-200 p-0"
+
+export const MIN_QUOTES = 3
+export const MAX_QUOTES = 7
+
+/** Max price cap per filter option (null = no cap) */
+export const FILTER_MAX_PRICE: Record<FilterOption, number | null> = {
+  all: null,
+  "under-20": 20,
+  "under-25": 25,
+  "under-30": 30,
+}
+
+/** Compulsory excess amount used in policy drawer */
+export const COMPULSORY_EXCESS = 100
+
+/** Quote card pricing: annual display range (reflects 10% discount) */
+export const ANNUAL_DISPLAY_MIN = 170.77
+export const ANNUAL_DISPLAY_MAX = 247.77
+export const SOURCE_TOTAL_MIN = 15
+export const SOURCE_TOTAL_MAX = 80
+export const MONTHLY_DIVISOR = 11
+/** Extra amount added to base instalment for deposit (monthly breakdown) */
+export const MONTHLY_DEPOSIT_EXTRA = 20
+/** Extra amount added to base instalment for ×1 (admin fee) */
+export const MONTHLY_X1_EXTRA = 5

@@ -1,5 +1,8 @@
 export type PaymentOption = "monthly" | "annual"
 
+export type SortOption = "price-asc" | "price-desc" | "provider-az"
+export type FilterOption = "all" | "under-20" | "under-25" | "under-30"
+
 export interface QuoteFilters {
   coverAmount: number
   excess: string
