@@ -42,7 +42,7 @@ const TOOLTIP_TRIGGER_CLASS =
 const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700"
 const COLUMN_BOX_CLASS =
-  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3"
+  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3"
 
 export function QuoteCardDf({
   quote,
@@ -92,7 +92,7 @@ export function QuoteCardDf({
     <div className="flex min-w-0 w-full">
       <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 min-[1513px]:gap-3">
         {/* Stacked layout (QuoteCardSm) — 1512px and below */}
-        <div className="flex min-w-0 w-full flex-col gap-3 p-0 min-[1513px]:hidden">
+        <div className="flex min-w-0 w-full flex-col gap-2 p-0 min-[1513px]:hidden">
           {/* Logo + insurer name (left) | policyType badge (right) */}
           <div className="flex w-full items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
@@ -108,27 +108,8 @@ export function QuoteCardDf({
             </span>
           </div>
 
-          {/* "Annual is 10% Cheaper" (left) | Annual label + toggle (right) */}
-          <div className="flex w-full items-center justify-between gap-3">
-            <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-              Annual is 10% Cheaper
-            </span>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                {pricingMode === "annual" ? "Annual" : "Monthly"}
-              </span>
-              <Switch
-                checked={pricingMode === "monthly"}
-                onCheckedChange={(checked) =>
-                  onPaymentOptionChange(checked ? "monthly" : "annual")
-                }
-                aria-label="Toggle pricing mode"
-              />
-            </div>
-          </div>
-
           {/* Home insurance container — full width */}
-          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
+          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex min-w-0 items-center gap-2">
                 <div className={COLUMN_ICON_CLASS}>
@@ -170,7 +151,7 @@ export function QuoteCardDf({
           </div>
 
           {/* Host insurance container — full width */}
-          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
+          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex min-w-0 items-center gap-2">
                 <div className={COLUMN_ICON_CLASS}>
@@ -209,8 +190,8 @@ export function QuoteCardDf({
           </div>
 
           {/* Family legal + Home emergency — side by side */}
-          <div className="flex w-full gap-3">
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
+          <div className="flex w-full gap-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
               <div className="flex items-center justify-between gap-2">
                 <div className={COLUMN_ICON_CLASS}>
                   <Scale className="h-4 w-4" />
@@ -235,7 +216,7 @@ export function QuoteCardDf({
                   </Tooltip>
                 </div>
               </div>
-              <span className="text-sm font-medium text-foreground">Family legal protection</span>
+              <span className="text-sm font-medium text-foreground">Legal Cover</span>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[18px] font-semibold text-foreground tabular-nums">
                   {toDisplay(quote.familyLegalAddOnPrice)}
@@ -247,7 +228,7 @@ export function QuoteCardDf({
                 />
               </div>
             </div>
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
               <div className="flex items-center justify-between gap-2">
                 <div className={COLUMN_ICON_CLASS}>
                   <Wrench className="h-4 w-4" />
@@ -272,7 +253,7 @@ export function QuoteCardDf({
                   </Tooltip>
                 </div>
               </div>
-              <span className="text-sm font-medium text-foreground">Home emergency cover</span>
+              <span className="text-sm font-medium text-foreground">Emergency Cover</span>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[18px] font-semibold text-foreground tabular-nums">
                   {toDisplay(quote.homeEmergencyAddOnPrice)}
@@ -288,7 +269,7 @@ export function QuoteCardDf({
 
           {/* Monthly only — payment breakdown, full width */}
           {pricingMode === "monthly" && (
-            <div className="flex w-full flex-col gap-0 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
+            <div className="flex w-full flex-col gap-0 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
               <span className="mb-2 text-sm font-medium text-muted-foreground">
                 Payment breakdown
               </span>
@@ -330,15 +311,34 @@ export function QuoteCardDf({
           )}
 
           {/* Total price block — full width, both modes */}
-          <div className="flex w-full flex-col items-center justify-center gap-1 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2 text-center">
-            <span className="text-sm font-medium text-muted-foreground">
-              {pricingMode === "annual" ? "Total price" : "Total monthly price"}
-            </span>
-            <span className="text-lg font-semibold tabular-nums text-foreground">
-              {pricingMode === "annual"
-                ? formatPounds(displayedAnnualTotal)
-                : `${formatPounds(monthlyAmount)}/mo.`}
-            </span>
+          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
+            <div className="flex w-full items-center justify-between gap-2">
+              <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                Annual is 10% Cheaper
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-muted-foreground">
+                  {pricingMode === "annual" ? "Annual" : "Monthly"}
+                </span>
+                <Switch
+                  checked={pricingMode === "monthly"}
+                  onCheckedChange={(checked) =>
+                    onPaymentOptionChange(checked ? "monthly" : "annual")
+                  }
+                  aria-label="Toggle pricing mode"
+                />
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-between gap-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                {pricingMode === "annual" ? "Total price" : "Total monthly price"}
+              </span>
+              <span className="text-lg font-semibold tabular-nums text-foreground">
+                {pricingMode === "annual"
+                  ? formatPounds(displayedAnnualTotal)
+                  : `${formatPounds(monthlyAmount)}/mo.`}
+              </span>
+            </div>
           </div>
 
           {/* Full width: More info, then Purchase */}
@@ -517,7 +517,7 @@ export function QuoteCardDf({
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                  Family legal protection
+                  Legal Cover
                 </span>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -560,7 +560,7 @@ export function QuoteCardDf({
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                  Home emergency cover
+                  Emergency Cover
                 </span>
                 <Tooltip>
                   <TooltipTrigger asChild>
