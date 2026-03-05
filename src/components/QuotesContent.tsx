@@ -90,7 +90,7 @@ export function QuotesContent({
             {onOpenOptions && (
               <Button
                 type="button"
-                className="flex-1 min-[1440px]:hidden"
+                className="flex-1 min-[1513px]:hidden"
                 onClick={onOpenOptions}
               >
                 Options
