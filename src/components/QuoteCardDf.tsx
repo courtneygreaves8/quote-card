@@ -40,7 +40,7 @@ const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
 
 const COLUMN_ICON_CLASS =
-  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700"
+  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FAFAFA] text-neutral-700"
 const COLUMN_BOX_CLASS =
   "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3"
 
@@ -108,84 +108,87 @@ export function QuoteCardDf({
             </span>
           </div>
 
-          {/* Home insurance container — full width */}
-          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex min-w-0 items-center gap-2">
-                <div className={COLUMN_ICON_CLASS}>
-                  <Home className="h-4 w-4" />
+          {/* Home + Host in one wrapper, divider between them */}
+          <div className="flex w-full flex-col rounded-[12px] border border-neutral-200">
+            <div className="flex w-full flex-col gap-3 p-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-2">
+                  <div className={COLUMN_ICON_CLASS}>
+                    <Home className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">Home insurance</span>
                 </div>
-                <span className="text-sm font-medium text-foreground">Home insurance</span>
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                    Included
+                  </span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS}
+                        aria-label="What is standard cover?"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-[220px]">
+                      General home insurance covering buildings and contents.
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
-              <div className="flex shrink-0 items-center gap-1.5">
-                <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                  Included
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-[18px] font-semibold text-foreground tabular-nums">
+                  {toDisplay(quote.standardPrice)}
                 </span>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      className={TOOLTIP_TRIGGER_CLASS}
-                      aria-label="What is standard cover?"
-                    >
-                      <HelpCircle className="h-4 w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-[220px]">
-                    General home insurance covering buildings and contents.
-                  </TooltipContent>
-                </Tooltip>
+                <span className="text-sm font-medium text-foreground">
+                  Excess:{" "}
+                  <span className="font-semibold">
+                    {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                  </span>
+                </span>
               </div>
             </div>
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="text-[18px] font-semibold text-foreground tabular-nums">
-                {toDisplay(quote.standardPrice)}
-              </span>
-              <span className="text-sm font-medium text-foreground">
-                Excess:{" "}
-                <span className="font-semibold">
-                  {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
-                </span>
-              </span>
-            </div>
-          </div>
 
-          {/* Host insurance container — full width */}
-          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex min-w-0 items-center gap-2">
-                <div className={COLUMN_ICON_CLASS}>
-                  <Users className="h-4 w-4" />
+            <div className="h-px w-full bg-neutral-200" aria-hidden />
+
+            <div className="flex w-full flex-col gap-3 p-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-2">
+                  <div className={COLUMN_ICON_CLASS}>
+                    <Users className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">Host insurance</span>
                 </div>
-                <span className="text-sm font-medium text-foreground">Host insurance</span>
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                    Included
+                  </span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS}
+                        aria-label="What is Pikl cover?"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-[220px]">
+                      Host insurance for short-term letting and home sharing.
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
-              <div className="flex shrink-0 items-center gap-1.5">
-                <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                  Included
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-[18px] font-semibold text-foreground tabular-nums">
+                  {toDisplay(quote.piklPrice)}
                 </span>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      className={TOOLTIP_TRIGGER_CLASS}
-                      aria-label="What is Pikl cover?"
-                    >
-                      <HelpCircle className="h-4 w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-[220px]">
-                    Host insurance for short-term letting and home sharing.
-                  </TooltipContent>
-                </Tooltip>
+                <span className="text-sm font-medium text-foreground">
+                  Excess: <span className="font-semibold">£50</span>
+                </span>
               </div>
-            </div>
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="text-[18px] font-semibold text-foreground tabular-nums">
-                {toDisplay(quote.piklPrice)}
-              </span>
-              <span className="text-sm font-medium text-foreground">
-                Excess: <span className="font-semibold">£50</span>
-              </span>
             </div>
           </div>
 
@@ -267,9 +270,11 @@ export function QuoteCardDf({
             </div>
           </div>
 
+          <div className="h-px w-full bg-neutral-200" aria-hidden />
+
           {/* Monthly only — payment breakdown, full width */}
           {pricingMode === "monthly" && (
-            <div className="flex w-full flex-col gap-0 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
+            <div className="flex w-full flex-col gap-0 py-2">
               <span className="mb-2 text-sm font-medium text-muted-foreground">
                 Payment breakdown
               </span>
@@ -311,7 +316,7 @@ export function QuoteCardDf({
           )}
 
           {/* Total price block — full width, both modes */}
-          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
+          <div className="flex w-full flex-col gap-3 py-2">
             <div className="flex w-full items-center justify-between gap-2">
               <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                 Annual is 10% Cheaper
@@ -340,6 +345,8 @@ export function QuoteCardDf({
               </span>
             </div>
           </div>
+
+          <div className="h-px w-full bg-neutral-200" aria-hidden />
 
           {/* Full width: More info, then Purchase */}
           <Button
