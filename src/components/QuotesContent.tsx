@@ -56,7 +56,7 @@ export function QuotesContent({
                 : `We've got ${displayedQuotes.length} quote${displayedQuotes.length === 1 ? "" : "s"} for you`}
             </h1>
             <p className="mt-1 text-muted-foreground">
-              Each quote comes with Pikl's Property Host Cover.
+              Compare your options and select a quote below to find the right cover for you.
             </p>
           </div>
           <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
