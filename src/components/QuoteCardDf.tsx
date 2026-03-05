@@ -274,7 +274,7 @@ export function QuoteCardDf({
 
           {/* Monthly only — payment breakdown, full width */}
           {pricingMode === "monthly" && (
-            <div className="flex w-full flex-col gap-0 bg-[#FAFAFA] py-2">
+            <div className="flex w-full flex-col gap-0 py-2">
               <span className="mb-2 text-sm font-medium text-muted-foreground">
                 Payment breakdown
               </span>
@@ -316,7 +316,7 @@ export function QuoteCardDf({
           )}
 
           {/* Total price block — full width, both modes */}
-          <div className="flex w-full flex-col gap-3 bg-[#FAFAFA] py-2">
+          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
             <div className="flex w-full items-center justify-between gap-2">
               <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                 Annual is 10% Cheaper
