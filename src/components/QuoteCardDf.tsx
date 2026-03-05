@@ -42,9 +42,9 @@ const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
 
 const COLUMN_ICON_CLASS =
-  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-700"
+  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700"
 const COLUMN_BOX_CLASS =
-  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 p-3"
+  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3"
 
 export function QuoteCardDf({
   quote,
@@ -121,7 +121,7 @@ export function QuoteCardDf({
             <span className="break-words text-base font-semibold text-foreground">
               {quote.providerName}
             </span>
-            <span className="inline-flex shrink-0 items-center rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+            <span className="inline-flex shrink-0 items-center rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
               {policyType}
             </span>
           </div>
@@ -260,7 +260,7 @@ export function QuoteCardDf({
               <span className="text-xs font-semibold text-slate-600">LOGO</span>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <span className="inline-flex w-fit rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="inline-flex w-fit rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 {policyType}
               </span>
               <span className="text-[16px] font-semibold text-[#1E1E1E]">
@@ -319,7 +319,7 @@ export function QuoteCardDf({
               <div className={COLUMN_ICON_CLASS}>
                 <Home className="h-4 w-4" />
               </div>
-              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Included
               </span>
             </div>
@@ -363,7 +363,7 @@ export function QuoteCardDf({
               <div className={COLUMN_ICON_CLASS}>
                 <Users className="h-4 w-4" />
               </div>
-              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Included
               </span>
             </div>
@@ -404,7 +404,7 @@ export function QuoteCardDf({
               <div className={COLUMN_ICON_CLASS}>
                 <Scale className="h-4 w-4" />
               </div>
-              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Optional
               </span>
             </div>
@@ -447,7 +447,7 @@ export function QuoteCardDf({
               <div className={COLUMN_ICON_CLASS}>
                 <Wrench className="h-4 w-4" />
               </div>
-              <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Optional
               </span>
             </div>
@@ -491,7 +491,7 @@ export function QuoteCardDf({
           />
 
           {pricingMode === "monthly" && (
-            <div className="flex w-fit flex-none flex-col justify-center self-stretch py-2">
+            <div className="flex w-fit flex-none flex-col justify-center self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3">
               <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                 <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
                 <span className="text-[14px] font-semibold text-[#1E1E1E]">
@@ -530,7 +530,7 @@ export function QuoteCardDf({
           )}
 
           {/* Total price block */}
-          <div className="flex w-[120px] min-w-[120px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-white p-3 text-center">
+          <div className="flex w-[120px] min-w-[120px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center">
             <span className="text-[14px] font-medium text-[#1E1E1E]">
               {pricingMode === "annual" ? "Total price" : "Monthly price"}
             </span>
