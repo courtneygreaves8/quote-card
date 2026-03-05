@@ -154,7 +154,7 @@ function App() {
       <div className="flex h-screen flex-col bg-neutral-50">
         <Navbar />
         <div className="flex min-h-0 flex-1">
-          <div className="hidden qc:flex">
+          <div className="hidden min-[1440px]:flex">
             <QuoteSidebar
               quoteReference={QUOTE_REF}
               filters={filters}
