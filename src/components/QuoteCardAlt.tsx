@@ -40,10 +40,12 @@ export function QuoteCardAlt({
     (legalCover ? quote.familyLegalAddOnPrice : 0) +
     (homeEmergency ? quote.homeEmergencyAddOnPrice : 0)
 
+  // Reuse the same monthly logic as QuoteCardLg
   const MONTHLY_DIVISOR = 11
   const monthlyAmount = totalPriceRaw / MONTHLY_DIVISOR
 
   const formatPounds = (n: number) => `£${n.toFixed(2)}`
+
   const x1Amount = monthlyAmount + 5
   const depositAmount = monthlyAmount + 20
 
