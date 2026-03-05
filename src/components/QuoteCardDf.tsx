@@ -128,7 +128,7 @@ export function QuoteCardDf({
           </div>
 
           {/* Home insurance container — full width */}
-          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-3">
+          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex min-w-0 items-center gap-2">
                 <div className={COLUMN_ICON_CLASS}>
@@ -170,7 +170,7 @@ export function QuoteCardDf({
           </div>
 
           {/* Host insurance container — full width */}
-          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-3">
+          <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex min-w-0 items-center gap-2">
                 <div className={COLUMN_ICON_CLASS}>
@@ -210,7 +210,7 @@ export function QuoteCardDf({
 
           {/* Family legal + Home emergency — side by side */}
           <div className="flex w-full gap-3">
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-3">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
               <div className="flex items-center justify-between gap-2">
                 <div className={COLUMN_ICON_CLASS}>
                   <Scale className="h-4 w-4" />
@@ -247,7 +247,7 @@ export function QuoteCardDf({
                 />
               </div>
             </div>
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-3">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
               <div className="flex items-center justify-between gap-2">
                 <div className={COLUMN_ICON_CLASS}>
                   <Wrench className="h-4 w-4" />
@@ -288,7 +288,7 @@ export function QuoteCardDf({
 
           {/* Monthly only — payment breakdown, full width */}
           {pricingMode === "monthly" && (
-            <div className="flex w-full flex-col gap-0 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-3">
+            <div className="flex w-full flex-col gap-0 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2">
               <span className="mb-2 text-sm font-medium text-muted-foreground">
                 Payment breakdown
               </span>
@@ -330,7 +330,7 @@ export function QuoteCardDf({
           )}
 
           {/* Total price block — full width, both modes */}
-          <div className="flex w-full flex-col items-center justify-center gap-1 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-3 text-center">
+          <div className="flex w-full flex-col items-center justify-center gap-1 rounded-[12px] border border-neutral-200 bg-[#FCFCFC] p-2 text-center">
             <span className="text-sm font-medium text-muted-foreground">
               {pricingMode === "annual" ? "Total price" : "Total monthly price"}
             </span>
@@ -597,7 +597,7 @@ export function QuoteCardDf({
           />
 
           {pricingMode === "monthly" && (
-            <div className="flex w-fit flex-none flex-col justify-center self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3">
+            <div className="flex w-fit flex-none flex-col justify-center self-stretch py-2">
               <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                 <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
                 <span className="text-[14px] font-semibold text-[#1E1E1E]">
