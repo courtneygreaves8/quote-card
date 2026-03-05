@@ -21,6 +21,7 @@ import type { PaymentOption } from "@/types/quote"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface QuoteCardDfProps {
@@ -36,8 +37,12 @@ interface QuoteCardDfProps {
   onPurchase?: (quote: Quote) => void
 }
 
-const TOOLTIP_TRIGGER_CLASS =
-  "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
+/** Sm: click-to-open popover trigger */
+const POPOVER_TRIGGER_CLASS_SM =
+  "inline-flex cursor-pointer rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
+/** Df: hover tooltip trigger with pointer */
+const TOOLTIP_TRIGGER_CLASS_DF =
+  "inline-flex cursor-pointer rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
 
 const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FFF] text-neutral-700"
@@ -103,7 +108,7 @@ export function QuoteCardDf({
                 {quote.providerName}
               </span>
             </div>
-            <span className="inline-flex shrink-0 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-muted-foreground">
+            <span className="inline-flex shrink-0 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-muted-foreground min-[1220px]:px-2 min-[1220px]:py-0.5 min-[1220px]:text-xs">
               {policyType}
             </span>
           </div>
@@ -116,26 +121,28 @@ export function QuoteCardDf({
                   <div className={COLUMN_ICON_CLASS}>
                     <Home className="h-4 w-4" />
                   </div>
-                  <span className="text-sm font-medium text-foreground">Home insurance</span>
+                  <span className="text-sm font-medium text-foreground">Home Insurance</span>
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                     Included
                   </span>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <button
                         type="button"
-                        className={TOOLTIP_TRIGGER_CLASS}
+                        className={POPOVER_TRIGGER_CLASS_SM}
                         aria-label="What is standard cover?"
                       >
                         <HelpCircle className="h-4 w-4" />
                       </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-[220px]">
-                      General home insurance covering buildings and contents.
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverTrigger>
+                    <PopoverContent side="right" className="max-w-[220px]">
+                      <p className="text-sm text-popover-foreground">
+                        Home Insurance: Covers the structure of your property and contents. This is included in your quote.
+                      </p>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
               <div className="flex items-baseline justify-between gap-2">
@@ -159,26 +166,28 @@ export function QuoteCardDf({
                   <div className={COLUMN_ICON_CLASS}>
                     <Users className="h-4 w-4" />
                   </div>
-                  <span className="text-sm font-medium text-foreground">Host insurance</span>
+                  <span className="text-sm font-medium text-foreground">Host Insurance</span>
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                     Included
                   </span>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <button
                         type="button"
-                        className={TOOLTIP_TRIGGER_CLASS}
+                        className={POPOVER_TRIGGER_CLASS_SM}
                         aria-label="What is Pikl cover?"
                       >
                         <HelpCircle className="h-4 w-4" />
                       </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-[220px]">
-                      Host insurance for short-term letting and home sharing.
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverTrigger>
+                    <PopoverContent side="right" className="max-w-[220px]">
+                      <p className="text-sm text-popover-foreground">
+                        Host Insurance: Covers short-term letting and home sharing. This is included in your quote.
+                      </p>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
               <div className="flex items-baseline justify-between gap-2">
@@ -203,20 +212,22 @@ export function QuoteCardDf({
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                     Optional
                   </span>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <button
                         type="button"
-                        className={TOOLTIP_TRIGGER_CLASS}
-                        aria-label="Family legal protection"
+                        className={POPOVER_TRIGGER_CLASS_SM}
+                        aria-label="Legal Cover"
                       >
                         <HelpCircle className="h-4 w-4" />
                       </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-[220px]">
-                      Optional family legal protection add-on.
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverTrigger>
+                    <PopoverContent side="right" className="max-w-[220px]">
+                      <p className="text-sm text-popover-foreground">
+                        Legal Cover: Optional add-on for family legal protection.
+                      </p>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
               <span className="text-sm font-medium text-foreground">Legal Cover</span>
@@ -240,20 +251,22 @@ export function QuoteCardDf({
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                     Optional
                   </span>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <button
                         type="button"
-                        className={TOOLTIP_TRIGGER_CLASS}
-                        aria-label="What is home emergency cover?"
+                        className={POPOVER_TRIGGER_CLASS_SM}
+                        aria-label="Emergency Cover"
                       >
                         <HelpCircle className="h-4 w-4" />
                       </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-[220px]">
-                      Optional home emergency cover add-on.
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverTrigger>
+                    <PopoverContent side="right" className="max-w-[220px]">
+                      <p className="text-sm text-popover-foreground">
+                        Emergency Cover: Optional add-on for home emergency cover.
+                      </p>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
               <span className="text-sm font-medium text-foreground">Emergency Cover</span>
@@ -287,20 +300,22 @@ export function QuoteCardDf({
               <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                 <div className="flex items-center gap-1">
                   <span className="text-[14px] font-medium text-foreground">First payment (×1):</span>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <button
                         type="button"
-                        className={TOOLTIP_TRIGGER_CLASS}
+                        className={POPOVER_TRIGGER_CLASS_SM}
                         aria-label="Admin fee info"
                       >
                         <HelpCircle className="h-4 w-4" />
                       </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-[220px]">
-                      Our insurer PremFina charges a £5 admin fee.
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverTrigger>
+                    <PopoverContent side="right" className="max-w-[220px]">
+                      <p className="text-sm text-popover-foreground">
+                        First payment (×1): Our insurer PremFina charges a £5 admin fee on this instalment.
+                      </p>
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <span className="text-[14px] font-semibold text-foreground tabular-nums">
                   {formatPounds(x1Amount)}
@@ -336,7 +351,7 @@ export function QuoteCardDf({
             </div>
             <div className="flex w-full items-center justify-between gap-2">
               <span className="text-sm font-medium text-muted-foreground">
-                {pricingMode === "annual" ? "Total price" : "Total monthly price"}
+                {pricingMode === "annual" ? "Total Annual Premium" : "Total Monthly Premium"}
               </span>
               <span className="text-lg font-semibold tabular-nums text-foreground">
                 {pricingMode === "annual"
@@ -436,23 +451,23 @@ export function QuoteCardDf({
                 Included
               </span>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                  Home insurance
+                  Home Insurance
                 </span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className={TOOLTIP_TRIGGER_CLASS}
+                      className={TOOLTIP_TRIGGER_CLASS_DF}
                       aria-label="What is standard cover?"
                     >
                       <HelpCircle className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[220px]">
-                    General home insurance covering buildings and contents.
+                    <p className="text-sm">Home Insurance: Covers the structure of your property and contents. This is included in your quote.</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -480,23 +495,23 @@ export function QuoteCardDf({
                 Included
               </span>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                  Host insurance
+                  Host Insurance
                 </span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className={TOOLTIP_TRIGGER_CLASS}
+                      className={TOOLTIP_TRIGGER_CLASS_DF}
                       aria-label="What is Pikl cover?"
                     >
                       <HelpCircle className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[220px]">
-                    Host insurance for short-term letting and home sharing.
+                    <p className="text-sm">Host Insurance: Covers short-term letting and home sharing. This is included in your quote.</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -521,7 +536,7 @@ export function QuoteCardDf({
                 Optional
               </span>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                   Legal Cover
@@ -530,14 +545,14 @@ export function QuoteCardDf({
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className={TOOLTIP_TRIGGER_CLASS}
+                      className={TOOLTIP_TRIGGER_CLASS_DF}
                       aria-label="Family legal protection"
                     >
                       <HelpCircle className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[220px]">
-                    Optional family legal protection add-on.
+                    <p className="text-sm">Legal Cover: Optional add-on for family legal protection.</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -564,7 +579,7 @@ export function QuoteCardDf({
                 Optional
               </span>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                   Emergency Cover
@@ -573,14 +588,14 @@ export function QuoteCardDf({
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className={TOOLTIP_TRIGGER_CLASS}
+                      className={TOOLTIP_TRIGGER_CLASS_DF}
                       aria-label="What is home emergency cover?"
                     >
                       <HelpCircle className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[220px]">
-                    Optional home emergency cover add-on.
+                    <p className="text-sm">Emergency Cover: Optional add-on for home emergency cover.</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -618,14 +633,14 @@ export function QuoteCardDf({
                     <TooltipTrigger asChild>
                       <button
                         type="button"
-                        className={TOOLTIP_TRIGGER_CLASS}
+                        className={TOOLTIP_TRIGGER_CLASS_DF}
                         aria-label="Admin fee info"
                       >
                         <HelpCircle className="h-4 w-4" />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="right" className="max-w-[220px]">
-                      Our insurer PremFina charges a £5 admin fee.
+                      <p className="text-sm">First payment (×1): Our insurer PremFina charges a £5 admin fee on this instalment.</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -645,7 +660,7 @@ export function QuoteCardDf({
           {/* Total price block */}
           <div className="flex w-[120px] min-w-[120px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center">
             <span className="text-[14px] font-medium text-[#1E1E1E]">
-              {pricingMode === "annual" ? "Total price" : "Monthly price"}
+              {pricingMode === "annual" ? "Total Annual Premium" : "Total Monthly Premium"}
             </span>
             <span className="text-[14px] font-semibold text-[#1E1E1E]">
               {pricingMode === "annual"

@@ -215,7 +215,7 @@ export function QuoteSidebar({
         <div className="space-y-5">
           <div className={ADDON_ROW_CLASS}>
             <Label htmlFor="buildings-accidental" className={ADDON_LABEL_CLASS}>
-              Accidental damage (Buildings)
+              Accidental Damage (Buildings)
             </Label>
             <Switch
               id="buildings-accidental"
@@ -227,7 +227,7 @@ export function QuoteSidebar({
           </div>
           <div className={ADDON_ROW_CLASS}>
             <Label htmlFor="contents-accidental" className={ADDON_LABEL_CLASS}>
-              Accidental damage (Contents)
+              Accidental Damage (Contents)
             </Label>
             <Switch
               id="contents-accidental"
@@ -239,7 +239,7 @@ export function QuoteSidebar({
           </div>
           <div className={ADDON_ROW_CLASS}>
             <Label htmlFor="home-emergency" className={ADDON_LABEL_CLASS}>
-              Home emergency
+              Home Emergency Cover
             </Label>
             <Switch
               id="home-emergency"
@@ -251,7 +251,7 @@ export function QuoteSidebar({
           </div>
           <div className={ADDON_ROW_CLASS}>
             <Label htmlFor="legal-cover" className={ADDON_LABEL_CLASS}>
-              Family legal protection
+              Family Legal Protection
             </Label>
             <Switch
               id="legal-cover"

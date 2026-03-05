@@ -3,7 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 
 export default function App() {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={200}>
       <ViewSelector />
     </TooltipProvider>
   )
