@@ -219,7 +219,7 @@ export function QuoteCardLg({
                   </Tooltip>
                 </span>
                 <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
-                  {formatPounds(monthlyAmount)}
+                  {formatPounds(monthlyAmount + 5)}
                 </span>
               </div>
               <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
@@ -305,7 +305,12 @@ export function QuoteCardLg({
         {/* Middle: 2×2 grid on mobile, horizontal row with equal-height dividers on desktop */}
         <div className="mt-2 grid flex-1 gap-3 sm:grid-cols-2 qc:mt-0 qc:flex qc:flex-row qc:items-stretch qc:gap-0">
           {/* Home insurance */}
-          <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
+          <div
+            className={cn(
+              "rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3",
+              pricingMode === "monthly" && "qc:pl-5 qc:pr-3"
+            )}
+          >
             <p className="mb-1 flex flex-col gap-0 text-sm text-muted-foreground">
               <span>Home</span>
               <span className="inline-flex items-center gap-1.5">
@@ -334,7 +339,12 @@ export function QuoteCardLg({
           </div>
 
           {/* Host insurance */}
-          <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
+          <div
+            className={cn(
+              "rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3",
+              pricingMode === "monthly" && "qc:pl-5 qc:pr-3"
+            )}
+          >
             <p className="mb-1 flex flex-col gap-0 text-sm text-muted-foreground">
               <span>Host</span>
               <span className="inline-flex items-center gap-1.5">
@@ -363,7 +373,12 @@ export function QuoteCardLg({
           </div>
 
           {/* Legal cover — \"Family legal\" on one line, \"protection\" below */}
-          <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
+          <div
+            className={cn(
+              "flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3",
+              pricingMode === "monthly" && "qc:pr-8"
+            )}
+          >
             <div className="flex flex-col gap-1">
               <p className="text-sm text-muted-foreground">
                 <span className="whitespace-nowrap">Family legal</span>
@@ -410,7 +425,7 @@ export function QuoteCardLg({
                   </Tooltip>
                 </span>
                 <span className="m-0 shrink-0 text-sm font-medium tabular-nums text-foreground">
-                  {formatPounds(monthlyAmount)}
+                  {formatPounds(monthlyAmount + 5)}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-2 pt-1.5">
