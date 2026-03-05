@@ -482,4 +482,3 @@ export function QuoteCardDf({
     </div>
   )
 }
-
