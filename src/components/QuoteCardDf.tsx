@@ -1,4 +1,15 @@
-import { CheckSquare, HelpCircle, Info, ShoppingCart, Square } from "lucide-react"
+import {
+  Building2,
+  CheckSquare,
+  HelpCircle,
+  Home,
+  Info,
+  Scale,
+  Wrench,
+  ShoppingCart,
+  Square,
+  Users,
+} from "lucide-react"
 import {
   ANNUAL_DISPLAY_MAX,
   ANNUAL_DISPLAY_MIN,
@@ -17,6 +28,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 interface QuoteCardDfProps {
   quote: Quote
+  policyType: string
   paymentOption: PaymentOption
   onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
@@ -32,6 +44,7 @@ const TOOLTIP_TRIGGER_CLASS =
 
 export function QuoteCardDf({
   quote,
+  policyType,
   paymentOption,
   onPaymentOptionChange,
   legalCover,
@@ -75,11 +88,11 @@ export function QuoteCardDf({
 
   return (
     <div className="flex min-w-0 w-full">
-      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 min-[1440px]:gap-6">
+      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 min-[1513px]:gap-6">
         {/* Stacked layout (QuoteCardSm) — 1439px and below */}
-        <div className="flex min-w-0 w-full flex-col gap-3 p-0 min-[1440px]:hidden">
+        <div className="flex min-w-0 w-full flex-col gap-3 p-0 min-[1513px]:hidden">
           <div className="flex min-w-0 items-center justify-between gap-3">
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-[#FAFAFA]">
               <span className="text-xs font-bold text-muted-foreground">LOGO</span>
             </div>
             <div className="flex items-center gap-2">
@@ -105,7 +118,7 @@ export function QuoteCardDf({
               {quote.providerName}
             </span>
             <span className="inline-flex shrink-0 items-center rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-              Buildings & Contents
+              {policyType}
             </span>
           </div>
           <div className="mt-2 flex min-w-0 flex-col">
@@ -233,18 +246,18 @@ export function QuoteCardDf({
           </div>
         </div>
 
-        {/* Horizontal layout (QuoteCardDf) — 1440px and above */}
-        <div className="hidden min-w-0 w-full flex-col gap-6 min-[1440px]:flex">
+        {/* Horizontal layout (QuoteCardDf) — 1513px and above */}
+        <div className="hidden min-w-0 w-full flex-col gap-3 min-[1513px]:flex">
         {/* Header */}
         <div className="flex w-full items-center justify-between">
           {/* Logo + insurer name */}
           <div className="flex items-center gap-3">
-            <div className="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-[10px] bg-[#D9D9D9]">
+            <div className="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-[10px] bg-[#FAFAFA]">
               <span className="text-xs font-semibold text-slate-600">LOGO</span>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
               <span className="inline-flex w-fit rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                Buildings & Contents
+                {policyType}
               </span>
               <span className="text-[16px] font-semibold text-[#1E1E1E]">
                 {quote.providerName || "Insurer name"}
@@ -295,9 +308,17 @@ export function QuoteCardDf({
         </div>
 
         {/* Content */}
-        <div className="flex min-w-0 w-full max-w-full items-stretch gap-6 overflow-x-auto rounded-[16px] border border-[#E2E8F0] bg-muted/30 p-3">
+        <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-4 overflow-x-auto">
           {/* Home column */}
-          <div className="flex min-w-0 flex-col items-start gap-4">
+          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
+                <Home className="h-4 w-4 text-neutral-600" aria-hidden />
+              </div>
+              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Included
+              </span>
+            </div>
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Home insurance
@@ -317,22 +338,29 @@ export function QuoteCardDf({
                 </TooltipContent>
               </Tooltip>
             </div>
-            <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {toDisplay(quote.standardPrice)}
-            </div>
-            <div className="text-[14px] font-medium text-[#1E1E1E]">
-              Excess:{" "}
-              <span className="font-semibold">
-                {quote.policyDetails.excess ?? "£0"}
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                {toDisplay(quote.standardPrice)}
+              </span>
+              <span className="text-[14px] font-medium text-[#1E1E1E]">
+                Excess:{" "}
+                <span className="font-semibold">
+                  {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                </span>
               </span>
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
-
           {/* Host column */}
-          <div className="flex min-w-0 flex-col items-start gap-4">
+          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
+                <Users className="h-4 w-4 text-neutral-600" aria-hidden />
+              </div>
+              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Included
+              </span>
+            </div>
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Host insurance
@@ -352,40 +380,54 @@ export function QuoteCardDf({
                 </TooltipContent>
               </Tooltip>
             </div>
-            <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {toDisplay(quote.piklPrice)}
-            </div>
-            <div className="text-[14px] font-medium text-[#1E1E1E]">
-              Excess: <span className="font-semibold">£50.00</span>
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                {toDisplay(quote.piklPrice)}
+              </span>
+              <span className="text-[14px] font-medium text-[#1E1E1E]">
+                Excess: <span className="font-semibold">£50</span>
+              </span>
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
-
           {/* Family legal column */}
-          <div className="flex min-w-[180px] w-[180px] flex-none flex-col items-start gap-4">
+          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
+                <Scale className="h-4 w-4 text-neutral-600" aria-hidden />
+              </div>
+              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Optional
+              </span>
+            </div>
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Family legal protection
               </span>
-              <HelpCircle className="h-4 w-4 text-slate-500" aria-hidden />
+              <HelpCircle className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
             </div>
-            <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {toDisplay(quote.familyLegalAddOnPrice)}
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                {toDisplay(quote.familyLegalAddOnPrice)}
+              </span>
+              <Switch
+                checked={legalCover}
+                onCheckedChange={onLegalCoverChange}
+                aria-label="Family legal protection"
+              />
             </div>
-            <Switch
-              checked={legalCover}
-              onCheckedChange={onLegalCoverChange}
-              aria-label="Family legal protection"
-            />
           </div>
 
-          {/* Divider */}
-          <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
-
           {/* Home emergency column */}
-          <div className="flex min-w-[180px] w-[180px] flex-none flex-col items-start gap-4">
+          <div className="flex w-[200px] min-w-[200px] flex-none flex-col gap-4 rounded-[12px] border border-neutral-200 bg-white p-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
+                <Wrench className="h-4 w-4 text-neutral-600" aria-hidden />
+              </div>
+              <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Optional
+              </span>
+            </div>
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Home emergency cover
@@ -405,50 +447,51 @@ export function QuoteCardDf({
                 </TooltipContent>
               </Tooltip>
             </div>
-            <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {toDisplay(quote.homeEmergencyAddOnPrice)}
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                {toDisplay(quote.homeEmergencyAddOnPrice)}
+              </span>
+              <Switch
+                checked={homeEmergency}
+                onCheckedChange={onHomeEmergencyChange}
+                aria-label="Home emergency cover"
+              />
             </div>
-            <Switch
-              checked={homeEmergency}
-              onCheckedChange={onHomeEmergencyChange}
-              aria-label="Home emergency cover"
-            />
           </div>
 
-          {pricingMode === "monthly" && (
-            <>
-              {/* Divider */}
-              <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
+          {/* Vertical divider after home emergency */}
+          <div className="h-auto w-px flex-shrink-0 self-stretch bg-neutral-200" aria-hidden />
 
-              {/* Monthly breakdown */}
-              <div className="flex w-[121px] min-w-[121px] flex-none flex-col items-stretch">
-                <div className="flex items-center justify-between gap-4 border-b border-[#E2E8F0] py-2">
+          {pricingMode === "monthly" && (
+            <div className="flex flex-none self-stretch items-center py-2">
+              <div className="flex w-full flex-col">
+                <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                   <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit:</span>
                   <span className="text-[14px] font-semibold text-[#1E1E1E]">
                     {formatPounds(depositAmount)}
                   </span>
                 </div>
-                <div className="flex items-center justify-between gap-4 border-b border-[#E2E8F0] py-2">
-                  <div className="flex items-center gap-1">
-                    <span className="text-[14px] font-medium text-[#1E1E1E]">×1</span>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          className={TOOLTIP_TRIGGER_CLASS}
-                          aria-label="Admin fee info"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="max-w-[220px]">
-                        Our insurer PremFina charges a £5 admin fee.
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
-                    {formatPounds(x1Amount)}
-                  </span>
+                <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
+                <div className="flex items-center gap-1">
+                  <span className="text-[14px] font-medium text-[#1E1E1E]">×1</span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS}
+                        aria-label="Admin fee info"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-[220px]">
+                      Our insurer PremFina charges a £5 admin fee.
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                  {formatPounds(x1Amount)}
+                </span>
                 </div>
                 <div className="flex items-center justify-between gap-4 py-2">
                   <span className="text-[14px] font-medium text-[#1E1E1E]">×9</span>
@@ -457,11 +500,11 @@ export function QuoteCardDf({
                   </span>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {/* Total price block */}
-          <div className="flex h-[120px] w-[120px] flex-none flex-col items-center justify-center gap-4 rounded-[12px] border border-[#E2E8F0] bg-white p-2 text-center">
+          <div className="flex w-[120px] min-w-[120px] flex-none flex-col items-center justify-center gap-4 self-stretch rounded-[12px] border border-neutral-200 bg-white p-3 text-center">
             <div className="text-[14px] font-medium text-[#1E1E1E]">
               {pricingMode === "annual" ? "Total price" : "Monthly Price"}
             </div>
