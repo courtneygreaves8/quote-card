@@ -23,6 +23,8 @@ interface QuotesContentProps {
   onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
   onLegalCoverChange: (checked: boolean) => void
+  homeEmergency: boolean
+  onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
   onOpenOptions?: () => void
@@ -38,6 +40,8 @@ export function QuotesContent({
   onPaymentOptionChange,
   legalCover,
   onLegalCoverChange,
+  homeEmergency,
+  onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
   onOpenOptions,
@@ -104,6 +108,8 @@ export function QuotesContent({
               onPaymentOptionChange={onPaymentOptionChange}
               legalCover={legalCover}
               onLegalCoverChange={onLegalCoverChange}
+              homeEmergency={homeEmergency}
+              onHomeEmergencyChange={onHomeEmergencyChange}
               onMoreDetails={onMoreDetails}
               onPurchase={onPurchase}
             />
