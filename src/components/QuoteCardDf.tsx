@@ -47,7 +47,7 @@ const TOOLTIP_TRIGGER_CLASS_DF =
 const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FFF] text-neutral-700"
 const COLUMN_BOX_CLASS =
-  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3"
+  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
 
 export function QuoteCardDf({
   quote,
