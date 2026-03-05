@@ -1,4 +1,5 @@
 import { QuoteCardLg } from "@/components/QuoteCardLg"
+import { QuoteCardAlt } from "@/components/QuoteCardAlt"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -23,6 +24,8 @@ interface QuotesContentProps {
   onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
   onLegalCoverChange: (checked: boolean) => void
+  homeEmergency: boolean
+  onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
   onOpenOptions?: () => void
@@ -38,12 +41,14 @@ export function QuotesContent({
   onPaymentOptionChange,
   legalCover,
   onLegalCoverChange,
+  homeEmergency,
+  onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
   onOpenOptions,
 }: QuotesContentProps) {
   return (
-    <div className="mx-auto w-full min-w-0 max-w-[1024px] overflow-x-hidden py-8 px-4 min-[1025px]:px-0">
+    <div className="mx-auto w-full min-w-0 max-w-[1200px] overflow-x-hidden py-8 px-4 min-[1200px]:px-0">
       <div className="mb-8 flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
@@ -96,17 +101,36 @@ export function QuotesContent({
       <div className="grid min-w-0 gap-6 sm:grid-cols-1 md:grid-cols-2 card3:grid-cols-3 qc:grid-cols-1">
         {displayedQuotes.length > 0 ? (
           displayedQuotes.map((quote) => (
-            <QuoteCardLg
-              key={quote.id}
-              size="lg"
-              quote={quote}
-              paymentOption={paymentOption}
-              onPaymentOptionChange={onPaymentOptionChange}
-              legalCover={legalCover}
-              onLegalCoverChange={onLegalCoverChange}
-              onMoreDetails={onMoreDetails}
-              onPurchase={onPurchase}
-            />
+            <div key={quote.id} className="flex flex-col items-center">
+              {/* Existing layout (stacked + original desktop) for < 1339px */}
+              <div className="block qc:hidden w-full">
+                <QuoteCardLg
+                  size="lg"
+                  quote={quote}
+                  paymentOption={paymentOption}
+                  onPaymentOptionChange={onPaymentOptionChange}
+                  legalCover={legalCover}
+                  onLegalCoverChange={onLegalCoverChange}
+                  homeEmergency={homeEmergency}
+                  onHomeEmergencyChange={onHomeEmergencyChange}
+                  onMoreDetails={onMoreDetails}
+                  onPurchase={onPurchase}
+                />
+              </div>
+
+              {/* Alternative desktop-only layout for 1339px and above */}
+              <QuoteCardAlt
+                quote={quote}
+                paymentOption={paymentOption}
+                onPaymentOptionChange={onPaymentOptionChange}
+                legalCover={legalCover}
+                homeEmergency={homeEmergency}
+                onLegalCoverChange={onLegalCoverChange}
+                onHomeEmergencyChange={onHomeEmergencyChange}
+                onMoreDetails={onMoreDetails}
+                onPurchase={onPurchase}
+              />
+            </div>
           ))
         ) : (
           <div className="col-span-2 rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
