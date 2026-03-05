@@ -174,12 +174,8 @@ function App() {
                 setFilters((f) => ({ ...f, paymentOption: option }))
               }
               legalCover={filters.legalCover}
-              homeEmergency={filters.homeEmergency}
               onLegalCoverChange={(checked) =>
                 setFilters((f) => ({ ...f, legalCover: checked }))
-              }
-              onHomeEmergencyChange={(checked) =>
-                setFilters((f) => ({ ...f, homeEmergency: checked }))
               }
               onMoreDetails={handleMoreDetails}
               onPurchase={handlePurchase}
