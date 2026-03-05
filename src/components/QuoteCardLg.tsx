@@ -32,9 +32,7 @@ interface QuoteCardLgProps {
   paymentOption: PaymentOption
   onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
-  homeEmergency: boolean
   onLegalCoverChange: (checked: boolean) => void
-  onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
   size?: "sm" | "md" | "lg"
@@ -45,9 +43,7 @@ export function QuoteCardLg({
   paymentOption,
   onPaymentOptionChange,
   legalCover,
-  homeEmergency,
   onLegalCoverChange,
-  onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
   size = "lg",
@@ -55,8 +51,7 @@ export function QuoteCardLg({
   const totalPrice =
     quote.standardPrice +
     quote.piklPrice +
-    (legalCover ? quote.familyLegalAddOnPrice : 0) +
-    (homeEmergency ? quote.homeEmergencyAddOnPrice : 0)
+    (legalCover ? quote.familyLegalAddOnPrice : 0)
 
   const pricingMode = paymentOption
 
@@ -251,28 +246,7 @@ export function QuoteCardLg({
           <div className="h-px flex-1 bg-border" />
         </div>
 
-        {/* Home emergency toggle card */}
-        <button
-          type="button"
-          onClick={() => onHomeEmergencyChange(!homeEmergency)}
-          className="flex w-full items-center justify-between rounded-lg border border-border bg-white px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted"
-          aria-pressed={homeEmergency}
-          aria-label="Toggle Home emergency"
-        >
-          <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-            {homeEmergency ? (
-              <CheckSquare className="h-5 w-5 shrink-0 text-foreground" aria-hidden />
-            ) : (
-              <Square className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
-            )}
-            Home emergency
-          </span>
-          <span className="text-sm font-medium text-foreground">
-            {toDisplay(quote.homeEmergencyAddOnPrice)}
-          </span>
-        </button>
-
-        {/* Legal cover toggle card */}
+        {/* Legal cover toggle card (Home emergency hidden on QuoteCardSm) */}
         <button
           type="button"
           onClick={() => onLegalCoverChange(!legalCover)}
@@ -388,10 +362,13 @@ export function QuoteCardLg({
             </p>
           </div>
 
-          {/* Legal cover */}
+          {/* Legal cover — \"Family legal\" on one line, \"protection\" below */}
           <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
             <div className="flex flex-col gap-1">
-              <p className="text-sm text-muted-foreground">Legal cover</p>
+              <p className="text-sm text-muted-foreground">
+                <span className="whitespace-nowrap">Family legal</span>
+                <span className="block">protection</span>
+              </p>
               <p className={priceClass}>
                 {pricingMode === "annual"
                   ? toDisplayAnnual(quote.familyLegalAddOnPrice)
@@ -401,28 +378,11 @@ export function QuoteCardLg({
             <Switch
               checked={legalCover}
               onCheckedChange={onLegalCoverChange}
-              aria-label="Legal cover"
+              aria-label="Family legal protection"
             />
           </div>
 
-          {/* Home emergency — hidden on monthly so breakdown column can follow Legal */}
-          {pricingMode === "annual" && (
-            <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:px-5 qc:py-3">
-              <div className="flex flex-col gap-1">
-                <p className="text-sm text-muted-foreground">Home emergency</p>
-                <p className={priceClass}>
-                  {toDisplayAnnual(quote.homeEmergencyAddOnPrice)}
-                </p>
-              </div>
-              <Switch
-                checked={homeEmergency}
-                onCheckedChange={onHomeEmergencyChange}
-                aria-label="Home emergency cover"
-              />
-            </div>
-          )}
-
-          {/* Monthly breakdown column — same style as other columns, only when monthly */}
+          {/* Monthly breakdown column — same style as other columns, only when monthly (Home emergency hidden on QuoteCardLg) */}
           {pricingMode === "monthly" && (
             <div className="hidden flex-col justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3" data-debug-monthly-desktop>
               <div className="flex items-center justify-between gap-2 border-b border-border pb-1.5">

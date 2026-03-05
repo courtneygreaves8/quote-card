@@ -247,7 +247,7 @@ export function QuoteSidebar({
           </div>
           <div className={ADDON_ROW_CLASS}>
             <Label htmlFor="legal-cover" className={ADDON_LABEL_CLASS}>
-              Legal cover
+              Family legal protection
             </Label>
             <Switch
               id="legal-cover"

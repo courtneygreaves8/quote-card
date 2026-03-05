@@ -15,9 +15,7 @@ const TOOLTIP_TRIGGER_CLASS =
 interface QuoteCardProps {
   quote: Quote
   legalCover: boolean
-  homeEmergency: boolean
   onLegalCoverChange: (checked: boolean) => void
-  onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
   size?: "sm" | "md" | "lg"
@@ -26,9 +24,7 @@ interface QuoteCardProps {
 export function QuoteCard({
   quote,
   legalCover,
-  homeEmergency,
   onLegalCoverChange,
-  onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
   size = "lg",
@@ -36,8 +32,7 @@ export function QuoteCard({
   const totalPrice =
     quote.standardPrice +
     quote.piklPrice +
-    (legalCover ? quote.familyLegalAddOnPrice : 0) +
-    (homeEmergency ? quote.homeEmergencyAddOnPrice : 0)
+    (legalCover ? quote.familyLegalAddOnPrice : 0)
 
   const coverLabelClass =
     "mb-1 flex items-center gap-1.5 text-sm text-muted-foreground"
@@ -67,7 +62,7 @@ export function QuoteCard({
           </div>
         </div>
 
-        {/* Middle: 2×2 grid on mobile, horizontal row with equal-height dividers on desktop */}
+        {/* Middle: grid on mobile, horizontal row with equal-height dividers on desktop (Home emergency hidden) */}
         <div className="mt-2 grid flex-1 gap-3 sm:grid-cols-2 qc:mt-0 qc:flex qc:flex-row qc:items-stretch qc:gap-0">
           {/* Home insurance */}
           <div className="rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-col qc:justify-center qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
@@ -116,26 +111,13 @@ export function QuoteCard({
           {/* Legal cover */}
           <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:border-r qc:border-border qc:px-5 qc:py-3">
             <div className="flex flex-col gap-1">
-              <p className="text-sm text-muted-foreground">Legal cover</p>
+              <p className="text-sm text-muted-foreground">Family legal protection</p>
               <p className={priceClass}>£{quote.familyLegalAddOnPrice}</p>
             </div>
             <Switch
               checked={legalCover}
               onCheckedChange={onLegalCoverChange}
-              aria-label="Legal cover"
-            />
-          </div>
-
-          {/* Home emergency */}
-          <div className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3 py-2 qc:flex qc:min-w-0 qc:h-[4.8rem] qc:flex-1 qc:flex-row qc:items-center qc:justify-between qc:gap-4 qc:rounded-none qc:border-0 qc:px-5 qc:py-3">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm text-muted-foreground">Home emergency</p>
-              <p className={priceClass}>£{quote.homeEmergencyAddOnPrice}</p>
-            </div>
-            <Switch
-              checked={homeEmergency}
-              onCheckedChange={onHomeEmergencyChange}
-              aria-label="Home emergency cover"
+              aria-label="Family legal protection"
             />
           </div>
         </div>
