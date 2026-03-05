@@ -1,5 +1,5 @@
 import type { FilterOption, PaymentOption, Quote, SortOption } from "@/types/quote"
-import { QuoteCardAlt } from "@/components/QuoteCardAlt"
+import { QuoteCardDf } from "@/components/QuoteCardDf"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -101,7 +101,7 @@ export function QuotesContent({
           {displayedQuotes.length > 0 ? (
             displayedQuotes.map((quote) => (
               <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
-                <QuoteCardAlt
+                <QuoteCardDf
                   quote={quote}
                   paymentOption={paymentOption}
                   onPaymentOptionChange={onPaymentOptionChange}

@@ -93,14 +93,14 @@ const POLICY_INCLUDES_LIST: { title: string; description: string }[] = [
   },
 ]
 
-interface PolicyDrawerProps {
+interface PolicySheetProps {
   quote: Quote | null
   quoteReference: string
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-function DrawerSection({
+function SheetSection({
   title,
   open,
   onToggle,
@@ -163,7 +163,7 @@ function ExcessTable({
   )
 }
 
-function PolicyDrawerRight({
+function PolicySheetRight({
   policyDetails,
   propertyAddress,
   proposerName,
@@ -184,7 +184,7 @@ function PolicyDrawerRight({
 
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[5.5rem]">
-      <DrawerSection
+      <SheetSection
         title="Overview"
         open={openOverview}
         onToggle={() => setOpenOverview((v) => !v)}
@@ -211,9 +211,9 @@ function PolicyDrawerRight({
             </li>
           </ul>
         </div>
-      </DrawerSection>
+      </SheetSection>
 
-      <DrawerSection
+      <SheetSection
         title="What's included"
         open={openIncluded}
         onToggle={() => setOpenIncluded((v) => !v)}
@@ -237,9 +237,9 @@ function PolicyDrawerRight({
             </li>
           ))}
         </ul>
-      </DrawerSection>
+      </SheetSection>
 
-      <DrawerSection
+      <SheetSection
         title="What's not included"
         open={openExcluded}
         onToggle={() => setOpenExcluded((v) => !v)}
@@ -252,9 +252,9 @@ function PolicyDrawerRight({
             </li>
           ))}
         </ul>
-      </DrawerSection>
+      </SheetSection>
 
-      <DrawerSection
+      <SheetSection
         title="Fees"
         open={openFees}
         onToggle={() => setOpenFees((v) => !v)}
@@ -263,9 +263,9 @@ function PolicyDrawerRight({
           No additional fees apply to this policy. Your premium includes all
           standard administration and policy fees.
         </p>
-      </DrawerSection>
+      </SheetSection>
 
-      <DrawerSection
+      <SheetSection
         title="Excess"
         open={openExcess}
         onToggle={() => setOpenExcess((v) => !v)}
@@ -276,9 +276,9 @@ function PolicyDrawerRight({
           claim in addition to the compulsory excess.
         </p>
         <ExcessTable policyDetails={policyDetails} />
-      </DrawerSection>
+      </SheetSection>
 
-      <DrawerSection
+      <SheetSection
         title="Documents"
         open={openDocuments}
         onToggle={() => setOpenDocuments((v) => !v)}
@@ -293,9 +293,9 @@ function PolicyDrawerRight({
             Policy summary
           </Button>
         </div>
-      </DrawerSection>
+      </SheetSection>
 
-      <DrawerSection
+      <SheetSection
         title="About the insurer"
         open={openAboutInsurer}
         onToggle={() => setOpenAboutInsurer((v) => !v)}
@@ -316,17 +316,17 @@ function PolicyDrawerRight({
             </p>
           </CardContent>
         </Card>
-      </DrawerSection>
+      </SheetSection>
     </div>
   )
 }
 
-export function PolicyDrawer({
+export function PolicySheet({
   quote,
   quoteReference,
   open,
   onOpenChange,
-}: PolicyDrawerProps) {
+}: PolicySheetProps) {
   const [showStickyBar, setShowStickyBar] = useState(false)
   const scrollRef = useRef<HTMLDivElement | null>(null)
 
@@ -543,7 +543,7 @@ export function PolicyDrawer({
 
           {/* Right: details – full width on small screens, 2/3 on md+ */}
           <div className="w-full md:w-2/3">
-            <PolicyDrawerRight
+            <PolicySheetRight
               policyDetails={policyDetails}
               propertyAddress={MOCK_PROPERTY_ADDRESS}
               proposerName={MOCK_PROPOSER_NAME}
