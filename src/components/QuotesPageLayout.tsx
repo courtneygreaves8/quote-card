@@ -44,6 +44,7 @@ export function QuotesPageLayout({
         <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
           <QuotesContent
             displayedQuotes={displayedQuotes}
+            policyType={filters.policyType}
             sort={sort}
             filter={filter}
             onSortChange={setSort}

@@ -13,6 +13,7 @@ export type { SortOption, FilterOption }
 
 interface QuotesContentProps {
   displayedQuotes: Quote[]
+  policyType: string
   sort: SortOption
   filter: FilterOption
   onSortChange: (value: SortOption) => void
@@ -30,6 +31,7 @@ interface QuotesContentProps {
 
 export function QuotesContent({
   displayedQuotes,
+  policyType,
   sort,
   filter,
   onSortChange,
@@ -46,8 +48,8 @@ export function QuotesContent({
 }: QuotesContentProps) {
   return (
     <div className="w-full overflow-x-hidden py-8 px-4 md:px-6 card3:px-6">
-      {/* Centre stage: wider for 3-col stacked cards; hugs content at 1440px+ for horizontal card */}
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col min-[1440px]:w-fit min-[1440px]:max-w-none min-[1440px]:items-center">
+      {/* Centre stage: 3-col stacked up to 1512px; single horizontal card at 1513px+ */}
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col min-[1513px]:w-fit min-[1513px]:max-w-none min-[1513px]:items-center">
         <div className="mb-8 w-full flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
@@ -97,12 +99,13 @@ export function QuotesContent({
           </div>
         </div>
 
-        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 card3:grid-cols-3 min-[1440px]:grid-cols-1 min-[1440px]:w-max min-[1440px]:max-w-none">
+        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 card3:grid-cols-3 min-[1513px]:grid-cols-1 min-[1513px]:w-max min-[1513px]:max-w-none">
           {displayedQuotes.length > 0 ? (
             displayedQuotes.map((quote) => (
               <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
                 <QuoteCardDf
                   quote={quote}
+                  policyType={policyType}
                   paymentOption={paymentOption}
                   onPaymentOptionChange={onPaymentOptionChange}
                   legalCover={legalCover}

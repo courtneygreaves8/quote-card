@@ -107,16 +107,19 @@ export function QuoteSidebar({
 
       <div className="space-y-2">
         <Label>Quote reference</Label>
-        <div className="flex h-10 w-full items-center gap-2 rounded-lg border border-input bg-muted/30 pl-3.5 pr-1">
-          <span className="flex-1 truncate font-mono text-sm font-medium">
-            {quoteReference}
-          </span>
+        <div className="flex items-center gap-2">
+          <div className="flex h-10 min-w-0 flex-1 items-center rounded-lg border border-input bg-muted/30 pl-3.5 pr-3.5">
+            <span className="truncate font-mono text-sm font-medium">
+              {quoteReference}
+            </span>
+          </div>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
-                size="icon"
-                className={SIDEBAR_ICON_BTN_CLASS}
+                type="button"
+                variant="outline"
+                size="sm"
+                className={EXCESS_BTN_CLASS}
                 onClick={handleCopyRef}
                 aria-label="Copy quote reference"
               >
@@ -130,9 +133,10 @@ export function QuoteSidebar({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
-                size="icon"
-                className={SIDEBAR_ICON_BTN_CLASS}
+                type="button"
+                variant="outline"
+                size="sm"
+                className={EXCESS_BTN_CLASS}
                 onClick={handleEmailRef}
                 aria-label="Email quote reference"
               >
