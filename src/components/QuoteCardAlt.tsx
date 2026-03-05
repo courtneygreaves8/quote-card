@@ -4,7 +4,7 @@ import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Quote } from "@/types/quote"
 import type { PaymentOption } from "@/types/quote"
-import { HelpCircle } from "lucide-react"
+import { CheckSquare, HelpCircle, Info, ShoppingCart, Square } from "lucide-react"
 
 interface QuoteCardAltProps {
   quote: Quote
@@ -20,6 +20,14 @@ interface QuoteCardAltProps {
 
 const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
+
+/** Annual pricing display range (quotes scaled into this range; reflects 10% discount). */
+const ANNUAL_DISPLAY_MIN = 170.77
+const ANNUAL_DISPLAY_MAX = 247.77
+const SOURCE_TOTAL_MIN = 15
+const SOURCE_TOTAL_MAX = 80
+
+const MONTHLY_DIVISOR = 11
 
 export function QuoteCardAlt({
   quote,
@@ -40,35 +48,221 @@ export function QuoteCardAlt({
     (legalCover ? quote.familyLegalAddOnPrice : 0) +
     (homeEmergency ? quote.homeEmergencyAddOnPrice : 0)
 
-  // Reuse the same monthly logic as QuoteCardLg
-  const MONTHLY_DIVISOR = 11
-  const monthlyAmount = totalPriceRaw / MONTHLY_DIVISOR
+  /** Scale annual total into [ANNUAL_DISPLAY_MIN, ANNUAL_DISPLAY_MAX]; line items scale proportionally. */
+  const displayedAnnualTotal = Math.min(
+    ANNUAL_DISPLAY_MAX,
+    Math.max(
+      ANNUAL_DISPLAY_MIN,
+      ANNUAL_DISPLAY_MIN +
+        ((totalPriceRaw - SOURCE_TOTAL_MIN) * (ANNUAL_DISPLAY_MAX - ANNUAL_DISPLAY_MIN)) /
+          (SOURCE_TOTAL_MAX - SOURCE_TOTAL_MIN)
+    )
+  )
+  const scaleFactor = totalPriceRaw > 0 ? displayedAnnualTotal / totalPriceRaw : 1
+
+  /** Monthly: 1 deposit + 1× first month + 9 more. Base instalment = displayedAnnualTotal / 11. */
+  const monthlyAmount = displayedAnnualTotal / MONTHLY_DIVISOR
+  const depositAmount = monthlyAmount + 20
+  const x1Amount = monthlyAmount + 5
 
   const formatPounds = (n: number) => `£${n.toFixed(2)}`
-
-  const x1Amount = monthlyAmount + 5
-  const depositAmount = monthlyAmount + 20
+  const toDisplayAnnual = (value: number) => formatPounds(value * scaleFactor)
+  const toDisplayMonthly = (value: number) =>
+    formatPounds((value * scaleFactor) / MONTHLY_DIVISOR)
+  const toDisplay = (value: number) =>
+    pricingMode === "annual" ? toDisplayAnnual(value) : toDisplayMonthly(value)
 
   return (
-    // Only show this alternative layout from 1339px+ (qc breakpoint and above)
-    <div className="hidden qc:flex">
-      <Card className="flex w-[1200px] flex-col items-start gap-6 rounded-[20px] border-none bg-white p-3">
+    <div className="flex min-w-0 w-full">
+      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 min-[1440px]:gap-6">
+        {/* Stacked layout (QuoteCardSm) — 1439px and below */}
+        <div className="flex min-w-0 w-full flex-col gap-3 p-0 min-[1440px]:hidden">
+          <div className="flex min-w-0 items-center justify-between gap-3">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
+              <span className="text-xs font-bold text-muted-foreground">LOGO</span>
+            </div>
+            <div className="flex items-center gap-2">
+              {pricingMode === "annual" && (
+                <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  10% cheaper
+                </span>
+              )}
+              <span className="text-xs font-medium text-muted-foreground">
+                {pricingMode === "annual" ? "Annual" : "Monthly"}
+              </span>
+              <Switch
+                checked={pricingMode === "monthly"}
+                onCheckedChange={(checked) =>
+                  onPaymentOptionChange(checked ? "monthly" : "annual")
+                }
+                aria-label="Toggle pricing mode"
+              />
+            </div>
+          </div>
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="break-words text-base font-semibold text-foreground">
+              {quote.providerName}
+            </span>
+            <span className="inline-flex shrink-0 items-center rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              Buildings & Contents
+            </span>
+          </div>
+          <div className="mt-2 flex min-w-0 flex-col">
+            <div className="flex min-w-0 items-baseline justify-between gap-2 py-2">
+              <span className="min-w-0 truncate text-sm text-muted-foreground">Home insurance</span>
+              <span className="shrink-0 text-sm font-medium tabular-nums text-foreground">
+                {toDisplay(quote.standardPrice)}
+              </span>
+            </div>
+            <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
+              <span className="min-w-0 truncate text-sm text-muted-foreground">Host insurance</span>
+              <span className="shrink-0 text-sm font-medium tabular-nums text-foreground">
+                {toDisplay(quote.piklPrice)}
+              </span>
+            </div>
+            {pricingMode === "monthly" && (
+              <>
+                <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-3">
+                  <span className="min-w-0 truncate text-[14px] text-muted-foreground">Deposit</span>
+                  <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
+                    {formatPounds(depositAmount)}
+                  </span>
+                </div>
+                <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-3">
+                  <span className="flex min-w-0 items-baseline gap-1 text-[14px] text-muted-foreground">
+                    × 1
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className={`${TOOLTIP_TRIGGER_CLASS} inline-flex align-baseline`}
+                          aria-label="Admin fee info"
+                        >
+                          <HelpCircle className="h-3 w-3" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="max-w-[220px]">
+                        Our insurer PremFina charges a £5 admin fee.
+                      </TooltipContent>
+                    </Tooltip>
+                  </span>
+                  <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
+                    {formatPounds(x1Amount)}
+                  </span>
+                </div>
+                <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-3">
+                  <span className="min-w-0 truncate text-[14px] text-muted-foreground">× 9</span>
+                  <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
+                    {formatPounds(monthlyAmount)}
+                  </span>
+                </div>
+              </>
+            )}
+            <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
+              <span className="min-w-0 text-sm text-muted-foreground">Excess</span>
+              <span className="shrink-0 text-sm font-medium text-foreground">
+                {quote.policyDetails.excess}
+              </span>
+            </div>
+          </div>
+          <div className="mt-4 flex items-center gap-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <div className="h-px flex-1 bg-border" />
+            <span>Extras</span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+          <button
+            type="button"
+            onClick={() => onHomeEmergencyChange(!homeEmergency)}
+            className="mt-2 flex w-full items-center justify-between rounded-lg border border-border bg-white px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted"
+            aria-pressed={homeEmergency}
+            aria-label="Toggle Home emergency"
+          >
+            <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+              {homeEmergency ? (
+                <CheckSquare className="h-5 w-5 shrink-0 text-foreground" aria-hidden />
+              ) : (
+                <Square className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+              )}
+              Home emergency
+            </span>
+            <span className="text-sm font-medium text-foreground">
+              {toDisplay(quote.homeEmergencyAddOnPrice)}
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onLegalCoverChange(!legalCover)}
+            className="mt-2 flex w-full items-center justify-between rounded-lg border border-border bg-white px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted"
+            aria-pressed={legalCover}
+            aria-label="Toggle Legal cover"
+          >
+            <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+              {legalCover ? (
+                <CheckSquare className="h-5 w-5 shrink-0 text-foreground" aria-hidden />
+              ) : (
+                <Square className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+              )}
+              Legal cover
+            </span>
+            <span className="text-sm font-medium text-foreground">
+              {toDisplay(quote.familyLegalAddOnPrice)}
+            </span>
+          </button>
+          <div className="mt-2 flex min-w-0 items-center justify-between gap-2 border-t border-border pt-3">
+            <span className="min-w-0 text-sm font-medium text-muted-foreground">Total price</span>
+            <span className="shrink-0 text-lg font-semibold tabular-nums text-foreground">
+              {pricingMode === "annual"
+                ? formatPounds(displayedAnnualTotal)
+                : `${formatPounds(monthlyAmount)}/mo.`}
+            </span>
+          </div>
+          <div className="flex min-w-0 flex-col gap-2 pt-2">
+            <Button className="h-10 w-full gap-1.5" onClick={() => onPurchase?.(quote)}>
+              <ShoppingCart className="h-4 w-4 shrink-0" />
+              Purchase
+            </Button>
+            <Button
+              variant="outline"
+              className="h-10 w-full gap-1.5"
+              onClick={() => onMoreDetails(quote)}
+            >
+              <Info className="h-4 w-4 shrink-0" />
+              More details
+            </Button>
+          </div>
+        </div>
+
+        {/* Horizontal layout (QuoteCardAlt) — 1440px and above */}
+        <div className="hidden min-w-0 w-full flex-col gap-6 min-[1440px]:flex">
         {/* Header */}
-        <div className="flex w-full max-w-[1176px] items-center justify-between">
+        <div className="flex w-full items-center justify-between">
           {/* Logo + insurer name */}
           <div className="flex items-center gap-3">
-            <div className="flex h-[76px] w-[76px] items-center justify-center rounded-[10px] bg-[#D9D9D9]">
+            <div className="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-[10px] bg-[#D9D9D9]">
               <span className="text-xs font-semibold text-slate-600">LOGO</span>
             </div>
-            <div className="text-[16px] font-medium text-[#1E1E1E]">
-              {quote.providerName || "Insurer name"}
+            <div className="flex min-w-0 flex-col gap-1">
+              <span className="inline-flex w-fit rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Buildings & Contents
+              </span>
+              <span className="text-[16px] font-semibold text-[#1E1E1E]">
+                {quote.providerName || "Insurer name"}
+              </span>
             </div>
           </div>
 
           {/* Header actions */}
           <div className="flex items-center gap-3">
-            {/* Annual toggle */}
+            {/* Annual toggle: badge (when annual), label, then toggle */}
             <div className="flex items-center gap-2">
+              {pricingMode === "annual" && (
+                <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  10% cheaper
+                </span>
+              )}
+              <span className="text-[14px] font-medium leading-[14px] text-[#1E1E1E]">
+                {pricingMode === "annual" ? "Annual" : "Monthly"}
+              </span>
               <Switch
                 checked={pricingMode === "monthly"}
                 onCheckedChange={(checked) =>
@@ -76,9 +270,6 @@ export function QuoteCardAlt({
                 }
                 aria-label="Toggle annual or monthly"
               />
-              <span className="text-[14px] font-medium leading-[14px] text-[#1E1E1E]">
-                Annual
-              </span>
             </div>
 
             {/* More info */}
@@ -103,9 +294,9 @@ export function QuoteCardAlt({
         </div>
 
         {/* Content */}
-        <div className="flex w-full items-stretch gap-6 rounded-[16px] border border-[#E2E8F0] bg-white p-3">
+        <div className="flex min-w-0 w-full max-w-full items-stretch gap-6 overflow-x-auto rounded-[16px] border border-[#E2E8F0] bg-muted/30 p-3">
           {/* Home column */}
-          <div className="flex min-w-0 flex-1 flex-col items-start gap-4">
+          <div className="flex min-w-0 flex-col items-start gap-4">
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Home insurance
@@ -126,7 +317,7 @@ export function QuoteCardAlt({
               </Tooltip>
             </div>
             <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {formatPounds(quote.standardPrice)}
+              {toDisplay(quote.standardPrice)}
             </div>
             <div className="text-[14px] font-medium text-[#1E1E1E]">
               Excess:{" "}
@@ -140,7 +331,7 @@ export function QuoteCardAlt({
           <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
 
           {/* Host column */}
-          <div className="flex min-w-0 flex-1 flex-col items-start gap-4">
+          <div className="flex min-w-0 flex-col items-start gap-4">
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Host insurance
@@ -161,7 +352,7 @@ export function QuoteCardAlt({
               </Tooltip>
             </div>
             <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {formatPounds(quote.piklPrice)}
+              {toDisplay(quote.piklPrice)}
             </div>
             <div className="text-[14px] font-medium text-[#1E1E1E]">
               Excess: <span className="font-semibold">£50.00</span>
@@ -172,7 +363,7 @@ export function QuoteCardAlt({
           <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
 
           {/* Family legal column */}
-          <div className="flex min-w-0 flex-1 flex-col items-start gap-4">
+          <div className="flex min-w-[180px] w-[180px] flex-none flex-col items-start gap-4">
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Family legal protection
@@ -180,7 +371,7 @@ export function QuoteCardAlt({
               <HelpCircle className="h-4 w-4 text-slate-500" aria-hidden />
             </div>
             <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {formatPounds(quote.familyLegalAddOnPrice)}
+              {toDisplay(quote.familyLegalAddOnPrice)}
             </div>
             <Switch
               checked={legalCover}
@@ -193,7 +384,7 @@ export function QuoteCardAlt({
           <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
 
           {/* Home emergency column */}
-          <div className="flex min-w-0 flex-1 flex-col items-start gap-4">
+          <div className="flex min-w-[180px] w-[180px] flex-none flex-col items-start gap-4">
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                 Home emergency cover
@@ -214,7 +405,7 @@ export function QuoteCardAlt({
               </Tooltip>
             </div>
             <div className="text-[18px] font-semibold text-[#1E1E1E]">
-              {formatPounds(quote.homeEmergencyAddOnPrice)}
+              {toDisplay(quote.homeEmergencyAddOnPrice)}
             </div>
             <Switch
               checked={homeEmergency}
@@ -223,67 +414,68 @@ export function QuoteCardAlt({
             />
           </div>
 
-          {/* Divider */}
-          <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
+          {pricingMode === "monthly" && (
+            <>
+              {/* Divider */}
+              <div className="h-auto w-px self-stretch bg-[#E2E8F0]" />
 
-          {/* Monthly breakdown */}
-          <div className="flex w-[121px] min-w-[121px] flex-none flex-col items-stretch justify-between gap-3">
-            {/* Monthly top row: Deposit */}
-            <div className="flex items-center justify-between gap-4 border-b border-[#E2E8F0] pb-2">
-              <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit:</span>
-              <span className="text-[14px] font-semibold text-[#1E1E1E]">
-                {formatPounds(depositAmount)}
-              </span>
-            </div>
-
-            {/* Middle row: ×1 with tooltip */}
-            <div className="flex items-center justify-between gap-4 border-b border-[#E2E8F0] py-2">
-              <div className="flex items-center gap-1">
-                <span className="text-[14px] font-medium text-[#1E1E1E]">×1</span>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      className={TOOLTIP_TRIGGER_CLASS}
-                      aria-label="Admin fee info"
-                    >
-                      <HelpCircle className="h-4 w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-[220px]">
-                    Our insurer PremFina charges a £5 admin fee.
-                  </TooltipContent>
-                </Tooltip>
+              {/* Monthly breakdown */}
+              <div className="flex w-[121px] min-w-[121px] flex-none flex-col items-stretch">
+                <div className="flex items-center justify-between gap-4 border-b border-[#E2E8F0] py-2">
+                  <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit:</span>
+                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    {formatPounds(depositAmount)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4 border-b border-[#E2E8F0] py-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[14px] font-medium text-[#1E1E1E]">×1</span>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className={TOOLTIP_TRIGGER_CLASS}
+                          aria-label="Admin fee info"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="max-w-[220px]">
+                        Our insurer PremFina charges a £5 admin fee.
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    {formatPounds(x1Amount)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4 py-2">
+                  <span className="text-[14px] font-medium text-[#1E1E1E]">×9</span>
+                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    {formatPounds(monthlyAmount)}
+                  </span>
+                </div>
               </div>
-              <span className="text-[14px] font-semibold text-[#1E1E1E]">
-                {formatPounds(x1Amount)}
-              </span>
-            </div>
+            </>
+          )}
 
-            {/* Bottom row: ×9 */}
-            <div className="flex items-center justify-between gap-4 pt-2">
-              <span className="text-[14px] font-medium text-[#1E1E1E]">×9</span>
-              <span className="text-[14px] font-semibold text-[#1E1E1E]">
-                {formatPounds(monthlyAmount)}
-              </span>
-            </div>
-          </div>
-
-          {/* Total price block (no divider between monthly breakdown and price) */}
+          {/* Total price block */}
           <div className="flex h-[120px] w-[120px] flex-none flex-col items-center justify-center gap-4 rounded-[12px] border border-[#E2E8F0] bg-white p-2 text-center">
-            <div className="text-[14px] font-medium text-[#1E1E1E]">Total price</div>
+            <div className="text-[14px] font-medium text-[#1E1E1E]">
+              {pricingMode === "annual" ? "Total price" : "Monthly Price"}
+            </div>
             <div className="text-[14px] font-semibold text-[#1E1E1E]">
               {pricingMode === "annual"
-                ? formatPounds(totalPriceRaw)
-                : formatPounds(monthlyAmount)}
+                ? formatPounds(displayedAnnualTotal)
+                : (
+                    <>
+                      {formatPounds(monthlyAmount)}
+                      <span className="text-xs font-normal">/mo.</span>
+                    </>
+                  )}
             </div>
-            {pricingMode === "monthly" && (
-              <div className="text-[14px] font-medium text-[#1E1E1E]">
-                {formatPounds(monthlyAmount)}
-                <span className="text-xs font-normal">/mo.</span>
-              </div>
-            )}
           </div>
+        </div>
         </div>
       </Card>
     </div>
