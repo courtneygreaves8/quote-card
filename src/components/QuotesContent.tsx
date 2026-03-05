@@ -1,4 +1,3 @@
-import { QuoteCardLg } from "@/components/QuoteCardLg"
 import { QuoteCardAlt } from "@/components/QuoteCardAlt"
 import { Button } from "@/components/ui/button"
 import {
@@ -48,98 +47,84 @@ export function QuotesContent({
   onOpenOptions,
 }: QuotesContentProps) {
   return (
-    <div className="mx-auto w-full min-w-0 max-w-[1200px] overflow-x-hidden py-8 px-4 min-[1200px]:px-0">
-      <div className="mb-8 flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            {displayedQuotes.length === 0
-              ? "No quotes match your filters"
-              : `We've got ${displayedQuotes.length} quote${displayedQuotes.length === 1 ? "" : "s"} for you`}
-          </h1>
-          <p className="mt-1 text-muted-foreground">
-            Each quote comes with Pikl's Property Host Cover.
-          </p>
-        </div>
-        <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
-          <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
-            <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
-              <SelectTrigger className="w-full" aria-label="Sort">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="price-asc">Price: low to high</SelectItem>
-                <SelectItem value="price-desc">Price: high to low</SelectItem>
-                <SelectItem value="provider-az">Provider A–Z</SelectItem>
-              </SelectContent>
-            </Select>
+    <div className="w-full overflow-x-hidden py-8 px-4 card3:px-0">
+      {/* Centre stage: wider for 3-col stacked cards; hugs content at 1440px+ for horizontal card */}
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col min-[1440px]:w-fit min-[1440px]:max-w-none min-[1440px]:items-center">
+        <div className="mb-8 w-full flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              {displayedQuotes.length === 0
+                ? "No quotes match your filters"
+                : `We've got ${displayedQuotes.length} quote${displayedQuotes.length === 1 ? "" : "s"} for you`}
+            </h1>
+            <p className="mt-1 text-muted-foreground">
+              Each quote comes with Pikl's Property Host Cover.
+            </p>
           </div>
-          <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
-            <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
-              <SelectTrigger className="w-full" aria-label="Filter">
-                <SelectValue placeholder="Filter" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All quotes</SelectItem>
-                <SelectItem value="under-20">Under £20/mo</SelectItem>
-                <SelectItem value="under-25">Under £25/mo</SelectItem>
-                <SelectItem value="under-30">Under £30/mo</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
+            <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
+              <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
+                <SelectTrigger className="w-full" aria-label="Sort">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="price-asc">Price: low to high</SelectItem>
+                  <SelectItem value="price-desc">Price: high to low</SelectItem>
+                  <SelectItem value="provider-az">Provider A–Z</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
+              <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
+                <SelectTrigger className="w-full" aria-label="Filter">
+                  <SelectValue placeholder="Filter" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All quotes</SelectItem>
+                  <SelectItem value="under-20">Under £20/mo</SelectItem>
+                  <SelectItem value="under-25">Under £25/mo</SelectItem>
+                  <SelectItem value="under-30">Under £30/mo</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {onOpenOptions && (
+              <Button
+                type="button"
+                className="flex-1 min-[1440px]:hidden"
+                onClick={onOpenOptions}
+              >
+                Options
+              </Button>
+            )}
           </div>
-          {onOpenOptions && (
-            <Button
-              type="button"
-              className="flex-1 qc:hidden"
-              onClick={onOpenOptions}
-            >
-              Options
-            </Button>
-          )}
         </div>
-      </div>
 
-      <div className="grid min-w-0 gap-6 sm:grid-cols-1 md:grid-cols-2 card3:grid-cols-3 qc:grid-cols-1">
-        {displayedQuotes.length > 0 ? (
-          displayedQuotes.map((quote) => (
-            <div key={quote.id} className="flex flex-col items-center">
-              {/* Existing layout (stacked + original desktop) for < 1339px */}
-              <div className="block qc:hidden w-full">
-                <QuoteCardLg
-                  size="lg"
+        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 card3:grid-cols-3 min-[1440px]:grid-cols-1 min-[1440px]:w-max min-[1440px]:max-w-none">
+          {displayedQuotes.length > 0 ? (
+            displayedQuotes.map((quote) => (
+              <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
+                <QuoteCardAlt
                   quote={quote}
                   paymentOption={paymentOption}
                   onPaymentOptionChange={onPaymentOptionChange}
                   legalCover={legalCover}
-                  onLegalCoverChange={onLegalCoverChange}
                   homeEmergency={homeEmergency}
+                  onLegalCoverChange={onLegalCoverChange}
                   onHomeEmergencyChange={onHomeEmergencyChange}
                   onMoreDetails={onMoreDetails}
                   onPurchase={onPurchase}
                 />
               </div>
-
-              {/* Alternative desktop-only layout for 1339px and above */}
-              <QuoteCardAlt
-                quote={quote}
-                paymentOption={paymentOption}
-                onPaymentOptionChange={onPaymentOptionChange}
-                legalCover={legalCover}
-                homeEmergency={homeEmergency}
-                onLegalCoverChange={onLegalCoverChange}
-                onHomeEmergencyChange={onHomeEmergencyChange}
-                onMoreDetails={onMoreDetails}
-                onPurchase={onPurchase}
-              />
+            ))
+          ) : (
+            <div className="col-span-2 rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
+              <p className="text-muted-foreground">
+                No quotes match your current filters. Try changing cover amount,
+                excess or policy type.
+              </p>
             </div>
-          ))
-        ) : (
-          <div className="col-span-2 rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
-            <p className="text-muted-foreground">
-              No quotes match your current filters. Try changing cover amount,
-              excess or policy type.
-            </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )
