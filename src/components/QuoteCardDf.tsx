@@ -40,7 +40,7 @@ const TOOLTIP_TRIGGER_CLASS =
   "inline-flex rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
 
 const COLUMN_ICON_CLASS =
-  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FAFAFA] text-neutral-700"
+  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FFF] text-neutral-700"
 const COLUMN_BOX_CLASS =
   "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3"
 
@@ -103,13 +103,13 @@ export function QuoteCardDf({
                 {quote.providerName}
               </span>
             </div>
-            <span className="inline-flex shrink-0 rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+            <span className="inline-flex shrink-0 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-muted-foreground">
               {policyType}
             </span>
           </div>
 
           {/* Home + Host in one wrapper, divider between them */}
-          <div className="flex w-full flex-col rounded-[12px] border border-neutral-200">
+          <div className="flex w-full flex-col rounded-[12px] border border-neutral-200 bg-[#FAFAFA]">
             <div className="flex w-full flex-col gap-3 p-2">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-2">
@@ -194,7 +194,7 @@ export function QuoteCardDf({
 
           {/* Family legal + Home emergency — side by side */}
           <div className="flex w-full gap-2">
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
               <div className="flex items-center justify-between gap-2">
                 <div className={COLUMN_ICON_CLASS}>
                   <Scale className="h-4 w-4" />
@@ -231,7 +231,7 @@ export function QuoteCardDf({
                 />
               </div>
             </div>
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
               <div className="flex items-center justify-between gap-2">
                 <div className={COLUMN_ICON_CLASS}>
                   <Wrench className="h-4 w-4" />
@@ -274,7 +274,7 @@ export function QuoteCardDf({
 
           {/* Monthly only — payment breakdown, full width */}
           {pricingMode === "monthly" && (
-            <div className="flex w-full flex-col gap-0 py-2">
+            <div className="flex w-full flex-col gap-0 bg-[#FAFAFA] py-2">
               <span className="mb-2 text-sm font-medium text-muted-foreground">
                 Payment breakdown
               </span>
@@ -316,7 +316,7 @@ export function QuoteCardDf({
           )}
 
           {/* Total price block — full width, both modes */}
-          <div className="flex w-full flex-col gap-3 py-2">
+          <div className="flex w-full flex-col gap-3 bg-[#FAFAFA] py-2">
             <div className="flex w-full items-center justify-between gap-2">
               <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                 Annual is 10% Cheaper
