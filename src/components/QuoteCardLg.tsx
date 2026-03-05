@@ -202,7 +202,7 @@ export function QuoteCardLg({
               <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
                 <span className="min-w-0 truncate text-[14px] text-muted-foreground">Deposit</span>
                 <span className="shrink-0 text-[14px] font-medium tabular-nums text-foreground">
-                  {formatPounds(monthlyAmount)}
+                  {formatPounds(monthlyAmount + 20)}
                 </span>
               </div>
               <div className="flex min-w-0 items-baseline justify-between gap-2 border-t border-border py-2">
@@ -449,7 +449,7 @@ export function QuoteCardLg({
               <div className="flex items-center justify-between gap-2 border-b border-border pb-1.5">
                 <span className="m-0 text-sm text-muted-foreground">Deposit</span>
                 <span className="m-0 shrink-0 text-sm font-medium tabular-nums text-foreground">
-                  {formatPounds(monthlyAmount)}
+                  {formatPounds(monthlyAmount + 20)}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-2 border-b border-border py-1.5">
