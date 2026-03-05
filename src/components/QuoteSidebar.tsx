@@ -38,8 +38,8 @@ interface QuoteSidebarProps {
   filters: QuoteFiltersType
   onFiltersChange: (f: QuoteFiltersType) => void
   onEditAnswers: () => void
-  isDrawer?: boolean
-  onCloseDrawer?: () => void
+  isSheet?: boolean
+  onCloseSheet?: () => void
 }
 
 export function QuoteSidebar({
@@ -47,8 +47,8 @@ export function QuoteSidebar({
   filters,
   onFiltersChange,
   onEditAnswers,
-  isDrawer = false,
-  onCloseDrawer,
+  isSheet = false,
+  onCloseSheet,
 }: QuoteSidebarProps) {
   const excessIndex = EXCESS_OPTIONS.indexOf(filters.excess)
   const safeExcessIndex = excessIndex >= 0 ? excessIndex : 0
@@ -72,13 +72,13 @@ export function QuoteSidebar({
 
   const containerClass = [
     "flex min-h-0 shrink-0 flex-col gap-4 overflow-y-auto bg-white py-6",
-    isDrawer ? "w-full" : "w-[308px] border-r border-border",
+    isSheet ? "w-full" : "w-[308px] border-r border-border",
     LAYOUT_PADDING_X,
   ].join(" ")
 
   return (
     <aside className={containerClass}>
-      {isDrawer && (
+      {isSheet && (
         <div className="mb-2 flex items-center justify-between">
           <span className="text-md font-semibold text-foreground">
             You can adjust your quote below.
@@ -87,7 +87,7 @@ export function QuoteSidebar({
             variant="outline"
             size="icon"
             className="h-8 w-8 border-border"
-            onClick={onCloseDrawer}
+            onClick={onCloseSheet}
             aria-label="Close options"
           >
             <X className="h-4 w-4" />
@@ -367,11 +367,11 @@ export function QuoteSidebar({
         </div>
       </div>
 
-      {isDrawer && (
+      {isSheet && (
         <div className="mt-4 mb-3 block card3:hidden">
           <Button
             className="h-10 w-full justify-center gap-2 text-sm"
-            onClick={onCloseDrawer}
+            onClick={onCloseSheet}
           >
             Apply changes
           </Button>
