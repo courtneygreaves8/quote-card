@@ -4,6 +4,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "1",
     providerName: "Pikl Home",
+    trustpilotRating: 4.3,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -33,6 +34,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "2",
     providerName: "Shield Insurance",
+    trustpilotRating: 4.4,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -62,6 +64,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "3",
     providerName: "SafeGuard Plus",
+    trustpilotRating: 4.5,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -91,6 +94,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "4",
     providerName: "CoverSure",
+    trustpilotRating: 4.6,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -109,6 +113,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "5",
     providerName: "Haven Insurance",
+    trustpilotRating: 4.7,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -127,6 +132,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "6",
     providerName: "SureProtect",
+    trustpilotRating: 4.8,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -145,6 +151,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "7",
     providerName: "HomeGuard",
+    trustpilotRating: 4.9,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -163,6 +170,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "8",
     providerName: "RenterCover",
+    trustpilotRating: 4.3,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -181,6 +189,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "9",
     providerName: "Premier Home",
+    trustpilotRating: 4.4,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -199,6 +208,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "10",
     providerName: "ValueCover",
+    trustpilotRating: 4.5,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -217,6 +227,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "11",
     providerName: "SimpleCover",
+    trustpilotRating: 4.6,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -235,6 +246,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "12",
     providerName: "TrustGuard",
+    trustpilotRating: 4.7,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -253,6 +265,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "13",
     providerName: "BudgetCover",
+    trustpilotRating: 4.8,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -271,6 +284,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "14",
     providerName: "ExtraCover",
+    trustpilotRating: 4.9,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -289,6 +303,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "15",
     providerName: "Steadfast Home",
+    trustpilotRating: 4.3,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -307,6 +322,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "16",
     providerName: "TenantSafe",
+    trustpilotRating: 4.4,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -325,6 +341,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "17",
     providerName: "SecureLiving",
+    trustpilotRating: 4.5,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -343,6 +360,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "18",
     providerName: "KeyCover",
+    trustpilotRating: 4.6,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -361,6 +379,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "19",
     providerName: "Summit Insurance",
+    trustpilotRating: 4.7,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -379,6 +398,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "20",
     providerName: "Nest Home",
+    trustpilotRating: 4.8,
     logo: "",
     cover: "Buildings & Contents",
     coverAmount: 500000,
@@ -397,6 +417,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "21",
     providerName: "Peak Protect",
+    trustpilotRating: 4.9,
     logo: "",
     cover: "Contents only",
     coverAmount: 500000,
@@ -415,6 +436,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "22",
     providerName: "Bricks & Mortar",
+    trustpilotRating: 4.3,
     logo: "",
     cover: "Buildings only",
     coverAmount: 500000,
@@ -433,6 +455,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "23",
     providerName: "StructureSure",
+    trustpilotRating: 4.4,
     logo: "",
     cover: "Buildings only",
     coverAmount: 500000,
@@ -451,6 +474,7 @@ export const mockQuotes: Quote[] = [
   {
     id: "24",
     providerName: "BuildCover",
+    trustpilotRating: 4.5,
     logo: "",
     cover: "Buildings only",
     coverAmount: 500000,

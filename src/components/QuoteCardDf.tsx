@@ -4,6 +4,7 @@ import {
   Info,
   Scale,
   ShoppingCart,
+  Star,
   Users,
   Wrench,
 } from "lucide-react"
@@ -104,9 +105,20 @@ export function QuoteCardDf({
               <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-[#F5F5F5]">
                 <span className="text-xs font-bold text-muted-foreground">LOGO</span>
               </div>
-              <span className="break-words text-base font-semibold text-foreground">
-                {quote.providerName}
-              </span>
+              <div className="flex min-w-0 items-center gap-1.5">
+                <span className="break-words text-base font-semibold text-foreground">
+                  {quote.providerName}
+                </span>
+                <span className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-foreground">
+                  {quote.trustpilotRating.toFixed(1)}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
+                    </TooltipTrigger>
+                    <TooltipContent>TrustPilot</TooltipContent>
+                  </Tooltip>
+                </span>
+              </div>
             </div>
             <span className="inline-flex shrink-0 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-muted-foreground min-[1220px]:px-2 min-[1220px]:py-0.5 min-[1220px]:text-xs">
               {policyType}
@@ -391,9 +403,20 @@ export function QuoteCardDf({
               <span className="inline-flex w-fit rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 {policyType}
               </span>
-              <span className="text-[16px] font-semibold text-[#1E1E1E]">
-                {quote.providerName || "Insurer name"}
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[16px] font-semibold text-[#1E1E1E]">
+                  {quote.providerName || "Insurer name"}
+                </span>
+                <span className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-[#1E1E1E]">
+                  {quote.trustpilotRating.toFixed(1)}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
+                    </TooltipTrigger>
+                    <TooltipContent>TrustPilot</TooltipContent>
+                  </Tooltip>
+                </span>
+              </div>
             </div>
           </div>
 

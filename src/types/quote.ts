@@ -18,6 +18,7 @@ export interface QuoteFilters {
 export interface Quote {
   id: string
   providerName: string
+  trustpilotRating: number
   logo: string
   cover: string
   coverAmount: number

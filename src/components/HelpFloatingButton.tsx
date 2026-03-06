@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { HelpModal } from "@/components/HelpModal"
-import { HelpCircle } from "lucide-react"
+import { Headset } from "lucide-react"
 import { useState } from "react"
 
 export function HelpFloatingButton() {
@@ -10,12 +10,12 @@ export function HelpFloatingButton() {
     <>
       <Button
         variant="outline"
-        size="icon"
-        className="fixed bottom-6 right-6 z-50 h-10 w-10 rounded-full border-border shadow-md"
-        aria-label="Help"
+        className="fixed bottom-6 right-6 z-50 h-10 gap-2 rounded-full border-border px-4 shadow-md"
+        aria-label="Contact us"
         onClick={() => setOpen(true)}
       >
-        <HelpCircle className="h-5 w-5" />
+        <Headset className="h-5 w-5 shrink-0" />
+        <span className="text-sm font-medium">Contact us</span>
       </Button>
       <HelpModal open={open} onOpenChange={setOpen} />
     </>
