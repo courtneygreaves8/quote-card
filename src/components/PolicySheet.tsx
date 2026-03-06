@@ -431,7 +431,7 @@ export function PolicySheet({
 
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-4 md:flex-row md:gap-0"
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-4 md:flex-row md:overflow-hidden md:gap-0"
         >
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
@@ -472,7 +472,7 @@ export function PolicySheet({
           </div>
 
           {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
-          <div className="flex w-full flex-col border-b border-border bg-white p-6 max-[767px]:p-4 max-[767px]:pb-0 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
+          <div className="flex w-full shrink-0 flex-col border-b border-border bg-white p-6 max-[767px]:p-4 max-[767px]:pb-0 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
             <div className="flex flex-col items-center text-center">
               <span
                 className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground max-[767px]:p-2"
@@ -606,8 +606,8 @@ export function PolicySheet({
             </div>
           </div>
 
-          {/* Right: details – full width on small screens, 2/3 on md+ */}
-          <div className="w-full md:w-2/3">
+          {/* Right: details – full width on small screens, 2/3 on md+; scrolls only on md+ */}
+          <div className="w-full min-h-0 md:flex-1 md:overflow-y-auto md:w-2/3">
             <PolicySheetRight
               policyDetails={policyDetails}
               propertyAddress={MOCK_PROPERTY_ADDRESS}
