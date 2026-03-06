@@ -3,6 +3,7 @@ import {
   Home,
   Info,
   Scale,
+  Tag,
   ShoppingCart,
   Star,
   Users,
@@ -120,7 +121,7 @@ export function QuoteCardDf({
                 </span>
               </div>
             </div>
-            <span className="inline-flex shrink-0 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-muted-foreground min-[1220px]:px-2 min-[1220px]:py-0.5 min-[1220px]:text-xs">
+            <span className="shrink-0 text-sm font-medium text-muted-foreground min-[1220px]:text-xs">
               {policyType}
             </span>
           </div>
@@ -400,7 +401,7 @@ export function QuoteCardDf({
               <span className="text-xs font-semibold text-slate-600">LOGO</span>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <span className="inline-flex w-fit rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <span className="text-xs font-medium text-muted-foreground">
                 {policyType}
               </span>
               <div className="flex items-center gap-1.5">
@@ -425,7 +426,8 @@ export function QuoteCardDf({
             {/* Annual toggle: badge (when annual), label, then toggle */}
             <div className="flex items-center gap-2">
               {pricingMode === "annual" && (
-                <span className="inline-flex rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-[#FFF] px-2 py-0.5 text-xs font-medium text-primary">
+                  <Tag className="h-3.5 w-3.5 shrink-0" aria-hidden />
                   10% cheaper
                 </span>
               )}
