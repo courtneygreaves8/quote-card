@@ -23,11 +23,11 @@ export function QuotesPageLayout({
   filter,
   setFilter,
   showLoadingModal,
-  setShowLoadingModal,
   displayedQuotes,
   handleEditAnswers,
   handleMoreDetails,
   handlePurchase,
+  handleLoadingComplete,
 }: QuotesPageLayoutProps) {
   return (
     <div className="flex h-screen flex-col bg-neutral-50">
@@ -87,8 +87,9 @@ export function QuotesPageLayout({
         quoteReference={quoteReference}
         open={sheetOpen}
         onOpenChange={setSheetOpen}
+        onPurchase={handlePurchase}
       />
-      <LoadingModal open={showLoadingModal} onClose={() => setShowLoadingModal(false)} />
+      <LoadingModal open={showLoadingModal} onClose={handleLoadingComplete} />
       <HelpFloatingButton />
     </div>
   )

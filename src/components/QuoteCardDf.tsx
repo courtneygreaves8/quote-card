@@ -217,20 +217,20 @@ export function QuoteCardDf({
                       <button
                         type="button"
                         className={POPOVER_TRIGGER_CLASS_SM}
-                        aria-label="Legal Cover"
+                        aria-label="Legal Protection"
                       >
                         <HelpCircle className="h-4 w-4" />
                       </button>
                     </PopoverTrigger>
                     <PopoverContent side="right" className="max-w-[220px]">
                       <p className="text-sm text-popover-foreground">
-                        Legal Cover: Optional add-on for family legal protection.
+                        Legal Protection: Optional add-on for family legal protection.
                       </p>
                     </PopoverContent>
                   </Popover>
                 </div>
               </div>
-              <span className="text-sm font-medium text-foreground">Legal Cover</span>
+              <span className="text-sm font-medium text-foreground">Legal Protection</span>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[18px] font-semibold text-foreground tabular-nums">
                   {toDisplay(quote.familyLegalAddOnPrice)}
@@ -539,7 +539,7 @@ export function QuoteCardDf({
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
-                  Legal Cover
+                  Legal Protection
                 </span>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -552,7 +552,7 @@ export function QuoteCardDf({
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[220px]">
-                    <p className="text-sm">Legal Cover: Optional add-on for family legal protection.</p>
+                    <p className="text-sm">Legal Protection: Optional add-on for family legal protection.</p>
                   </TooltipContent>
                 </Tooltip>
               </div>

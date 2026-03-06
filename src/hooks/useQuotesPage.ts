@@ -30,7 +30,7 @@ export function useQuotesPage() {
   const [optionsOpen, setOptionsOpen] = useState(false)
   const [sort, setSort] = useState<SortOption>("price-asc")
   const [filter, setFilter] = useState<FilterOption>("all")
-  const [showLoadingModal, setShowLoadingModal] = useState(false)
+  const [showLoadingModal, setShowLoadingModal] = useState(true)
   const [showPurchaseConfirmed, setShowPurchaseConfirmed] = useState(false)
   const [quoteReference] = useState(() =>
     "QR-" + Math.random().toString(36).slice(2, 10).toUpperCase()
@@ -137,6 +137,10 @@ export function useQuotesPage() {
     setShowPurchaseConfirmed(true)
   }
 
+  const handleLoadingComplete = () => {
+    setShowLoadingModal(false)
+  }
+
   const handleClosePurchaseConfirmed = () => {
     setShowPurchaseConfirmed(false)
   }
@@ -161,6 +165,7 @@ export function useQuotesPage() {
     handleEditAnswers,
     handleMoreDetails,
     handlePurchase,
+    handleLoadingComplete,
     handleClosePurchaseConfirmed,
   }
 }

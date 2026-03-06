@@ -71,8 +71,19 @@ export function Navbar() {
       <Sheet open={navOpen} onOpenChange={setNavOpen}>
         <SheetContent
           side="top"
-          className="flex w-full max-w-none flex-col border-b border-border bg-white p-4 pt-16"
+          className="flex w-full max-w-none flex-col border-b border-border bg-white p-4 pt-[52px]"
         >
+          <div className="mb-4 flex w-full items-center justify-center gap-2 md:hidden">
+            <span
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-neutral-200"
+              aria-hidden
+            >
+              <Rocket className="h-4 w-4" stroke="url(#navbarRocketGrad)" strokeWidth={2} />
+            </span>
+            <span className="text-lg font-black uppercase tracking-tight text-black">
+              Pikl <span className="font-light">Prototype</span>
+            </span>
+          </div>
           <div className="flex flex-col gap-3">
             <Button
               variant="outline"

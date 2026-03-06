@@ -98,6 +98,7 @@ interface PolicySheetProps {
   quoteReference: string
   open: boolean
   onOpenChange: (open: boolean) => void
+  onPurchase?: () => void
 }
 
 function SheetSection({
@@ -116,7 +117,7 @@ function SheetSection({
       <button
         type="button"
         onClick={onToggle}
-        className="flex w-full items-center justify-between py-4 text-left"
+        className="flex w-full items-center justify-between py-4 text-left max-[767px]:py-2"
         aria-expanded={open}
       >
         <span className="font-semibold text-foreground">{title}</span>
@@ -128,7 +129,7 @@ function SheetSection({
         />
       </button>
       {open && (
-        <div className="pb-4 pt-0">
+        <div className="pb-4 pt-0 max-[767px]:pb-3">
           {children}
         </div>
       )}
@@ -326,6 +327,7 @@ export function PolicySheet({
   quoteReference,
   open,
   onOpenChange,
+  onPurchase,
 }: PolicySheetProps) {
   const [showStickyBar, setShowStickyBar] = useState(false)
   const scrollRef = useRef<HTMLDivElement | null>(null)
@@ -374,6 +376,13 @@ export function PolicySheet({
   const deposit = monthlyPrice
   const instalment = monthlyPrice
 
+  const handlePrimaryAction = () => {
+    if (window.innerWidth <= 767) {
+      onPurchase?.()
+    }
+    onOpenChange(false)
+  }
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -395,7 +404,7 @@ export function PolicySheet({
 
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto md:flex-row"
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-4 md:flex-row md:gap-0"
         >
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
@@ -427,33 +436,36 @@ export function PolicySheet({
               </div>
               <Button
                 className="h-9 whitespace-nowrap px-3 text-xs"
-                onClick={() => onOpenChange(false)}
+                onClick={handlePrimaryAction}
               >
-                Continue
+                <span className="md:hidden">Purchase</span>
+                <span className="hidden md:inline">Continue</span>
               </Button>
             </div>
           </div>
 
           {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
-          <div className="flex w-full flex-col border-b border-border bg-white p-6 md:w-1/3 md:border-b-0 md:border-r">
+          <div className="flex w-full flex-col border-b border-border bg-white p-6 max-[767px]:p-4 max-[767px]:pb-0 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
             <div className="flex flex-col items-center text-center">
               <span
-                className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground"
+                className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground max-[767px]:p-2"
                 aria-hidden
               >
-                <Building2 className="h-3.5 w-3.5" />
+                <Building2 className="h-3.5 w-3.5 max-[767px]:h-4 max-[767px]:w-4" />
               </span>
-              <p className="text-sm font-medium text-foreground">{providerName}</p>
+              <p className="text-sm font-medium text-foreground max-[767px]:text-base max-[767px]:font-semibold">
+                {providerName}
+              </p>
             </div>
 
-            <div className="mt-6 flex flex-col items-center">
+            <div className="mt-6 flex flex-col items-center max-[767px]:mt-4">
               <p className="text-sm text-muted-foreground">Pay annually</p>
               <p className="mt-1 text-3xl font-bold tabular-nums text-foreground">
                 £{annualPrice.toFixed(2)}
               </p>
             </div>
 
-            <div className="mt-6 flex flex-col">
+            <div className="mt-6 flex flex-col max-[767px]:mt-4">
               <p className="mb-3 text-sm text-muted-foreground">
                 Or pay monthly
               </p>
@@ -474,19 +486,20 @@ export function PolicySheet({
               </div>
             </div>
 
-            <p className="mt-5 text-sm text-muted-foreground">
+            <p className="mt-5 text-sm text-muted-foreground max-[767px]:mt-3">
               Your quote will be saved for the next 1 day. After that, you&apos;ll
               need to refresh your results to get the latest price.
             </p>
 
             <Button
-              className="mt-6 w-full"
-              onClick={() => onOpenChange(false)}
+              className="mt-6 w-full max-[767px]:mt-4"
+              onClick={handlePrimaryAction}
             >
-              Continue
+              <span className="md:hidden">Purchase</span>
+              <span className="hidden md:inline">Continue</span>
             </Button>
 
-            <Separator className="my-6" />
+            <Separator className="my-6 max-[767px]:my-4" />
 
             <div className="flex flex-col gap-2">
               <Tooltip>
@@ -518,7 +531,7 @@ export function PolicySheet({
               </Tooltip>
             </div>
 
-            <div className="mt-6 flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2">
+            <div className="mt-6 flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 max-[767px]:mt-4">
               <span className="flex-1 truncate font-mono text-sm">
                 {quoteReference}
               </span>
