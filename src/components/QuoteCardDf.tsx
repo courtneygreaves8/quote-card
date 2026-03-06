@@ -45,9 +45,9 @@ const TOOLTIP_TRIGGER_CLASS_DF =
   "inline-flex cursor-pointer rounded text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-ring"
 
 const COLUMN_ICON_CLASS =
-  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FFF] text-neutral-700"
+  "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700 transition-colors duration-150 group-hover:bg-[#FFF]"
 const COLUMN_BOX_CLASS =
-  "flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
+  "group flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
 
 export function QuoteCardDf({
   quote,
@@ -422,7 +422,7 @@ export function QuoteCardDf({
             <Button
               type="button"
               variant="outline"
-              className="flex items-center justify-center gap-2 rounded-[6px] border-[#E2E8F0] bg-white px-4 py-2 text-[14px] font-medium text-slate-900"
+              className="flex items-center justify-center gap-2 border-[#E2E8F0] bg-white px-4 py-2 text-[14px] font-medium text-slate-900"
               onClick={() => onMoreDetails(quote)}
             >
               More info
@@ -431,7 +431,7 @@ export function QuoteCardDf({
             {/* Purchase */}
             <Button
               type="button"
-              className="flex items-center justify-center gap-2 rounded-[6px] bg-slate-900 px-4 py-2 text-[14px] font-medium text-white"
+              className="flex items-center justify-center gap-2 bg-slate-900 px-4 py-2 text-[14px] font-medium text-white"
               onClick={() => onPurchase?.(quote)}
             >
               Purchase

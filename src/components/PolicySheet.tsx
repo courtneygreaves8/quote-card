@@ -4,6 +4,7 @@ import {
   ChevronDown,
   Copy,
   Download,
+  Lock,
   Mail,
   Save,
   X,
@@ -180,6 +181,7 @@ function PolicySheetRight({
   const [openExcluded, setOpenExcluded] = useState(false)
   const [openFees, setOpenFees] = useState(false)
   const [openExcess, setOpenExcess] = useState(false)
+  const [openEndorsements, setOpenEndorsements] = useState(false)
   const [openDocuments, setOpenDocuments] = useState(false)
   const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
@@ -277,6 +279,31 @@ function PolicySheetRight({
           claim in addition to the compulsory excess.
         </p>
         <ExcessTable policyDetails={policyDetails} />
+      </SheetSection>
+
+      <SheetSection
+        title="Endorsements"
+        open={openEndorsements}
+        onToggle={() => setOpenEndorsements((v) => !v)}
+      >
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Download className="h-4 w-4" />
+            Guest Property Coverage
+          </Button>
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Download className="h-4 w-4" />
+            Loss of Rental Income
+          </Button>
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Download className="h-4 w-4" />
+            Increased Liability
+          </Button>
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Download className="h-4 w-4" />
+            Short-term Rental Liability
+          </Button>
+        </div>
       </SheetSection>
 
       <SheetSection
@@ -551,6 +578,31 @@ export function PolicySheet({
                   Copy quote reference to clipboard
                 </TooltipContent>
               </Tooltip>
+            </div>
+
+            <div className="mt-4 flex flex-col gap-2 rounded-md border border-dashed border-border bg-neutral-50 px-3 py-3">
+              <div className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-3 py-2 text-[11px] font-semibold tracking-wide text-neutral-900 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                <Lock className="h-3 w-3 text-neutral-800" aria-hidden />
+                <span>256-bit SSL</span>
+              </div>
+              <div className="mt-2 flex w-full flex-nowrap items-center gap-1.5">
+                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                  <img src="/assets/mastercard.png" alt="Mastercard" className="h-4 w-auto max-w-full object-contain" />
+                </span>
+                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                  <img src="/assets/visa.png" alt="Visa" className="h-4 w-auto max-w-full object-contain" />
+                </span>
+                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                  <img src="/assets/applepay.png" alt="Apple Pay" className="h-4 w-auto max-w-full object-contain" />
+                </span>
+                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                  <img src="/assets/googlepay.png" alt="Google Pay" className="h-4 w-auto max-w-full object-contain" />
+                </span>
+              </div>
+              <div className="mt-1 flex w-full items-center justify-between text-[11px] text-muted-foreground">
+                <span>Powered by:</span>
+                <img src="/assets/stripe.png" alt="Stripe" className="h-4 w-auto object-contain" />
+              </div>
             </div>
           </div>
 
