@@ -30,7 +30,7 @@ export function HelpModal({ open, onOpenChange }: HelpModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md p-[14.4px]">
+      <DialogContent className="max-w-md p-[14.4px] max-[767px]:w-[calc(100vw-32px)] max-[767px]:max-w-[calc(100vw-32px)]">
         <Card className="border-0 shadow-none">
           <CardHeader className="pb-1 pr-8 p-[14.4px]">
             <div
