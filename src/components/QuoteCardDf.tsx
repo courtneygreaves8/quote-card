@@ -110,7 +110,7 @@ export function QuoteCardDf({
                 <span className="break-words text-base font-semibold text-foreground">
                   {quote.providerName}
                 </span>
-                <span className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-foreground">
+                <span className="hidden shrink-0 items-center gap-1 text-sm font-medium text-foreground">
                   {quote.trustpilotRating.toFixed(1)}
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -121,20 +121,17 @@ export function QuoteCardDf({
                 </span>
               </div>
             </div>
-            <span className="shrink-0 text-sm font-medium text-muted-foreground min-[1220px]:text-xs">
+            <span className="inline-flex shrink-0 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-muted-foreground min-[1220px]:px-2 min-[1220px]:py-0.5 min-[1220px]:text-xs">
               {policyType}
             </span>
           </div>
 
-          {/* Home + Host in one wrapper, divider between them */}
-          <div className="flex w-full flex-col rounded-[12px] border border-neutral-200 bg-[#FAFAFA]">
-            <div className="flex w-full flex-col gap-3 p-2">
+          {/* Home + Host — side by side, same layout as Legal + Emergency */}
+          <div className="flex w-full gap-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex min-w-0 items-center gap-2">
-                  <div className={COLUMN_ICON_CLASS}>
-                    <Home className="h-4 w-4" />
-                  </div>
-                  <span className="text-sm font-medium text-foreground">Home Insurance</span>
+                <div className={COLUMN_ICON_CLASS}>
+                  <Home className="h-4 w-4" />
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
@@ -158,11 +155,12 @@ export function QuoteCardDf({
                   </Popover>
                 </div>
               </div>
-              <div className="flex items-baseline justify-between gap-2">
+              <span className="text-sm font-medium text-foreground">Home Insurance</span>
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-[18px] font-semibold text-foreground tabular-nums">
                   {toDisplay(quote.standardPrice)}
                 </span>
-                <span className="text-sm font-medium text-foreground">
+                <span className="text-[11px] font-medium text-foreground">
                   Excess:{" "}
                   <span className="font-semibold">
                     {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
@@ -170,16 +168,10 @@ export function QuoteCardDf({
                 </span>
               </div>
             </div>
-
-            <div className="h-px w-full bg-neutral-200" aria-hidden />
-
-            <div className="flex w-full flex-col gap-3 p-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex min-w-0 items-center gap-2">
-                  <div className={COLUMN_ICON_CLASS}>
-                    <Users className="h-4 w-4" />
-                  </div>
-                  <span className="text-sm font-medium text-foreground">Host Insurance</span>
+                <div className={COLUMN_ICON_CLASS}>
+                  <Users className="h-4 w-4" />
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
@@ -203,11 +195,12 @@ export function QuoteCardDf({
                   </Popover>
                 </div>
               </div>
-              <div className="flex items-baseline justify-between gap-2">
+              <span className="text-sm font-medium text-foreground">Host Insurance</span>
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-[18px] font-semibold text-foreground tabular-nums">
                   {toDisplay(quote.piklPrice)}
                 </span>
-                <span className="text-sm font-medium text-foreground">
+                <span className="text-[11px] font-medium text-foreground">
                   Excess: <span className="font-semibold">£50</span>
                 </span>
               </div>
@@ -401,7 +394,7 @@ export function QuoteCardDf({
               <span className="text-xs font-semibold text-slate-600">LOGO</span>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <span className="text-xs font-medium text-muted-foreground">
+              <span className="inline-flex w-fit shrink-0 rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 {policyType}
               </span>
               <div className="flex items-center gap-1.5">
