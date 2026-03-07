@@ -8,6 +8,7 @@ import {
   Lock,
   Mail,
   Save,
+  Shield,
   X,
 } from "lucide-react"
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
@@ -187,7 +188,7 @@ function PolicySheetRight({
   const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[5.5rem]">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[5.5rem] max-[767px]:pt-4">
       <SheetSection
         title="Overview"
         open={openOverview}
@@ -430,7 +431,7 @@ export function PolicySheet({
 
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-4 md:flex-row md:overflow-hidden md:gap-0"
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-0 md:flex-row md:overflow-hidden md:gap-0"
         >
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
@@ -442,26 +443,35 @@ export function PolicySheet({
                 : "-translate-y-2 opacity-0 pointer-events-none"
             )}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Button
                 variant="outline"
                 size="icon"
-                className="h-8 w-8 border-border"
+                className="h-8 w-8 shrink-0 border-border"
                 onClick={() => onOpenChange(false)}
                 aria-label="Close policy details"
               >
                 <X className="h-4 w-4" />
               </Button>
-              <div className="flex flex-1 flex-col">
-                <span className="text-[11px] font-medium text-muted-foreground">
-                  Pay annually
+              <div className="flex flex-1 flex-wrap items-center justify-start gap-1.5 pl-1 text-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1 text-xs">
+                  <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <span className="font-semibold tabular-nums text-foreground">
+                    £{annualPrice.toFixed(2)}
+                  </span>
+                  <span className="font-medium text-muted-foreground">Annual</span>
                 </span>
-                <span className="text-base font-semibold tabular-nums text-foreground">
-                  £{annualPrice.toFixed(2)}
+                <span className="text-muted-foreground">or</span>
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1 text-xs">
+                  <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <span className="font-semibold tabular-nums text-foreground">
+                    £{monthlyPrice.toFixed(2)}
+                  </span>
+                  <span className="font-medium text-muted-foreground">Monthly</span>
                 </span>
               </div>
               <Button
-                className="h-9 whitespace-nowrap px-3 text-xs"
+                className="h-9 shrink-0 whitespace-nowrap px-3 text-xs"
                 onClick={handlePrimaryAction}
               >
                 Purchase
