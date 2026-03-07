@@ -30,7 +30,7 @@ export function QuotesPageLayout({
   handleLoadingComplete,
 }: QuotesPageLayoutProps) {
   return (
-    <div className="flex h-screen flex-col bg-neutral-50">
+    <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-neutral-200">
       <Navbar />
       <div className="flex min-h-0 flex-1">
         <div className="hidden min-[1513px]:flex">

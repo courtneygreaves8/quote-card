@@ -60,7 +60,7 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
   }, [])
 
   return (
-    <div className="flex min-h-screen flex-col bg-neutral-50">
+    <div className="flex min-h-screen flex-col bg-neutral-50 max-[767px]:bg-neutral-200">
       <Navbar />
       <main className="flex flex-1 items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md">
