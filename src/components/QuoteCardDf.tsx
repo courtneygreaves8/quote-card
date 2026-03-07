@@ -156,11 +156,11 @@ export function QuoteCardDf({
                 </div>
               </div>
               <span className="text-sm font-medium text-foreground">Home Insurance</span>
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex items-end justify-between gap-2">
                 <span className="text-[18px] font-semibold text-foreground tabular-nums">
                   {toDisplay(quote.standardPrice)}
                 </span>
-                <span className="text-[11px] font-medium text-foreground">
+                <span className="-translate-y-[2px] text-[11px] font-medium text-foreground">
                   Excess:{" "}
                   <span className="font-semibold">
                     {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
@@ -196,11 +196,11 @@ export function QuoteCardDf({
                 </div>
               </div>
               <span className="text-sm font-medium text-foreground">Host Insurance</span>
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex items-end justify-between gap-2">
                 <span className="text-[18px] font-semibold text-foreground tabular-nums">
                   {toDisplay(quote.piklPrice)}
                 </span>
-                <span className="text-[11px] font-medium text-foreground">
+                <span className="-translate-y-[2px] text-[11px] font-medium text-foreground">
                   Excess: <span className="font-semibold">£50</span>
                 </span>
               </div>
