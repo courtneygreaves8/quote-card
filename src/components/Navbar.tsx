@@ -4,7 +4,7 @@ import { CreateAccountModal } from "@/components/CreateAccountModal"
 import { HelpModal } from "@/components/HelpModal"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { LAYOUT_PADDING_X } from "@/lib/constants"
-import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
+import { Headset, LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 
 interface NavbarProps {
   activeLayout?: "default" | "alt"
@@ -65,6 +65,17 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
               <UserPlus className="h-4 w-4" />
               Create account
             </Button>
+            {activeLayout === "alt" && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5 border-border"
+                onClick={() => setHelpOpen(true)}
+              >
+                <Headset className="h-4 w-4" />
+                Contact support
+              </Button>
+            )}
           </div>
           {/* Mobile hamburger when we show a single card */}
           <Button

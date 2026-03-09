@@ -485,8 +485,14 @@ export function QuoteCardDf({
 
         {/* Content */}
         <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-3">
-          {/* Four coverage blocks: same width in annual & monthly, grid hugs content */}
-          <div className="grid w-max flex-shrink-0 grid-cols-4 gap-3">
+          {/* Four coverage blocks */}
+          <div
+            className={
+              pricingMode === "monthly" && monthlyBreakdownInDropdown
+                ? "grid flex-1 min-w-0 grid-cols-4 gap-3"
+                : "grid w-max flex-shrink-0 grid-cols-4 gap-3"
+            }
+          >
           {/* Home column */}
           <div className={COLUMN_BOX_GRID_CLASS}>
             <div className="flex items-center justify-between gap-2">
@@ -699,11 +705,11 @@ export function QuoteCardDf({
             </div>
           )}
 
-          {/* Total price block — fixed width on Org layout, fills remaining space on Alt (monthly dropdown) */}
+        {/* Total price block — fixed width on Org layout, 126px on Alt (monthly dropdown) */}
           <div
             className={
               monthlyBreakdownInDropdown
-                ? "flex flex-1 min-w-0 flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
+                ? "flex w-[126px] min-w-[126px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
                 : "flex w-[136px] min-w-[136px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
             }
           >

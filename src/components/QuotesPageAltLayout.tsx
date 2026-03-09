@@ -1,4 +1,3 @@
-import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicySheet } from "@/components/PolicySheet"
@@ -17,7 +16,7 @@ import {
 } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
-import { Check, Home, Scale, Star, Users, Wrench } from "lucide-react"
+import { ArrowLeftRight, Check, Home, Scale, Star, Users, Wrench } from "lucide-react"
 import { useState } from "react"
 
 export type QuotesPageAltLayoutProps = ReturnType<typeof useQuotesPage> & {
@@ -102,15 +101,26 @@ export function QuotesPageAltLayout({
             <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-0 md:py-0 min-[1120px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
               <section className="w-full md:order-2 md:ml-auto md:w-[320px] md:shrink-0 md:border-l md:border-border md:bg-white md:px-6 md:py-6 min-[1120px]:fixed min-[1120px]:right-0 min-[1120px]:top-14 min-[1120px]:z-10 min-[1120px]:flex min-[1120px]:h-[calc(100vh-3.5rem)] min-[1120px]:flex-col min-[1120px]:overflow-hidden">
-                {/* Compare heading + check badge */}
-                <div className="mb-2 flex items-center justify-between gap-3">
-                  <span className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
+                {/* Compare heading + arrow badge aligned above checkbox column */}
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="flex-1 text-sm font-semibold tracking-wide text-[#1E1E1E]">
                     Select and compare
                   </span>
-                  <span className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-[#1E1E1E]">
-                    <Check className="h-3 w-3" aria-hidden />
-                    Compare
-                  </span>
+                  <div className="flex w-6 justify-center">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span
+                          className="inline-flex cursor-default items-center justify-center rounded-full border border-neutral-200 bg-white p-1"
+                          aria-label="Select up to 3 insurers below and compare."
+                        >
+                          <ArrowLeftRight className="h-3 w-3 text-[#1E1E1E]" aria-hidden />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Select up to 3 insurers below and compare.
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                 </div>
 
                 <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
@@ -131,100 +141,102 @@ export function QuotesPageAltLayout({
                     const isMonthlyPrimary = filters.paymentOption === "monthly"
 
                     return (
-                      <button
-                        key={quote.id}
-                        type="button"
-                        onClick={() => {
-                          // On narrower viewports, open the policy sheet instead of showing the preview card
-                          if (window.innerWidth <= 1119) {
-                            handleMoreDetails(quote)
-                          } else {
-                            // Only control which quote is shown on the right;
-                            // compare checkboxes exclusively control comparison selection.
-                            handleSelectQuote(quote)
-                          }
-                        }}
-                        className={[
-                          "flex w-full items-center justify-between gap-2 rounded-[10px] border px-3 py-2 text-left text-sm transition-colors",
-                          isActive
-                            ? "border-[#111111] bg-white text-foreground"
-                            : "border-border bg-white hover:bg-muted/60",
-                        ].join(" ")}
-                      >
-                        <div className="flex min-w-0 flex-1 items-center gap-2">
-                          {/* Compare checkbox at start of row */}
-                          {isCompareLimitReached && !isCompared ? (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <button
-                                  type="button"
-                                  aria-pressed={isCompared}
-                                  aria-label="Select for compare"
-                                  className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border cursor-not-allowed opacity-60 bg-white"
-                                >
-                                  {isCompared && (
-                                    <Check className="h-3 w-3 text-black" aria-hidden />
-                                  )}
-                                </button>
-                              </TooltipTrigger>
-                              <TooltipContent side="right">
-                              You can only select three providers at one time.
-                              </TooltipContent>
-                            </Tooltip>
-                          ) : (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleToggleCompare(quote.id)
-                                  }}
-                                  aria-pressed={isCompared}
-                                  aria-label="Select for compare"
-                                  className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border cursor-pointer bg-white"
-                                >
-                                  {isCompared && <Check className="h-3 w-3 text-black" aria-hidden />}
-                                </button>
-                              </TooltipTrigger>
-                              <TooltipContent side="right">{compareTooltipLabel}</TooltipContent>
-                            </Tooltip>
-                          )}
-
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[6px] bg-[#F5F5F5] text-[10px] font-semibold text-slate-600">
-                            LOGO
-                          </div>
-                          <div className="min-w-0 flex flex-col gap-0.5">
-                            <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
-                              {quote.providerName}
-                            </span>
+                      <div key={quote.id} className="flex w-full items-stretch gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            // On narrower viewports, open the policy sheet instead of showing the preview card
+                            if (window.innerWidth <= 1119) {
+                              handleMoreDetails(quote)
+                            } else {
+                              // Only control which quote is shown on the right;
+                              // compare checkboxes exclusively control comparison selection.
+                              handleSelectQuote(quote)
+                            }
+                          }}
+                          className={[
+                            "flex w-full items-center justify-between gap-2 rounded-[10px] border px-3 py-2 text-left text-sm transition-colors",
+                            isActive
+                              ? "border-[#111111] bg-white text-foreground"
+                              : "border-border bg-white hover:bg-muted/60",
+                          ].join(" ")}
+                        >
+                          <div className="flex min-w-0 flex-1 flex-col gap-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
+                                {quote.providerName}
+                              </span>
+                              {isCompareLimitReached && !isCompared ? (
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <button
+                                      type="button"
+                                      aria-pressed={isCompared}
+                                      aria-label="Select for compare"
+                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
+                                    >
+                                      {isCompared && (
+                                        <Check className="h-3 w-3 text-black" aria-hidden />
+                                      )}
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="right">
+                                    You can only select three providers at one time.
+                                  </TooltipContent>
+                                </Tooltip>
+                              ) : (
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleToggleCompare(quote.id)
+                                      }}
+                                      aria-pressed={isCompared}
+                                      aria-label="Select for compare"
+                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
+                                    >
+                                      {isCompared && (
+                                        <Check className="h-3 w-3 text-black" aria-hidden />
+                                      )}
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="right">
+                                    {compareTooltipLabel}
+                                  </TooltipContent>
+                                </Tooltip>
+                              )}
+                            </div>
                             <span className="truncate text-[11px] text-muted-foreground">
                               {filters.policyType}
                             </span>
+                            <div className="mt-0.5 flex w-full items-baseline justify-start gap-2">
+                              {isMonthlyPrimary ? (
+                                <>
+                                  <span className="text-[13px] font-semibold tabular-nums text-foreground">
+                                    £{monthlyPrice.toFixed(2)}/mo.
+                                  </span>
+                                  <span className="text-[11px] text-muted-foreground">or</span>
+                                  <span className="text-[13px] tabular-nums text-muted-foreground">
+                                    £{annualPrice.toFixed(2)} <span>annual</span>
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="text-[13px] font-semibold tabular-nums text-foreground">
+                                    £{annualPrice.toFixed(2)} <span>annual</span>
+                                  </span>
+                                  <span className="text-[11px] text-muted-foreground">or</span>
+                                  <span className="text-[13px] tabular-nums text-muted-foreground">
+                                    £{monthlyPrice.toFixed(2)}/mo.
+                                  </span>
+                                </>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex flex-col items-end gap-0.5">
-                          {isMonthlyPrimary ? (
-                            <>
-                              <span className="text-[13px] font-semibold tabular-nums text-foreground">
-                                £{monthlyPrice.toFixed(2)}/mo.
-                              </span>
-                              <span className="text-[13px] tabular-nums text-muted-foreground">
-                                £{annualPrice.toFixed(2)} <span>annual</span>
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <span className="text-[13px] font-semibold tabular-nums text-foreground">
-                                £{annualPrice.toFixed(2)} <span>annual</span>
-                              </span>
-                              <span className="text-[13px] tabular-nums text-muted-foreground">
-                                £{monthlyPrice.toFixed(2)}/mo.
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </button>
+                        </button>
+                      </div>
                     )
                   })}
                 </div>
@@ -551,7 +563,6 @@ export function QuotesPageAltLayout({
       />
 
       <LoadingModal open={showLoadingModal} onClose={handleLoadingComplete} />
-      <HelpFloatingButton />
     </div>
   )
 }
