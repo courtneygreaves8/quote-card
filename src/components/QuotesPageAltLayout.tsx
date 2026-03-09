@@ -60,12 +60,17 @@ export function QuotesPageAltLayout({
       ? displayedQuotes.find((q) => q.id === compareIds[1]) ?? null
       : null
 
+  const tertiaryQuote =
+    compareIds.length > 2
+      ? displayedQuotes.find((q) => q.id === compareIds[2]) ?? null
+      : null
+
   const handleToggleCompare = (id: string) => {
     setCompareIds((prev) => {
       if (prev.includes(id)) {
         return prev.filter((x) => x !== id)
       }
-      if (prev.length >= 2) {
+      if (prev.length >= 3) {
         return prev
       }
       return [...prev, id]
@@ -92,7 +97,7 @@ export function QuotesPageAltLayout({
         </div>
 
         {/* Main area: quote list (secondary sidebar) + viewing pane */}
-        <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50">
+        <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50 pb-4">
           {primaryQuote ? (
             <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-0 md:py-0 min-[1120px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
@@ -118,13 +123,15 @@ export function QuotesPageAltLayout({
                   {sortedQuotes.map((quote) => {
                     const isActive = primaryQuote?.id === quote.id
                     const isCompared = compareIds.includes(quote.id)
-                    const isCompareLimitReached = compareIds.length >= 2 && !isCompared
+                    const isCompareLimitReached = compareIds.length >= 3 && !isCompared
                     const compareTooltipLabel =
                       compareIds.length === 0
-                        ? "Select two providers to compare."
+                        ? "Select up to three providers to compare."
                         : compareIds.length === 1
+                        ? "Select up to two more providers to compare."
+                        : compareIds.length === 2
                         ? "Select one more provider to compare."
-                        : "You can only select two providers at one time."
+                        : "You can only select three providers at one time."
                     const monthlyPrice = quote.piklPrice
                     const annualPrice = monthlyPrice * 12
                     const isMonthlyPrimary = filters.paymentOption === "monthly"
@@ -167,7 +174,7 @@ export function QuotesPageAltLayout({
                                 </button>
                               </TooltipTrigger>
                               <TooltipContent side="right">
-                                You can only select two providers at one time.
+                              You can only select three providers at one time.
                               </TooltipContent>
                             </Tooltip>
                           ) : (
@@ -249,7 +256,7 @@ export function QuotesPageAltLayout({
 
               {/* Right column: selected quote summary (full details are in PolicySheet) */}
               {/* Hidden on <=1119px so small screens just use the list + sheet */}
-              <section className="mt-4 hidden min-w-0 flex-1 md:order-1 md:mt-0 min-[1120px]:flex min-[1120px]:justify-center min-[1120px]:pt-6">
+              <section className="mt-4 mb-4 hidden min-w-0 flex-1 md:order-1 md:mt-0 min-[1120px]:flex min-[1120px]:justify-center min-[1120px]:pt-6">
                 <div className="w-full max-w-[960px]">
                 {/* Centre stage header — same as Org layout (QuotesContent) */}
                 <div className="mb-8 flex w-full flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
@@ -290,34 +297,44 @@ export function QuotesPageAltLayout({
                   </div>
                 </div>
 
-                {/* Comparison table when two quotes are selected */}
+                {/* Comparison table when at least two quotes are selected */}
                 {secondaryQuote && primaryQuote && (
                   <div className="mb-3 rounded-[16px] border border-border bg-white px-4 py-3">
                     <div className="mb-3 text-xs font-semibold tracking-wide text-muted-foreground">
-                      {primaryQuote.providerName} vs {secondaryQuote.providerName}
+                      {tertiaryQuote
+                        ? `${primaryQuote.providerName} vs ${secondaryQuote.providerName} vs ${tertiaryQuote.providerName}`
+                        : `${primaryQuote.providerName} vs ${secondaryQuote.providerName}`}
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full min-w-[280px] border-collapse text-[11px] text-muted-foreground">
                         <thead>
-                          <tr className="border-b border-border text-left">
-                            <th className="py-2 pr-4 font-semibold text-muted-foreground" scope="col">
+                          <tr className="border-b border-border text-left text-[12px] font-semibold">
+                            <th className="py-2 pr-4 text-muted-foreground" scope="col">
                               Feature
                             </th>
-                            <th className="py-2 pr-4 text-left font-medium text-[#1E1E1E]" scope="col">
+                            <th className="py-2 pr-4 text-left text-[#1E1E1E]" scope="col">
                               {primaryQuote.providerName}
                             </th>
-                            <th className="py-2 text-left font-medium text-[#1E1E1E]" scope="col">
+                            <th className="py-2 text-left text-[#1E1E1E]" scope="col">
                               {secondaryQuote.providerName}
                             </th>
+                            {tertiaryQuote && (
+                              <th className="py-2 text-left text-[#1E1E1E]" scope="col">
+                                {tertiaryQuote.providerName}
+                              </th>
+                            )}
                           </tr>
                         </thead>
                         <tbody className="[&>tr:nth-child(even)]:bg-neutral-100">
-                          <tr className="border-b border-border">
+                          <tr>
                             <td className="py-2 pr-4">Overall</td>
                             <td className="py-2 pr-4 font-medium text-[#16a34a]">Good fit</td>
                             <td className="py-2 font-medium text-[#16a34a]">Good fit</td>
+                            {tertiaryQuote && (
+                              <td className="py-2 font-medium text-[#16a34a]">Good fit</td>
+                            )}
                           </tr>
-                          <tr className="border-b border-border">
+                          <tr>
                             <td className="py-2 pr-4">Annual price</td>
                             <td className="py-2 pr-4 font-medium text-[#1E1E1E]">
                               £
@@ -337,8 +354,19 @@ export function QuotesPageAltLayout({
                                 secondaryQuote.homeEmergencyAddOnPrice
                               ).toFixed(2)}
                             </td>
+                            {tertiaryQuote && (
+                              <td className="py-2 font-medium text-[#1E1E1E]">
+                                £
+                                {(
+                                  tertiaryQuote.standardPrice +
+                                  tertiaryQuote.piklPrice +
+                                  tertiaryQuote.familyLegalAddOnPrice +
+                                  tertiaryQuote.homeEmergencyAddOnPrice
+                                ).toFixed(2)}
+                              </td>
+                            )}
                           </tr>
-                          <tr className="border-b border-border">
+                          <tr>
                             <td className="py-2 pr-4">Monthly price</td>
                             <td className="py-2 pr-4 font-medium text-[#1E1E1E]">
                               £
@@ -364,16 +392,32 @@ export function QuotesPageAltLayout({
                                 .replace(".00", "")}
                               /mo.
                             </td>
+                            {tertiaryQuote && (
+                              <td className="py-2 font-medium text-[#1E1E1E]">
+                                £
+                                {(
+                                  tertiaryQuote.standardPrice +
+                                  tertiaryQuote.piklPrice +
+                                  tertiaryQuote.familyLegalAddOnPrice +
+                                  tertiaryQuote.homeEmergencyAddOnPrice
+                                )
+                                  .toFixed(2)
+                                  .replace(".00", "")}
+                                /mo.
+                              </td>
+                            )}
                           </tr>
                           <tr className="border-b border-border">
                             <td className="py-2 pr-4">Home cover</td>
                             <td className="py-2 pr-4">Included</td>
                             <td className="py-2">Included</td>
+                            {tertiaryQuote && <td className="py-2">Included</td>}
                           </tr>
                           <tr>
                             <td className="py-2 pr-4">Host cover</td>
                             <td className="py-2 pr-4">Included</td>
                             <td className="py-2">Included</td>
+                            {tertiaryQuote && <td className="py-2">Included</td>}
                           </tr>
                         </tbody>
                       </table>
@@ -416,13 +460,41 @@ export function QuotesPageAltLayout({
                   </div>
                 )}
 
-                {/* Secondary selected card when comparing two */}
+                {/* Secondary selected card when comparing multiple */}
                 {secondaryQuote && (
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
                     <div className="w-full max-w-[960px]">
                       <QuoteCardDf
                         quote={secondaryQuote}
+                        policyType={filters.policyType}
+                        paymentOption={filters.paymentOption}
+                        onPaymentOptionChange={(option) =>
+                          setFilters((prev) => ({ ...prev, paymentOption: option }))
+                        }
+                        legalCover={filters.legalCover}
+                        homeEmergency={filters.homeEmergency}
+                        onLegalCoverChange={(checked) =>
+                          setFilters((prev) => ({ ...prev, legalCover: checked }))
+                        }
+                        onHomeEmergencyChange={(checked) =>
+                          setFilters((prev) => ({ ...prev, homeEmergency: checked }))
+                        }
+                        onMoreDetails={handleMoreDetails}
+                        onPurchase={() => handlePurchase()}
+                        monthlyBreakdownInDropdown
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Tertiary selected card when comparing three */}
+                {tertiaryQuote && (
+                  <div className="mt-0 flex flex-col gap-1">
+                    <Separator className="my-4" />
+                    <div className="w-full max-w-[960px]">
+                      <QuoteCardDf
+                        quote={tertiaryQuote}
                         policyType={filters.policyType}
                         paymentOption={filters.paymentOption}
                         onPaymentOptionChange={(option) =>
