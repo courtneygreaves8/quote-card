@@ -126,165 +126,184 @@ export function QuoteCardDf({
             </span>
           </div>
 
-          {/* Home + Host — side by side, same layout as Legal + Emergency */}
-          <div className="flex w-full gap-2">
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className={COLUMN_ICON_CLASS}>
-                  <Home className="h-4 w-4" />
-                </div>
-                <div className="flex shrink-0 items-center gap-1.5">
-                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+          {/* Home, Host, Legal, Emergency — stacked full width */}
+          <div className="flex w-full flex-col gap-2">
+            {/* Home */}
+            <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className="self-start rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                     Included
                   </span>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={POPOVER_TRIGGER_CLASS_SM}
-                        aria-label="What is standard cover?"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent side="right" className="max-w-[220px]">
-                      <p className="text-sm text-popover-foreground">
-                        Home Insurance: Covers the structure of your property and contents. This is included in your quote.
-                      </p>
-                    </PopoverContent>
-                  </Popover>
+                  <div className="flex items-center gap-2">
+                    <div className={COLUMN_ICON_CLASS}>
+                      <Home className="h-4 w-4" />
+                    </div>
+                    <div className="flex min-w-0 items-center gap-1.5">
+                      <span className="text-sm font-medium text-foreground">Home Insurance</span>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            className={POPOVER_TRIGGER_CLASS_SM}
+                            aria-label="What is standard cover?"
+                          >
+                            <HelpCircle className="h-4 w-4" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent side="right" className="max-w-[220px]">
+                          <p className="text-sm text-popover-foreground">
+                            Home Insurance: Covers the structure of your property and contents. This is included in your quote.
+                          </p>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <span className="text-sm font-medium text-foreground">Home Insurance</span>
-              <div className="flex items-end justify-between gap-2">
-                <span className="text-[18px] font-semibold text-foreground tabular-nums">
-                  {toDisplay(quote.standardPrice)}
-                </span>
-                <span className="-translate-y-[2px] text-[11px] font-medium text-foreground">
-                  Excess:{" "}
-                  <span className="font-semibold">
-                    {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className="text-[18px] font-semibold text-foreground tabular-nums">
+                    {toDisplay(quote.standardPrice)}
                   </span>
-                </span>
+                  <span className="text-[11px] font-medium text-foreground">
+                    Excess:{" "}
+                    <span className="font-semibold">
+                      {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className={COLUMN_ICON_CLASS}>
-                  <Users className="h-4 w-4" />
-                </div>
-                <div className="flex shrink-0 items-center gap-1.5">
-                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    Included
-                  </span>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={POPOVER_TRIGGER_CLASS_SM}
-                        aria-label="What is Pikl cover?"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent side="right" className="max-w-[220px]">
-                      <p className="text-sm text-popover-foreground">
-                        Host Insurance: Covers short-term letting and home sharing. This is included in your quote.
-                      </p>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-              <span className="text-sm font-medium text-foreground">Host Insurance</span>
-              <div className="flex items-end justify-between gap-2">
-                <span className="text-[18px] font-semibold text-foreground tabular-nums">
-                  {toDisplay(quote.piklPrice)}
-                </span>
-                <span className="-translate-y-[2px] text-[11px] font-medium text-foreground">
-                  Excess: <span className="font-semibold">£50</span>
-                </span>
-              </div>
-            </div>
-          </div>
 
-          {/* Family legal + Home emergency — side by side */}
-          <div className="flex w-full gap-2">
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className={COLUMN_ICON_CLASS}>
-                  <Scale className="h-4 w-4" />
-                </div>
-                <div className="flex shrink-0 items-center gap-1.5">
-                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    Optional
+            {/* Host */}
+            <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className="self-start rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                    Included
                   </span>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={POPOVER_TRIGGER_CLASS_SM}
-                        aria-label="Legal Protection"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent side="right" className="max-w-[220px]">
-                      <p className="text-sm text-popover-foreground">
-                        Legal Protection: Optional add-on for family legal protection.
-                      </p>
-                    </PopoverContent>
-                  </Popover>
+                  <div className="flex items-center gap-2">
+                    <div className={COLUMN_ICON_CLASS}>
+                      <Users className="h-4 w-4" />
+                    </div>
+                    <div className="flex min-w-0 items-center gap-1.5">
+                      <span className="text-sm font-medium text-foreground">Host Insurance</span>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            className={POPOVER_TRIGGER_CLASS_SM}
+                            aria-label="What is Pikl cover?"
+                          >
+                            <HelpCircle className="h-4 w-4" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent side="right" className="max-w-[220px]">
+                          <p className="text-sm text-popover-foreground">
+                            Host Insurance: Covers short-term letting and home sharing. This is included in your quote.
+                          </p>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <span className="text-sm font-medium text-foreground">Legal Protection</span>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[18px] font-semibold text-foreground tabular-nums">
-                  {toDisplay(quote.familyLegalAddOnPrice)}
-                </span>
-                <Switch
-                  checked={legalCover}
-                  onCheckedChange={onLegalCoverChange}
-                  aria-label="Family legal protection"
-                />
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className="text-[18px] font-semibold text-foreground tabular-nums">
+                    {toDisplay(quote.piklPrice)}
+                  </span>
+                  <span className="text-[11px] font-medium text-foreground">
+                    Excess: <span className="font-semibold">£50</span>
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="flex min-w-0 flex-1 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className={COLUMN_ICON_CLASS}>
-                  <Wrench className="h-4 w-4" />
-                </div>
-                <div className="flex shrink-0 items-center gap-1.5">
-                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+
+            {/* Legal */}
+            <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className="self-start rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
                     Optional
                   </span>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={POPOVER_TRIGGER_CLASS_SM}
-                        aria-label="Emergency Cover"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent side="right" className="max-w-[220px]">
-                      <p className="text-sm text-popover-foreground">
-                        Emergency Cover: Optional add-on for home emergency cover.
-                      </p>
-                    </PopoverContent>
-                  </Popover>
+                  <div className="flex items-center gap-2">
+                    <div className={COLUMN_ICON_CLASS}>
+                      <Scale className="h-4 w-4" />
+                    </div>
+                    <div className="flex min-w-0 items-center gap-1.5">
+                      <span className="text-sm font-medium text-foreground">Legal Protection</span>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            className={POPOVER_TRIGGER_CLASS_SM}
+                            aria-label="Legal Protection"
+                          >
+                            <HelpCircle className="h-4 w-4" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent side="right" className="max-w-[220px]">
+                          <p className="text-sm text-popover-foreground">
+                            Legal Protection: Optional add-on for family legal protection.
+                          </p>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className="text-[18px] font-semibold text-foreground tabular-nums">
+                    {toDisplay(quote.familyLegalAddOnPrice)}
+                  </span>
+                  <Switch
+                    checked={legalCover}
+                    onCheckedChange={onLegalCoverChange}
+                    aria-label="Family legal protection"
+                  />
                 </div>
               </div>
-              <span className="text-sm font-medium text-foreground">Emergency Cover</span>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[18px] font-semibold text-foreground tabular-nums">
-                  {toDisplay(quote.homeEmergencyAddOnPrice)}
-                </span>
-                <Switch
-                  checked={homeEmergency}
-                  onCheckedChange={onHomeEmergencyChange}
-                  aria-label="Home emergency cover"
-                />
+            </div>
+
+            {/* Emergency */}
+            <div className="flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-2">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className="self-start rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                    Optional
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <div className={COLUMN_ICON_CLASS}>
+                      <Wrench className="h-4 w-4" />
+                    </div>
+                    <div className="flex min-w-0 items-center gap-1.5">
+                      <span className="text-sm font-medium text-foreground">Emergency Cover</span>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            className={POPOVER_TRIGGER_CLASS_SM}
+                            aria-label="Emergency Cover"
+                          >
+                            <HelpCircle className="h-4 w-4" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent side="right" className="max-w-[220px]">
+                          <p className="text-sm text-popover-foreground">
+                            Emergency Cover: Optional add-on for home emergency cover.
+                          </p>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className="text-[18px] font-semibold text-foreground tabular-nums">
+                    {toDisplay(quote.homeEmergencyAddOnPrice)}
+                  </span>
+                  <Switch
+                    checked={homeEmergency}
+                    onCheckedChange={onHomeEmergencyChange}
+                    aria-label="Home emergency cover"
+                  />
+                </div>
               </div>
             </div>
           </div>
