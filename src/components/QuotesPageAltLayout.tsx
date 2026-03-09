@@ -102,21 +102,15 @@ export function QuotesPageAltLayout({
             <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-0 md:py-0 min-[1120px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
               <section className="w-full md:order-2 md:ml-auto md:w-[320px] md:shrink-0 md:border-l md:border-border md:bg-white md:px-6 md:py-6 min-[1120px]:fixed min-[1120px]:right-0 min-[1120px]:top-14 min-[1120px]:z-10 min-[1120px]:flex min-[1120px]:h-[calc(100vh-3.5rem)] min-[1120px]:flex-col min-[1120px]:overflow-hidden">
-                {/* Quotes count + sort control */}
+                {/* Compare heading + check badge */}
                 <div className="mb-2 flex items-center justify-between gap-3">
                   <span className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
-                    {displayedQuotes.length} quotes found.
+                    Select and compare
                   </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8 px-2 text-[11px] font-medium text-[#1E1E1E] border-neutral-200"
-                    onClick={() =>
-                      setAltSortMode((prev) => (prev === "price" ? "rating" : "price"))
-                    }
-                  >
-                    {altSortMode === "price" ? "Sort: Lowest price" : "Sort: Highest rating"}
-                  </Button>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-[#1E1E1E]">
+                    <Check className="h-3 w-3" aria-hidden />
+                    Compare
+                  </span>
                 </div>
 
                 <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
