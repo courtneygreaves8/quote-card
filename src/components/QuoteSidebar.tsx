@@ -210,62 +210,7 @@ export function QuoteSidebar({
 
       <Separator />
 
-      <div className="space-y-4">
-        <Label>Add-ons</Label>
-        <div className="space-y-5">
-          <div className={ADDON_ROW_CLASS}>
-            <Label htmlFor="buildings-accidental" className={ADDON_LABEL_CLASS}>
-              Accidental Damage (Buildings)
-            </Label>
-            <Switch
-              id="buildings-accidental"
-              checked={filters.buildingsAccidentalDamage}
-              onCheckedChange={(checked) =>
-                onFiltersChange({ ...filters, buildingsAccidentalDamage: checked })
-              }
-            />
-          </div>
-          <div className={ADDON_ROW_CLASS}>
-            <Label htmlFor="contents-accidental" className={ADDON_LABEL_CLASS}>
-              Accidental Damage (Contents)
-            </Label>
-            <Switch
-              id="contents-accidental"
-              checked={filters.contentsAccidentalDamage}
-              onCheckedChange={(checked) =>
-                onFiltersChange({ ...filters, contentsAccidentalDamage: checked })
-              }
-            />
-          </div>
-          <div className={ADDON_ROW_CLASS}>
-            <Label htmlFor="home-emergency" className={ADDON_LABEL_CLASS}>
-              Home Emergency Cover
-            </Label>
-            <Switch
-              id="home-emergency"
-              checked={filters.homeEmergency}
-              onCheckedChange={(checked) =>
-                onFiltersChange({ ...filters, homeEmergency: checked })
-              }
-            />
-          </div>
-          <div className={ADDON_ROW_CLASS}>
-            <Label htmlFor="legal-cover" className={ADDON_LABEL_CLASS}>
-              Family Legal Protection
-            </Label>
-            <Switch
-              id="legal-cover"
-              checked={filters.legalCover}
-              onCheckedChange={(checked) =>
-                onFiltersChange({ ...filters, legalCover: checked })
-              }
-            />
-          </div>
-        </div>
-      </div>
-
-      <Separator />
-
+      {/* Excess moved above add-ons */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label>Excess</Label>
@@ -330,6 +275,63 @@ export function QuoteSidebar({
             </TooltipTrigger>
             <TooltipContent side="right">Increase excess</TooltipContent>
           </Tooltip>
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Add-ons now follow excess */}
+      <div className="space-y-4">
+        <Label>Add-ons</Label>
+        <div className="space-y-5">
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="buildings-accidental" className={ADDON_LABEL_CLASS}>
+              Accidental Damage (Buildings)
+            </Label>
+            <Switch
+              id="buildings-accidental"
+              checked={filters.buildingsAccidentalDamage}
+              onCheckedChange={(checked) =>
+                onFiltersChange({ ...filters, buildingsAccidentalDamage: checked })
+              }
+            />
+          </div>
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="contents-accidental" className={ADDON_LABEL_CLASS}>
+              Accidental Damage (Contents)
+            </Label>
+            <Switch
+              id="contents-accidental"
+              checked={filters.contentsAccidentalDamage}
+              onCheckedChange={(checked) =>
+                onFiltersChange({ ...filters, contentsAccidentalDamage: checked })
+              }
+            />
+          </div>
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="home-emergency" className={ADDON_LABEL_CLASS}>
+              Home Emergency Cover
+            </Label>
+            <Switch
+              id="home-emergency"
+              checked={filters.homeEmergency}
+              onCheckedChange={(checked) =>
+                onFiltersChange({ ...filters, homeEmergency: checked })
+              }
+            />
+          </div>
+          <div className={ADDON_ROW_CLASS}>
+            <Label htmlFor="legal-cover" className={ADDON_LABEL_CLASS}>
+              Family Legal Protection
+            </Label>
+            <Switch
+              id="legal-cover"
+              checked={filters.legalCover}
+              onCheckedChange={(checked) =>
+                onFiltersChange({ ...filters, legalCover: checked })
+              }
+            />
+          </div>
         </div>
       </div>
 
