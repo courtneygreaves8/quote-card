@@ -5,19 +5,12 @@ import { QuoteSidebar } from "@/components/QuoteSidebar"
 import { QuoteCardDf } from "@/components/QuoteCardDf"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
-import type { FilterOption, SortOption } from "@/types/quote"
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
-import { ArrowLeftRight, Check, Home, Scale, Star, Users, Wrench } from "lucide-react"
+import { ArrowLeftRight, Check, Star } from "lucide-react"
 import { useState } from "react"
+import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
 
 export type QuotesPageAltLayoutProps = ReturnType<typeof useQuotesPage> & {
   onLayoutChange: (variant: "default" | "alt") => void
@@ -32,10 +25,6 @@ export function QuotesPageAltLayout({
   optionsOpen,
   setOptionsOpen,
   setFilters,
-  sort,
-  setSort,
-  filter,
-  setFilter,
   showLoadingModal,
   displayedQuotes,
   handleSelectQuote,
@@ -47,7 +36,7 @@ export function QuotesPageAltLayout({
 }: QuotesPageAltLayoutProps) {
   const activeQuote = selectedQuote ?? displayedQuotes[0] ?? null
   const [compareIds, setCompareIds] = useState<string[]>([])
-  const [altSortMode, setAltSortMode] = useState<"price" | "rating">("price")
+  const [viewMode, setViewMode] = useState<"all" | "compare">("compare")
 
   const primaryQuote =
     compareIds.length > 0
@@ -76,10 +65,7 @@ export function QuotesPageAltLayout({
     })
   }
 
-  const sortedQuotes =
-    altSortMode === "price"
-      ? [...displayedQuotes].sort((a, b) => a.piklPrice - b.piklPrice)
-      : [...displayedQuotes].sort((a, b) => b.trustpilotRating - a.trustpilotRating)
+  const sortedQuotes = [...displayedQuotes]
 
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-neutral-200">
@@ -282,40 +268,35 @@ export function QuotesPageAltLayout({
                       We've found {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
                     </h1>
                     <p className="mt-1 text-muted-foreground">
-                      Select upto 3 insurers on the right to compare, or view all quotes.
+                      Select up to 3 insurers on the right to compare, or view all quotes.
                     </p>
                   </div>
-                  <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
-                    <div className="min-w-0 flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
-                      <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
-                        <SelectTrigger className="w-full" aria-label="Sort">
-                          <SelectValue placeholder="Sort by" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="price-asc">Price: low to high</SelectItem>
-                          <SelectItem value="price-desc">Price: high to low</SelectItem>
-                          <SelectItem value="provider-az">Provider A–Z</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="min-w-0 flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
-                      <Select value={filter} onValueChange={(v) => setFilter(v as FilterOption)}>
-                        <SelectTrigger className="w-full" aria-label="Filter">
-                          <SelectValue placeholder="Filter" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All quotes</SelectItem>
-                          <SelectItem value="under-20">Under £20/mo</SelectItem>
-                          <SelectItem value="under-25">Under £25/mo</SelectItem>
-                          <SelectItem value="under-30">Under £30/mo</SelectItem>
-                        </SelectContent>
-                      </Select>
+                  <div className="flex w-full min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
+                    <div className="flex h-10 w-full max-w-[260px] items-center gap-0.5 rounded-[8px] border border-input bg-muted/30 p-0.5">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className={viewMode === "all" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS}
+                        onClick={() => setViewMode("all")}
+                      >
+                        View all quotes
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className={viewMode === "compare" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS}
+                        onClick={() => setViewMode("compare")}
+                      >
+                        Compare quotes
+                      </Button>
                     </div>
                   </div>
                 </div>
 
-                {/* Comparison table when at least two quotes are selected */}
-                {secondaryQuote && primaryQuote && (
+                {/* Comparison table when at least two quotes are selected in Compare mode */}
+                {viewMode === "compare" && secondaryQuote && primaryQuote && (
                   <div className="mb-3 rounded-[16px] border border-border bg-white px-4 py-3">
                     <div className="mb-3 text-xs font-semibold tracking-wide text-muted-foreground">
                       {tertiaryQuote
@@ -448,8 +429,34 @@ export function QuotesPageAltLayout({
                   </div>
                 )}
 
-                {/* Primary card when at least one quote is selected */}
-                {primaryQuote ? (
+                {/* Primary / list view when at least one quote is available */}
+                {viewMode === "all" ? (
+                  <div className="mb-0 flex flex-col gap-3">
+                    {displayedQuotes.map((quote) => (
+                      <div key={quote.id} className="w-full max-w-[960px]">
+                        <QuoteCardDf
+                          quote={quote}
+                          policyType={filters.policyType}
+                          paymentOption={filters.paymentOption}
+                          onPaymentOptionChange={(option) =>
+                            setFilters((prev) => ({ ...prev, paymentOption: option }))
+                          }
+                          legalCover={filters.legalCover}
+                          homeEmergency={filters.homeEmergency}
+                          onLegalCoverChange={(checked) =>
+                            setFilters((prev) => ({ ...prev, legalCover: checked }))
+                          }
+                          onHomeEmergencyChange={(checked) =>
+                            setFilters((prev) => ({ ...prev, homeEmergency: checked }))
+                          }
+                          onMoreDetails={handleMoreDetails}
+                          onPurchase={() => handlePurchase()}
+                          monthlyBreakdownInDropdown
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : primaryQuote ? (
                   <div className="mb-0 flex flex-col gap-1">
                     <div className="w-full max-w-[960px]">
                       <QuoteCardDf
@@ -484,7 +491,7 @@ export function QuotesPageAltLayout({
                 )}
 
                 {/* Secondary selected card when comparing multiple */}
-                {secondaryQuote && (
+                {viewMode === "compare" && secondaryQuote && (
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
                     <div className="w-full max-w-[960px]">
@@ -512,7 +519,7 @@ export function QuotesPageAltLayout({
                 )}
 
                 {/* Tertiary selected card when comparing three */}
-                {tertiaryQuote && (
+                {viewMode === "compare" && tertiaryQuote && (
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
                     <div className="w-full max-w-[960px]">
