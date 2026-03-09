@@ -250,6 +250,85 @@ export function QuotesPageAltLayout({
                   ) : null}
                 </div>
 
+                {/* Simple comparison table when two quotes are selected */}
+                {secondaryQuote && primaryQuote && (
+                  <div className="mb-3 rounded-[16px] border border-border bg-white px-4 py-3">
+                    <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      <span>Comparison table</span>
+                      <span className="normal-case font-normal text-[11px] text-[#1E1E1E]">
+                        {primaryQuote.providerName} vs {secondaryQuote.providerName}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1.5fr)_minmax(0,1.5fr)] gap-y-1.5 text-[11px] text-muted-foreground">
+                      <div />
+                      <div className="truncate font-medium text-[#1E1E1E]">
+                        {primaryQuote.providerName}
+                      </div>
+                      <div className="truncate font-medium text-[#1E1E1E]">
+                        {secondaryQuote.providerName}
+                      </div>
+
+                      <div className="truncate">Overall</div>
+                      <div className="font-medium text-[#16a34a]">Good fit</div>
+                      <div className="font-medium text-[#16a34a]">Good fit</div>
+
+                      <div className="truncate">Annual price</div>
+                      <div className="font-medium text-[#1E1E1E]">
+                        £
+                        {(
+                          primaryQuote.standardPrice +
+                          primaryQuote.piklPrice +
+                          primaryQuote.familyLegalAddOnPrice +
+                          primaryQuote.homeEmergencyAddOnPrice
+                        ).toFixed(2)}
+                      </div>
+                      <div className="font-medium text-[#1E1E1E]">
+                        £
+                        {(
+                          secondaryQuote.standardPrice +
+                          secondaryQuote.piklPrice +
+                          secondaryQuote.familyLegalAddOnPrice +
+                          secondaryQuote.homeEmergencyAddOnPrice
+                        ).toFixed(2)}
+                      </div>
+
+                      <div className="truncate">Monthly price</div>
+                      <div className="font-medium text-[#1E1E1E]">
+                        £
+                        {(
+                          primaryQuote.standardPrice +
+                          primaryQuote.piklPrice +
+                          primaryQuote.familyLegalAddOnPrice +
+                          primaryQuote.homeEmergencyAddOnPrice
+                        )
+                          .toFixed(2)
+                          .replace(".00", "")}
+                        /mo.
+                      </div>
+                      <div className="font-medium text-[#1E1E1E]">
+                        £
+                        {(
+                          secondaryQuote.standardPrice +
+                          secondaryQuote.piklPrice +
+                          secondaryQuote.familyLegalAddOnPrice +
+                          secondaryQuote.homeEmergencyAddOnPrice
+                        )
+                          .toFixed(2)
+                          .replace(".00", "")}
+                        /mo.
+                      </div>
+
+                      <div className="truncate">Home cover</div>
+                      <div>Included</div>
+                      <div>Included</div>
+
+                      <div className="truncate">Host cover</div>
+                      <div>Included</div>
+                      <div>Included</div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Primary card when at least one quote is selected */}
                 {primaryQuote ? (
                   <div className="mb-0 flex flex-col gap-1">
