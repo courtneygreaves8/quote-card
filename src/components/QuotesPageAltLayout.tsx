@@ -344,14 +344,6 @@ export function QuotesPageAltLayout({
                         </thead>
                         <tbody className="[&>tr:nth-child(even)]:bg-neutral-100">
                           <tr>
-                            <td className="py-2 pr-4">Overall</td>
-                            <td className="py-2 pr-4 font-medium text-[#16a34a]">Good fit</td>
-                            <td className="py-2 font-medium text-[#16a34a]">Good fit</td>
-                            {tertiaryQuote && (
-                              <td className="py-2 font-medium text-[#16a34a]">Good fit</td>
-                            )}
-                          </tr>
-                          <tr>
                             <td className="py-2 pr-4">Annual price</td>
                             <td className="py-2 pr-4 font-medium text-[#1E1E1E]">
                               £
@@ -424,17 +416,31 @@ export function QuotesPageAltLayout({
                               </td>
                             )}
                           </tr>
-                          <tr className="border-b border-border">
-                            <td className="py-2 pr-4">Home cover</td>
-                            <td className="py-2 pr-4">Included</td>
-                            <td className="py-2">Included</td>
-                            {tertiaryQuote && <td className="py-2">Included</td>}
+                          <tr>
+                            <td className="py-2 pr-4">Buildings cover</td>
+                            <td className="py-2 pr-4">Up to £1,000,000</td>
+                            <td className="py-2">Up to £750,000</td>
+                            {tertiaryQuote && <td className="py-2">Up to £1,200,000</td>}
                           </tr>
                           <tr>
-                            <td className="py-2 pr-4">Host cover</td>
-                            <td className="py-2 pr-4">Included</td>
-                            <td className="py-2">Included</td>
-                            {tertiaryQuote && <td className="py-2">Included</td>}
+                            <td className="py-2 pr-4">Contents cover</td>
+                            <td className="py-2 pr-4">Up to £50,000</td>
+                            <td className="py-2">Up to £40,000</td>
+                            {tertiaryQuote && <td className="py-2">Up to £60,000</td>}
+                          </tr>
+                          <tr>
+                            <td className="py-2 pr-4">Successful claims</td>
+                            <td className="py-2 pr-4">94.3% in last 12 months</td>
+                            <td className="py-2">92.8% in last 12 months</td>
+                            {tertiaryQuote && (
+                              <td className="py-2">95.6% in last 12 months</td>
+                            )}
+                          </tr>
+                          <tr>
+                            <td className="py-2 pr-4">Defaqto rating</td>
+                            <td className="py-2 pr-4">4.8 / 5</td>
+                            <td className="py-2">4.6 / 5</td>
+                            {tertiaryQuote && <td className="py-2">4.9 / 5</td>}
                           </tr>
                         </tbody>
                       </table>
