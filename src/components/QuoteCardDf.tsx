@@ -1,4 +1,5 @@
 import {
+  ChevronDown,
   HelpCircle,
   Home,
   Info,
@@ -25,6 +26,7 @@ import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 
 interface QuoteCardDfProps {
   quote: Quote
@@ -37,6 +39,8 @@ interface QuoteCardDfProps {
   onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
+  /** When true and monthly: show monthly breakdown in a dropdown below the row instead of in the row (e.g. alt layout). */
+  monthlyBreakdownInDropdown?: boolean
 }
 
 /** Sm: click-to-open popover trigger */
@@ -48,8 +52,9 @@ const TOOLTIP_TRIGGER_CLASS_DF =
 
 const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700 transition-colors duration-150 group-hover:bg-[#FFF]"
-const COLUMN_BOX_CLASS =
-  "group flex w-[200px] min-w-[200px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
+/** Coverage blocks in Df row: width from grid (equal for all 4); grid wrapper hugs content. */
+const COLUMN_BOX_GRID_CLASS =
+  "group flex min-w-0 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
 
 export function QuoteCardDf({
   quote,
@@ -62,6 +67,7 @@ export function QuoteCardDf({
   onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
+  monthlyBreakdownInDropdown = false,
 }: QuoteCardDfProps) {
   const pricingMode = paymentOption
 
@@ -164,7 +170,7 @@ export function QuoteCardDf({
                   <span className="text-[18px] font-semibold text-foreground tabular-nums">
                     {toDisplay(quote.standardPrice)}
                   </span>
-                  <span className="text-[11px] font-medium text-foreground">
+                  <span className="whitespace-nowrap text-[11px] font-medium text-foreground">
                     Excess:{" "}
                     <span className="font-semibold">
                       {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
@@ -210,7 +216,7 @@ export function QuoteCardDf({
                   <span className="text-[18px] font-semibold text-foreground tabular-nums">
                     {toDisplay(quote.piklPrice)}
                   </span>
-                  <span className="text-[11px] font-medium text-foreground">
+                  <span className="whitespace-nowrap text-[11px] font-medium text-foreground">
                     Excess: <span className="font-semibold">£50</span>
                   </span>
                 </div>
@@ -375,9 +381,14 @@ export function QuoteCardDf({
               </div>
             </div>
             <div className="flex w-full items-center justify-between gap-2">
-              <span className="text-sm font-medium text-muted-foreground">
-                {pricingMode === "annual" ? "Total Annual Premium" : "Total Monthly Premium"}
-              </span>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-muted-foreground">
+                  {pricingMode === "annual" ? "Total Annual" : "Total Monthly"}
+                </span>
+                <span className="text-sm font-medium text-muted-foreground">
+                  Premium
+                </span>
+              </div>
               <span className="text-lg font-semibold tabular-nums text-foreground">
                 {pricingMode === "annual"
                   ? formatPounds(displayedAnnualTotal)
@@ -473,9 +484,17 @@ export function QuoteCardDf({
         </div>
 
         {/* Content */}
-        <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-4 overflow-x-auto">
+        <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-3">
+          {/* Four coverage blocks */}
+          <div
+            className={
+              pricingMode === "monthly" && monthlyBreakdownInDropdown
+                ? "grid flex-1 min-w-0 grid-cols-4 gap-3"
+                : "grid w-max flex-shrink-0 grid-cols-4 gap-3"
+            }
+          >
           {/* Home column */}
-          <div className={COLUMN_BOX_CLASS}>
+          <div className={COLUMN_BOX_GRID_CLASS}>
             <div className="flex items-center justify-between gap-2">
               <div className={COLUMN_ICON_CLASS}>
                 <Home className="h-4 w-4" />
@@ -508,7 +527,7 @@ export function QuoteCardDf({
                 <span className="text-[18px] font-semibold text-[#1E1E1E]">
                   {toDisplay(quote.standardPrice)}
                 </span>
-                <span className="text-[14px] font-medium text-[#1E1E1E]">
+                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                   Excess:{" "}
                   <span className="font-semibold">
                     {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
@@ -519,7 +538,7 @@ export function QuoteCardDf({
           </div>
 
           {/* Host column */}
-          <div className={COLUMN_BOX_CLASS}>
+          <div className={COLUMN_BOX_GRID_CLASS}>
             <div className="flex items-center justify-between gap-2">
               <div className={COLUMN_ICON_CLASS}>
                 <Users className="h-4 w-4" />
@@ -552,7 +571,7 @@ export function QuoteCardDf({
                 <span className="text-[18px] font-semibold text-[#1E1E1E]">
                   {toDisplay(quote.piklPrice)}
                 </span>
-                <span className="text-[14px] font-medium text-[#1E1E1E]">
+                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                   Excess: <span className="font-semibold">£50</span>
                 </span>
               </div>
@@ -560,7 +579,7 @@ export function QuoteCardDf({
           </div>
 
           {/* Family legal column */}
-          <div className={COLUMN_BOX_CLASS}>
+          <div className={COLUMN_BOX_GRID_CLASS}>
             <div className="flex items-center justify-between gap-2">
               <div className={COLUMN_ICON_CLASS}>
                 <Scale className="h-4 w-4" />
@@ -603,7 +622,7 @@ export function QuoteCardDf({
           </div>
 
           {/* Home emergency column */}
-          <div className={COLUMN_BOX_CLASS}>
+          <div className={COLUMN_BOX_GRID_CLASS}>
             <div className="flex items-center justify-between gap-2">
               <div className={COLUMN_ICON_CLASS}>
                 <Wrench className="h-4 w-4" />
@@ -645,13 +664,9 @@ export function QuoteCardDf({
             </div>
           </div>
 
-          {/* Divider after Home emergency */}
-          <div
-            className="h-auto w-px flex-shrink-0 self-stretch bg-neutral-200"
-            aria-hidden
-          />
+          </div>
 
-          {pricingMode === "monthly" && (
+          {pricingMode === "monthly" && !monthlyBreakdownInDropdown && (
             <div className="flex w-fit flex-none flex-col justify-center self-stretch py-2">
               <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                 <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
@@ -690,11 +705,16 @@ export function QuoteCardDf({
             </div>
           )}
 
-          {/* Total price block */}
-          <div className="flex w-[120px] min-w-[120px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center">
-            <span className="text-[14px] font-medium text-[#1E1E1E]">
-              {pricingMode === "annual" ? "Total Annual Premium" : "Total Monthly Premium"}
-            </span>
+          {/* Total price block — fixed width on annual & monthly */}
+          <div className="flex w-[136px] min-w-[136px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center">
+            <div className="flex flex-col">
+              <span className="text-[14px] font-medium text-[#1E1E1E]">
+                {pricingMode === "annual" ? "Total Annual" : "Total Monthly"}
+              </span>
+              <span className="text-[14px] font-medium text-[#1E1E1E]">
+                Premium
+              </span>
+            </div>
             <span className="text-[14px] font-semibold text-[#1E1E1E]">
               {pricingMode === "annual"
                 ? formatPounds(displayedAnnualTotal)
@@ -702,6 +722,55 @@ export function QuoteCardDf({
             </span>
           </div>
         </div>
+
+        {/* Monthly breakdown dropdown (alt layout): full-width below the row */}
+        {pricingMode === "monthly" && monthlyBreakdownInDropdown && (
+          <Collapsible className="group/breakdown w-full">
+            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-[12px] border border-neutral-200 bg-white px-4 py-3 text-left text-[14px] font-medium text-[#1E1E1E] shadow-sm hover:bg-neutral-50">
+              <span>Monthly breakdown</span>
+              <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]/breakdown:rotate-180" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="overflow-visible">
+              <div className="mt-3 w-full overflow-hidden rounded-b-[12px] rounded-t-[12px] border border-neutral-200 bg-white shadow-sm">
+                <div className="flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 py-2">
+                  <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
+                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    {formatPounds(depositAmount)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4 border-b border-neutral-200 bg-neutral-100 px-4 py-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[14px] font-medium text-[#1E1E1E]">× 1</span>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className={TOOLTIP_TRIGGER_CLASS_DF}
+                          aria-label="Admin fee info"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="max-w-[220px]">
+                        <p className="text-sm">First payment (×1): Our insurer PremFina charges a £5 admin fee on this instalment.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    {formatPounds(x1Amount)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4 rounded-b-[12px] bg-white px-4 py-2">
+                  <span className="text-[14px] font-medium text-[#1E1E1E]">× 9</span>
+                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    {formatPounds(monthlyAmount)}
+                  </span>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        )}
+
         </div>
       </Card>
     </div>

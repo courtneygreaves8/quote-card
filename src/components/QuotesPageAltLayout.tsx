@@ -6,8 +6,15 @@ import { QuoteSidebar } from "@/components/QuoteSidebar"
 import { QuoteCardDf } from "@/components/QuoteCardDf"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
+import type { FilterOption, SortOption } from "@/types/quote"
 import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
 import { Check, Home, Scale, Star, Users, Wrench } from "lucide-react"
@@ -26,6 +33,10 @@ export function QuotesPageAltLayout({
   optionsOpen,
   setOptionsOpen,
   setFilters,
+  sort,
+  setSort,
+  filter,
+  setFilter,
   showLoadingModal,
   displayedQuotes,
   handleSelectQuote,
@@ -83,13 +94,13 @@ export function QuotesPageAltLayout({
         {/* Main area: quote list (secondary sidebar) + viewing pane */}
         <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50">
           {primaryQuote ? (
-            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-0 md:py-0">
-              {/* Secondary sidebar: compact list of results (docked right on desktop) */}
-              <section className="w-full md:order-2 md:ml-auto md:w-[320px] md:shrink-0 md:border-l md:border-border md:bg-white md:py-6 md:pl-3 md:pr-6 md:sticky md:top-0 md:h-full md:overflow-y-auto">
+            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-0 md:py-0 min-[1120px]:pr-[320px]">
+              {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
+              <section className="w-full md:order-2 md:ml-auto md:w-[320px] md:shrink-0 md:border-l md:border-border md:bg-white md:px-6 md:py-6 min-[1120px]:fixed min-[1120px]:right-0 min-[1120px]:top-14 min-[1120px]:z-10 min-[1120px]:flex min-[1120px]:h-[calc(100vh-3.5rem)] min-[1120px]:flex-col min-[1120px]:overflow-hidden">
                 {/* Quotes count + sort control */}
                 <div className="mb-2 flex items-center justify-between gap-3">
                   <span className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
-                    {sortedQuotes.length} quotes found.
+                    {displayedQuotes.length} quotes found.
                   </span>
                   <Button
                     variant="outline"
@@ -103,7 +114,7 @@ export function QuotesPageAltLayout({
                   </Button>
                 </div>
 
-                <div className="flex-1 space-y-2 overflow-y-auto md:max-h-[calc(100vh-160px)]">
+                <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
                   {sortedQuotes.map((quote) => {
                     const isActive = primaryQuote?.id === quote.id
                     const isCompared = compareIds.includes(quote.id)
@@ -238,94 +249,134 @@ export function QuotesPageAltLayout({
 
               {/* Right column: selected quote summary (full details are in PolicySheet) */}
               {/* Hidden on <=1119px so small screens just use the list + sheet */}
-              <section className="mt-4 hidden min-w-0 flex-1 md:order-1 md:mt-0 md:pl-6 md:pr-3 md:pt-6 md:max-w-[960px] md:mx-auto min-[1120px]:block">
-                {/* Viewing header */}
-                <div className="mb-3 flex items-center justify-between text-sm font-semibold uppercase tracking-wide text-[#1E1E1E]">
-                  <span>{secondaryQuote && primaryQuote ? "Comparing" : "Viewing"}</span>
-                  {secondaryQuote && primaryQuote ? (
-                    <span className="normal-case font-normal">
-                      {primaryQuote.providerName} vs {secondaryQuote.providerName}
-                    </span>
-                  ) : primaryQuote ? (
-                    <span className="normal-case font-normal">{primaryQuote.providerName}</span>
-                  ) : null}
+              <section className="mt-4 hidden min-w-0 flex-1 md:order-1 md:mt-0 min-[1120px]:flex min-[1120px]:justify-center min-[1120px]:pt-6">
+                <div className="w-full max-w-[960px]">
+                {/* Centre stage header — same as Org layout (QuotesContent) */}
+                <div className="mb-8 flex w-full flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
+                  <div className="min-w-0 flex-1">
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                      We've found {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
+                    </h1>
+                    <p className="mt-1 text-muted-foreground">
+                      Find the cover right for you.
+                    </p>
+                  </div>
+                  <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
+                    <div className="min-w-0 flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
+                      <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
+                        <SelectTrigger className="w-full" aria-label="Sort">
+                          <SelectValue placeholder="Sort by" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="price-asc">Price: low to high</SelectItem>
+                          <SelectItem value="price-desc">Price: high to low</SelectItem>
+                          <SelectItem value="provider-az">Provider A–Z</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="min-w-0 flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
+                      <Select value={filter} onValueChange={(v) => setFilter(v as FilterOption)}>
+                        <SelectTrigger className="w-full" aria-label="Filter">
+                          <SelectValue placeholder="Filter" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All quotes</SelectItem>
+                          <SelectItem value="under-20">Under £20/mo</SelectItem>
+                          <SelectItem value="under-25">Under £25/mo</SelectItem>
+                          <SelectItem value="under-30">Under £30/mo</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Simple comparison table when two quotes are selected */}
+                {/* Comparison table when two quotes are selected */}
                 {secondaryQuote && primaryQuote && (
                   <div className="mb-3 rounded-[16px] border border-border bg-white px-4 py-3">
-                    <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      <span>Comparison table</span>
-                      <span className="normal-case font-normal text-[11px] text-[#1E1E1E]">
-                        {primaryQuote.providerName} vs {secondaryQuote.providerName}
-                      </span>
+                    <div className="mb-3 text-xs font-semibold tracking-wide text-muted-foreground">
+                      {primaryQuote.providerName} vs {secondaryQuote.providerName}
                     </div>
-                    <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1.5fr)_minmax(0,1.5fr)] gap-y-1.5 text-[11px] text-muted-foreground">
-                      <div />
-                      <div className="truncate font-medium text-[#1E1E1E]">
-                        {primaryQuote.providerName}
-                      </div>
-                      <div className="truncate font-medium text-[#1E1E1E]">
-                        {secondaryQuote.providerName}
-                      </div>
-
-                      <div className="truncate">Overall</div>
-                      <div className="font-medium text-[#16a34a]">Good fit</div>
-                      <div className="font-medium text-[#16a34a]">Good fit</div>
-
-                      <div className="truncate">Annual price</div>
-                      <div className="font-medium text-[#1E1E1E]">
-                        £
-                        {(
-                          primaryQuote.standardPrice +
-                          primaryQuote.piklPrice +
-                          primaryQuote.familyLegalAddOnPrice +
-                          primaryQuote.homeEmergencyAddOnPrice
-                        ).toFixed(2)}
-                      </div>
-                      <div className="font-medium text-[#1E1E1E]">
-                        £
-                        {(
-                          secondaryQuote.standardPrice +
-                          secondaryQuote.piklPrice +
-                          secondaryQuote.familyLegalAddOnPrice +
-                          secondaryQuote.homeEmergencyAddOnPrice
-                        ).toFixed(2)}
-                      </div>
-
-                      <div className="truncate">Monthly price</div>
-                      <div className="font-medium text-[#1E1E1E]">
-                        £
-                        {(
-                          primaryQuote.standardPrice +
-                          primaryQuote.piklPrice +
-                          primaryQuote.familyLegalAddOnPrice +
-                          primaryQuote.homeEmergencyAddOnPrice
-                        )
-                          .toFixed(2)
-                          .replace(".00", "")}
-                        /mo.
-                      </div>
-                      <div className="font-medium text-[#1E1E1E]">
-                        £
-                        {(
-                          secondaryQuote.standardPrice +
-                          secondaryQuote.piklPrice +
-                          secondaryQuote.familyLegalAddOnPrice +
-                          secondaryQuote.homeEmergencyAddOnPrice
-                        )
-                          .toFixed(2)
-                          .replace(".00", "")}
-                        /mo.
-                      </div>
-
-                      <div className="truncate">Home cover</div>
-                      <div>Included</div>
-                      <div>Included</div>
-
-                      <div className="truncate">Host cover</div>
-                      <div>Included</div>
-                      <div>Included</div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[280px] border-collapse text-[11px] text-muted-foreground">
+                        <thead>
+                          <tr className="border-b border-border text-left">
+                            <th className="py-2 pr-4 font-semibold text-muted-foreground" scope="col">
+                              Feature
+                            </th>
+                            <th className="py-2 pr-4 text-left font-medium text-[#1E1E1E]" scope="col">
+                              {primaryQuote.providerName}
+                            </th>
+                            <th className="py-2 text-left font-medium text-[#1E1E1E]" scope="col">
+                              {secondaryQuote.providerName}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="[&>tr:nth-child(even)]:bg-neutral-100">
+                          <tr className="border-b border-border">
+                            <td className="py-2 pr-4">Overall</td>
+                            <td className="py-2 pr-4 font-medium text-[#16a34a]">Good fit</td>
+                            <td className="py-2 font-medium text-[#16a34a]">Good fit</td>
+                          </tr>
+                          <tr className="border-b border-border">
+                            <td className="py-2 pr-4">Annual price</td>
+                            <td className="py-2 pr-4 font-medium text-[#1E1E1E]">
+                              £
+                              {(
+                                primaryQuote.standardPrice +
+                                primaryQuote.piklPrice +
+                                primaryQuote.familyLegalAddOnPrice +
+                                primaryQuote.homeEmergencyAddOnPrice
+                              ).toFixed(2)}
+                            </td>
+                            <td className="py-2 font-medium text-[#1E1E1E]">
+                              £
+                              {(
+                                secondaryQuote.standardPrice +
+                                secondaryQuote.piklPrice +
+                                secondaryQuote.familyLegalAddOnPrice +
+                                secondaryQuote.homeEmergencyAddOnPrice
+                              ).toFixed(2)}
+                            </td>
+                          </tr>
+                          <tr className="border-b border-border">
+                            <td className="py-2 pr-4">Monthly price</td>
+                            <td className="py-2 pr-4 font-medium text-[#1E1E1E]">
+                              £
+                              {(
+                                primaryQuote.standardPrice +
+                                primaryQuote.piklPrice +
+                                primaryQuote.familyLegalAddOnPrice +
+                                primaryQuote.homeEmergencyAddOnPrice
+                              )
+                                .toFixed(2)
+                                .replace(".00", "")}
+                              /mo.
+                            </td>
+                            <td className="py-2 font-medium text-[#1E1E1E]">
+                              £
+                              {(
+                                secondaryQuote.standardPrice +
+                                secondaryQuote.piklPrice +
+                                secondaryQuote.familyLegalAddOnPrice +
+                                secondaryQuote.homeEmergencyAddOnPrice
+                              )
+                                .toFixed(2)
+                                .replace(".00", "")}
+                              /mo.
+                            </td>
+                          </tr>
+                          <tr className="border-b border-border">
+                            <td className="py-2 pr-4">Home cover</td>
+                            <td className="py-2 pr-4">Included</td>
+                            <td className="py-2">Included</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2 pr-4">Host cover</td>
+                            <td className="py-2 pr-4">Included</td>
+                            <td className="py-2">Included</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 )}
@@ -351,6 +402,7 @@ export function QuotesPageAltLayout({
                         }
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
+                        monthlyBreakdownInDropdown
                       />
                     </div>
                   </div>
@@ -386,10 +438,12 @@ export function QuotesPageAltLayout({
                         }
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
+                        monthlyBreakdownInDropdown
                       />
                     </div>
                   </div>
                 )}
+                </div>
               </section>
             </div>
           ) : (
