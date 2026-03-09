@@ -1,7 +1,7 @@
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
-import { PolicySheet, PolicySheetRight } from "@/components/PolicySheet"
+import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
@@ -19,16 +19,12 @@ export type QuotesPageAltLayoutProps = ReturnType<typeof useQuotesPage> & {
 export function QuotesPageAltLayout({
   quoteReference,
   filters,
-  setFilters,
   selectedQuote,
   sheetOpen,
   setSheetOpen,
   optionsOpen,
   setOptionsOpen,
-  sort,
-  setSort,
-  filter,
-  setFilter,
+  setFilters,
   showLoadingModal,
   displayedQuotes,
   handleSelectQuote,
@@ -88,11 +84,11 @@ export function QuotesPageAltLayout({
           />
         </div>
 
-        {/* Main area: list + details */}
+        {/* Main area: quote list (secondary sidebar) + viewing pane */}
         <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50/60">
           {primaryQuote ? (
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-3 py-4 md:flex-row md:px-6">
-              {/* Centre column: compact list of results */}
+            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-6">
+              {/* Secondary sidebar: compact list of results */}
               <section className="w-full md:w-[380px] md:shrink-0 md:border-r md:border-border md:pr-3 md:sticky md:top-4 md:self-start">
                 {/* Quotes count + sort control */}
                 <div className="mb-2 flex items-center justify-between gap-3">
@@ -236,7 +232,7 @@ export function QuotesPageAltLayout({
 
               {/* Right column: selected quote summary (full details are in PolicySheet) */}
               {/* Hidden on <=1119px so small screens just use the list + sheet */}
-              <section className="mt-4 hidden min-w-0 flex-1 md:mt-0 md:pl-3 min-[1120px]:block">
+              <section className="mt-4 hidden min-w-0 flex-1 md:mt-2 md:pl-3 min-[1120px]:block">
                 {/* Viewing header */}
                 <div className="mb-3 flex items-center justify-between text-sm font-semibold uppercase tracking-wide text-[#1E1E1E]">
                   <span>{secondaryQuote && primaryQuote ? "Comparing" : "Viewing"}</span>
