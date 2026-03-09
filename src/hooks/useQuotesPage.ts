@@ -128,6 +128,10 @@ export function useQuotesPage() {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
   }
 
+  const handleSelectQuote = (quote: Quote) => {
+    setSelectedQuote(quote)
+  }
+
   const handleMoreDetails = (quote: Quote) => {
     setSelectedQuote(quote)
     setSheetOpen(true)
@@ -162,6 +166,7 @@ export function useQuotesPage() {
     setShowLoadingModal,
     showPurchaseConfirmed,
     displayedQuotes,
+    handleSelectQuote,
     handleEditAnswers,
     handleMoreDetails,
     handlePurchase,

@@ -7,7 +7,9 @@ import { QuotesContent } from "@/components/QuotesContent"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
 
-export type QuotesPageLayoutProps = ReturnType<typeof useQuotesPage>
+export type QuotesPageLayoutProps = ReturnType<typeof useQuotesPage> & {
+  onLayoutChange: (variant: "default" | "alt") => void
+}
 
 export function QuotesPageLayout({
   quoteReference,
@@ -28,10 +30,11 @@ export function QuotesPageLayout({
   handleMoreDetails,
   handlePurchase,
   handleLoadingComplete,
+  onLayoutChange,
 }: QuotesPageLayoutProps) {
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-neutral-200">
-      <Navbar />
+      <Navbar activeLayout="default" onSelectLayout={onLayoutChange} />
       <div className="flex min-h-0 flex-1">
         <div className="hidden min-[1513px]:flex">
           <QuoteSidebar

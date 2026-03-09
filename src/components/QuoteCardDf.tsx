@@ -405,7 +405,7 @@ export function QuoteCardDf({
 
         {/* Horizontal layout — 1513px and above */}
         <div className="hidden min-w-0 w-full flex-col gap-3 min-[1513px]:flex">
-        {/* Header */}
+          {/* Header */}
         <div className="flex w-full items-center justify-between">
           {/* Logo + insurer name */}
           <div className="flex items-center gap-3">
@@ -413,23 +413,19 @@ export function QuoteCardDf({
               <span className="text-xs font-semibold text-slate-600">LOGO</span>
             </div>
             <div className="flex min-w-0 flex-col gap-1">
-              <span className="inline-flex w-fit shrink-0 rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                {policyType}
-              </span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[16px] font-semibold text-[#1E1E1E]">
-                  {quote.providerName || "Insurer name"}
-                </span>
-                <span className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-[#1E1E1E]">
-                  {quote.trustpilotRating.toFixed(1)}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
-                    </TooltipTrigger>
-                    <TooltipContent>TrustPilot</TooltipContent>
-                  </Tooltip>
-                </span>
+              <div className="inline-flex w-fit items-center gap-1 rounded-[4px] border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">
+                <span className="font-medium">{quote.trustpilotRating.toFixed(1)}</span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
+                  </TooltipTrigger>
+                  <TooltipContent>TrustPilot</TooltipContent>
+                </Tooltip>
               </div>
+              <span className="truncate text-[16px] font-semibold text-[#1E1E1E]">
+                {quote.providerName || "Insurer name"}
+              </span>
+              <span className="truncate text-xs text-muted-foreground">{policyType}</span>
             </div>
           </div>
 

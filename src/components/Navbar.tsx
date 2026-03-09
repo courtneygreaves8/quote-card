@@ -6,7 +6,12 @@ import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { LAYOUT_PADDING_X } from "@/lib/constants"
 import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 
-export function Navbar() {
+interface NavbarProps {
+  activeLayout?: "default" | "alt"
+  onSelectLayout?: (variant: "default" | "alt") => void
+}
+
+export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps) {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
@@ -14,7 +19,7 @@ export function Navbar() {
   return (
     <>
       <header className={`flex h-14 shrink-0 items-center justify-between border-b border-border bg-white ${LAYOUT_PADDING_X}`}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <span
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-neutral-200"
             aria-hidden
@@ -32,6 +37,17 @@ export function Navbar() {
               </linearGradient>
             </defs>
           </svg>
+          {onSelectLayout && (
+            <button
+              type="button"
+              className={`hidden text-xs font-medium transition-colors md:inline-flex ${
+                activeLayout === "alt" ? "text-black" : "text-neutral-500 hover:text-black"
+              }`}
+              onClick={() => onSelectLayout(activeLayout === "alt" ? "default" : "alt")}
+            >
+              {activeLayout === "alt" ? "Org Layout" : "Alt Layout"}
+            </button>
+          )}
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {/* Desktop / tablet buttons */}
@@ -103,6 +119,18 @@ export function Navbar() {
               <UserPlus className="h-4 w-4" />
               Create account
             </Button>
+            {onSelectLayout && (
+              <Button
+                variant="outline"
+                className="h-10 w-full justify-center gap-1.5 border-border"
+                onClick={() => {
+                  setNavOpen(false)
+                  onSelectLayout(activeLayout === "alt" ? "default" : "alt")
+                }}
+              >
+                {activeLayout === "alt" ? "Org Layout" : "Alt Layout"}
+              </Button>
+            )}
             <Button
               variant="outline"
               className="h-10 w-full justify-center gap-1.5 border-border"

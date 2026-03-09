@@ -167,7 +167,7 @@ function ExcessTable({
   )
 }
 
-function PolicySheetRight({
+export function PolicySheetRight({
   policyDetails,
   propertyAddress,
   proposerName,
@@ -431,7 +431,7 @@ export function PolicySheet({
 
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-0 md:flex-row md:overflow-hidden md:gap-0"
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-0 md:flex-row md:overflow-auto md:gap-0"
         >
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
