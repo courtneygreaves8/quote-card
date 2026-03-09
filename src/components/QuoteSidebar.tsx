@@ -106,7 +106,9 @@ export function QuoteSidebar({
       <Separator />
 
       <div className="space-y-2">
-        <Label>Quote reference</Label>
+        <Label className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
+          Quote reference
+        </Label>
         <div className="flex items-center gap-2">
           <div className="flex h-10 min-w-0 flex-1 items-center rounded-lg border border-input bg-muted/30 pl-3.5 pr-3.5">
             <span className="truncate font-mono text-sm font-medium">
@@ -153,7 +155,12 @@ export function QuoteSidebar({
       <Separator />
 
       <div className="space-y-2">
-        <Label htmlFor="cover-start-date">Cover start date</Label>
+        <Label
+          htmlFor="cover-start-date"
+          className="text-sm font-semibold tracking-wide text-[#1E1E1E]"
+        >
+          Cover start date
+        </Label>
         <div className="relative flex h-10 w-full items-center rounded-lg border border-neutral-200 bg-neutral-50/80 pr-1">
           <input
             ref={dateInputRef}
@@ -188,7 +195,9 @@ export function QuoteSidebar({
       <Separator />
 
       <div className="space-y-2">
-        <Label>Cover type</Label>
+        <Label className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
+          Cover type
+        </Label>
         <Select
           value={filters.policyType}
           onValueChange={(value) =>
@@ -282,7 +291,9 @@ export function QuoteSidebar({
 
       {/* Add-ons now follow excess */}
       <div className="space-y-4">
-        <Label>Add-ons</Label>
+        <Label className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
+          Add-ons
+        </Label>
         <div className="space-y-5">
           <div className={ADDON_ROW_CLASS}>
             <Label htmlFor="buildings-accidental" className={ADDON_LABEL_CLASS}>
@@ -338,7 +349,9 @@ export function QuoteSidebar({
       <Separator />
 
       <div className="space-y-2">
-        <Label>Payment</Label>
+        <Label className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
+          Payment
+        </Label>
         <div className="flex h-10 w-full items-center rounded-[8px] border border-input bg-muted/30 gap-0.5 p-0.5">
           <Button
             type="button"

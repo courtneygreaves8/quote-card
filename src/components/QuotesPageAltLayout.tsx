@@ -163,9 +163,20 @@ export function QuotesPageAltLayout({
                         >
                           <div className="flex min-w-0 flex-1 flex-col gap-1">
                             <div className="flex items-center justify-between gap-2">
-                              <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
-                                {quote.providerName}
-                              </span>
+                              <div className="flex min-w-0 items-center gap-1.5">
+                                <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
+                                  {quote.providerName}
+                                </span>
+                                <span className="inline-flex shrink-0 items-center gap-0.5 text-[11px] font-medium text-foreground">
+                                  {quote.trustpilotRating.toFixed(1)}
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Star className="h-3 w-3 fill-amber-400 text-amber-500" aria-hidden />
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right">TrustPilot</TooltipContent>
+                                  </Tooltip>
+                                </span>
+                              </div>
                               {isCompareLimitReached && !isCompared ? (
                                 <Tooltip>
                                   <TooltipTrigger asChild>
@@ -271,7 +282,7 @@ export function QuotesPageAltLayout({
                       We've found {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
                     </h1>
                     <p className="mt-1 text-muted-foreground">
-                      Find the cover right for you.
+                      Select upto 3 insurers on the right to compare, or view all quotes.
                     </p>
                   </div>
                   <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">

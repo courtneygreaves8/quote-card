@@ -52,9 +52,9 @@ const TOOLTIP_TRIGGER_CLASS_DF =
 
 const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700 transition-colors duration-150 group-hover:bg-[#FFF]"
-/** Coverage blocks in Df row: width from grid (equal for all 4); grid wrapper hugs content. */
+/** Coverage blocks in Df row: fixed width columns; price block flexes. */
 const COLUMN_BOX_GRID_CLASS =
-  "group flex min-w-0 flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
+  "group flex w-[192px] min-w-[192px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
 
 export function QuoteCardDf({
   quote,
@@ -485,14 +485,8 @@ export function QuoteCardDf({
 
         {/* Content */}
         <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-3">
-          {/* Four coverage blocks */}
-          <div
-            className={
-              pricingMode === "monthly" && monthlyBreakdownInDropdown
-                ? "grid flex-1 min-w-0 grid-cols-4 gap-3"
-                : "grid w-max flex-shrink-0 grid-cols-4 gap-3"
-            }
-          >
+          {/* Four coverage blocks: fixed-width columns, grid hugs content */}
+          <div className="grid w-max flex-shrink-0 grid-cols-4 gap-3">
           {/* Home column */}
           <div className={COLUMN_BOX_GRID_CLASS}>
             <div className="flex items-center justify-between gap-2">
@@ -705,14 +699,8 @@ export function QuoteCardDf({
             </div>
           )}
 
-        {/* Total price block — fixed width on Org layout, 126px on Alt (monthly dropdown) */}
-          <div
-            className={
-              monthlyBreakdownInDropdown
-                ? "flex w-[126px] min-w-[126px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
-                : "flex w-[136px] min-w-[136px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
-            }
-          >
+        {/* Total price block — fills remaining horizontal space (annual & monthly) */}
+          <div className="flex flex-1 min-w-0 flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center">
             <div className="flex flex-col">
               <span className="text-[14px] font-medium text-[#1E1E1E]">
                 {pricingMode === "annual" ? "Total Annual" : "Total Monthly"}
