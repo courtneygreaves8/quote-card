@@ -3,6 +3,7 @@ import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
+import { QuoteCardDf } from "@/components/QuoteCardDf"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
 import { Button } from "@/components/ui/button"
@@ -332,256 +333,25 @@ export function QuotesPageAltLayout({
                 {/* Primary card when at least one quote is selected */}
                 {primaryQuote ? (
                   <div className="mb-0 flex flex-col gap-1">
-                    {/* Summary header */}
-                    <div className="mb-0 flex flex-col gap-2 rounded-[16px] border border-border bg-white px-3 py-3">
-                      <div className="flex items-center justify-between gap-4">
-                        {/* Left: logo + rating + insurer name */}
-                        <div className="flex min-w-0 flex-1 items-start gap-3">
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[8px] bg-[#F5F5F5] text-xs font-semibold text-slate-600">
-                            LOGO
-                          </div>
-                          <div className="flex min-w-0 flex-col gap-0.5">
-                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" aria-hidden />
-                              <span>{primaryQuote.trustpilotRating.toFixed(1)} rating</span>
-                            </div>
-                            <span className="truncate text-base font-semibold text-foreground">
-                              {primaryQuote.providerName}
-                            </span>
-                            <span className="text-xs text-muted-foreground">{filters.policyType}</span>
-                          </div>
-                        </div>
-
-                        {/* Right: inline actions */}
-                        <div className="flex shrink-0 flex-row items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-9 px-3 text-xs"
-                            onClick={() => handleMoreDetails(primaryQuote)}
-                          >
-                            More info
-                          </Button>
-                          <Button size="sm" className="h-9 px-4 text-xs" onClick={handlePurchase}>
-                            Purchase
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Coverage breakdown + total premium for primary */}
-                    <div className="mt-0 flex flex-col gap-2 rounded-[16px] border border-border bg-white px-3 py-3">
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                        {/* Home */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Home className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Included
-                            </span>
-                          </div>
-                          {/* Row 2: heading + tooltip */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Home Insurance</span>
-                          </div>
-                          {/* Row 3: price + excess */}
-                          <div className="mt-1 flex items-baseline justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{primaryQuote.standardPrice.toFixed(2)}
-                            </span>
-                            <span>
-                              Excess:{" "}
-                              <span className="font-semibold text-foreground">
-                                {primaryQuote.policyDetails.excess || "£0"}
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Host */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Users className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Included
-                            </span>
-                          </div>
-                          {/* Row 2: heading */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Host Insurance</span>
-                          </div>
-                          {/* Row 3: price + excess */}
-                          <div className="mt-1 flex items-baseline justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{primaryQuote.piklPrice.toFixed(2)}
-                            </span>
-                            <span>
-                              Excess: <span className="font-semibold text-foreground">£50</span>
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Legal */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Scale className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Optional
-                            </span>
-                          </div>
-                          {/* Row 2: heading */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Legal Protection</span>
-                          </div>
-                          {/* Row 3: price + toggle */}
-                          <div className="mt-1 flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{primaryQuote.familyLegalAddOnPrice.toFixed(2)}
-                            </span>
-                            <Switch
-                              checked={filters.legalCover}
-                              onCheckedChange={(checked) =>
-                                setFilters((prev) => ({ ...prev, legalCover: checked }))
-                              }
-                              aria-label="Toggle legal protection"
-                            />
-                          </div>
-                        </div>
-
-                        {/* Emergency */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Wrench className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Optional
-                            </span>
-                          </div>
-                          {/* Row 2: heading */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Emergency Cover</span>
-                          </div>
-                          {/* Row 3: price + toggle */}
-                          <div className="mt-1 flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{primaryQuote.homeEmergencyAddOnPrice.toFixed(2)}
-                            </span>
-                            <Switch
-                              checked={filters.homeEmergency}
-                              onCheckedChange={(checked) =>
-                                setFilters((prev) => ({ ...prev, homeEmergency: checked }))
-                              }
-                              aria-label="Toggle emergency cover"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Totals: order depends on selected payment option */}
-                      {filters.paymentOption === "monthly" ? (
-                        <>
-                          {/* Total Monthly Premium (primary) */}
-                          <div className="mt-2 flex items-center justify-between rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <span className="text-xs font-medium text-muted-foreground">
-                              Total Monthly Premium
-                            </span>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                primaryQuote.standardPrice +
-                                primaryQuote.piklPrice +
-                                primaryQuote.familyLegalAddOnPrice +
-                                primaryQuote.homeEmergencyAddOnPrice
-                              )
-                                .toFixed(2)
-                                .replace(".00", "")}
-                              <span className="text-[11px] font-medium text-muted-foreground">/mo.</span>
-                            </span>
-                          </div>
-
-                          {/* Total Annual Premium (secondary) */}
-                          <div className="flex items-center justify-between gap-2 rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-xs font-medium text-muted-foreground">
-                                Total Annual Premium
-                              </span>
-                              <span className="inline-flex items-center rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-primary">
-                                10% cheaper
-                              </span>
-                            </div>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                primaryQuote.standardPrice +
-                                primaryQuote.piklPrice +
-                                primaryQuote.familyLegalAddOnPrice +
-                                primaryQuote.homeEmergencyAddOnPrice
-                              ).toFixed(2)}
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {/* Total Annual Premium (primary) */}
-                          <div className="mt-2 flex items-center justify-between gap-2 rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-xs font-medium text-muted-foreground">
-                                Total Annual Premium
-                              </span>
-                              <span className="inline-flex items-center rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-primary">
-                                10% cheaper
-                              </span>
-                            </div>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                primaryQuote.standardPrice +
-                                primaryQuote.piklPrice +
-                                primaryQuote.familyLegalAddOnPrice +
-                                primaryQuote.homeEmergencyAddOnPrice
-                              ).toFixed(2)}
-                            </span>
-                          </div>
-
-                          {/* Total Monthly Premium (secondary) */}
-                          <div className="flex items-center justify-between rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <span className="text-xs font-medium text-muted-foreground">
-                              Total Monthly Premium
-                            </span>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                primaryQuote.standardPrice +
-                                primaryQuote.piklPrice +
-                                primaryQuote.familyLegalAddOnPrice +
-                                primaryQuote.homeEmergencyAddOnPrice
-                              )
-                                .toFixed(2)
-                                .replace(".00", "")}
-                              <span className="text-[11px] font-medium text-muted-foreground">/mo.</span>
-                            </span>
-                          </div>
-                        </>
-                      )}
+                    <div className="w-full max-w-[960px]">
+                      <QuoteCardDf
+                        quote={primaryQuote}
+                        policyType={filters.policyType}
+                        paymentOption={filters.paymentOption}
+                        onPaymentOptionChange={(option) =>
+                          setFilters((prev) => ({ ...prev, paymentOption: option }))
+                        }
+                        legalCover={filters.legalCover}
+                        homeEmergency={filters.homeEmergency}
+                        onLegalCoverChange={(checked) =>
+                          setFilters((prev) => ({ ...prev, legalCover: checked }))
+                        }
+                        onHomeEmergencyChange={(checked) =>
+                          setFilters((prev) => ({ ...prev, homeEmergency: checked }))
+                        }
+                        onMoreDetails={handleMoreDetails}
+                        onPurchase={() => handlePurchase()}
+                      />
                     </div>
                   </div>
                 ) : (
@@ -598,249 +368,25 @@ export function QuotesPageAltLayout({
                 {secondaryQuote && (
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
-
-                    {/* Summary header */}
-                    <div className="mb-0 flex flex-col gap-2 rounded-[16px] border border-border bg-white px-3 py-3">
-                      <div className="flex items-center justify-between gap-4">
-                        {/* Left: logo + rating + insurer name */}
-                        <div className="flex min-w-0 flex-1 items-start gap-3">
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[8px] bg-[#F5F5F5] text-xs font-semibold text-slate-600">
-                            LOGO
-                          </div>
-                          <div className="flex min-w-0 flex-col gap-0.5">
-                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" aria-hidden />
-                              <span>{secondaryQuote.trustpilotRating.toFixed(1)} rating</span>
-                            </div>
-                            <span className="truncate text-base font-semibold text-foreground">
-                              {secondaryQuote.providerName}
-                            </span>
-                            <span className="text-xs text-muted-foreground">{filters.policyType}</span>
-                          </div>
-                        </div>
-
-                        {/* Right: inline actions for secondary card */}
-                        <div className="flex shrink-0 flex-row items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-9 px-3 text-xs"
-                            onClick={() => handleMoreDetails(secondaryQuote)}
-                          >
-                            More info
-                          </Button>
-                          <Button
-                            size="sm"
-                            className="h-9 px-4 text-xs"
-                            onClick={handlePurchase}
-                          >
-                            Purchase
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Coverage breakdown + total premium for secondary */}
-                    <div className="mt-0 flex flex-col gap-2 rounded-[16px] border border-border bg-white px-3 py-3">
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                        {/* Home */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Home className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Included
-                            </span>
-                          </div>
-                          {/* Row 2: heading + tooltip */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Home Insurance</span>
-                          </div>
-                          {/* Row 3: price + excess */}
-                          <div className="mt-1 flex items-baseline justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{secondaryQuote.standardPrice.toFixed(2)}
-                            </span>
-                            <span>
-                              Excess:{" "}
-                              <span className="font-semibold text-foreground">
-                                {secondaryQuote.policyDetails.excess || "£0"}
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Host */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Users className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Included
-                            </span>
-                          </div>
-                          {/* Row 2: heading + tooltip */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Host Insurance</span>
-                          </div>
-                          {/* Row 3: price + excess */}
-                          <div className="mt-1 flex items-baseline justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{secondaryQuote.piklPrice.toFixed(2)}
-                            </span>
-                            <span>
-                              Excess: <span className="font-semibold text-foreground">£50</span>
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Legal */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Scale className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Optional
-                            </span>
-                          </div>
-                          {/* Row 2: heading + tooltip */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Legal Protection</span>
-                          </div>
-                          {/* Row 3: price + toggle */}
-                          <div className="mt-1 flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{secondaryQuote.familyLegalAddOnPrice.toFixed(2)}
-                            </span>
-                            <Switch
-                              checked={filters.legalCover}
-                              onCheckedChange={(checked) =>
-                                setFilters((prev) => ({ ...prev, legalCover: checked }))
-                              }
-                              aria-label="Toggle legal protection"
-                            />
-                          </div>
-                        </div>
-
-                        {/* Emergency */}
-                        <div className="flex flex-col gap-2 rounded-[10px] border border-neutral-200 bg-[#FAFAFA] p-2">
-                          {/* Row 1: icon badge + status */}
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700">
-                                <Wrench className="h-4 w-4" aria-hidden />
-                              </div>
-                            </div>
-                            <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              Optional
-                            </span>
-                          </div>
-                          {/* Row 2: heading + tooltip */}
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-medium text-foreground">Emergency Cover</span>
-                          </div>
-                          {/* Row 3: price + toggle */}
-                          <div className="mt-1 flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
-                            <span className="text-[15px] font-semibold tabular-nums text-foreground">
-                              £{secondaryQuote.homeEmergencyAddOnPrice.toFixed(2)}
-                            </span>
-                            <Switch
-                              checked={filters.homeEmergency}
-                              onCheckedChange={(checked) =>
-                                setFilters((prev) => ({ ...prev, homeEmergency: checked }))
-                              }
-                              aria-label="Toggle emergency cover"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Totals for secondary: mirror primary order */}
-                      {filters.paymentOption === "monthly" ? (
-                        <>
-                          {/* Total Monthly Premium (primary) */}
-                          <div className="mt-2 flex items-center justify-between rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <span className="text-xs font-medium text-muted-foreground">
-                              Total Monthly Premium
-                            </span>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                secondaryQuote.standardPrice +
-                                secondaryQuote.piklPrice +
-                                secondaryQuote.familyLegalAddOnPrice +
-                                secondaryQuote.homeEmergencyAddOnPrice
-                              )
-                                .toFixed(2)
-                                .replace(".00", "")}
-                              <span className="text-[11px] font-medium text-muted-foreground">/mo.</span>
-                            </span>
-                          </div>
-                          {/* Total Annual Premium (secondary) */}
-                          <div className="flex items-center justify-between gap-2 rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <span className="text-xs font-medium text-muted-foreground">
-                              Total Annual Premium
-                            </span>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                secondaryQuote.standardPrice +
-                                secondaryQuote.piklPrice +
-                                secondaryQuote.familyLegalAddOnPrice +
-                                secondaryQuote.homeEmergencyAddOnPrice
-                              ).toFixed(2)}
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {/* Total Annual Premium (primary) */}
-                          <div className="mt-2 flex items-center justify-between gap-2 rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <span className="text-xs font-medium text-muted-foreground">
-                              Total Annual Premium
-                            </span>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                secondaryQuote.standardPrice +
-                                secondaryQuote.piklPrice +
-                                secondaryQuote.familyLegalAddOnPrice +
-                                secondaryQuote.homeEmergencyAddOnPrice
-                              ).toFixed(2)}
-                            </span>
-                          </div>
-                          {/* Total Monthly Premium (secondary) */}
-                          <div className="flex items-center justify-between rounded-[10px] border border-dashed border-neutral-300 bg-[#FAFAFA] px-3 py-2">
-                            <span className="text-xs font-medium text-muted-foreground">
-                              Total Monthly Premium
-                            </span>
-                            <span className="text-sm font-semibold tabular-nums text-foreground">
-                              £
-                              {(
-                                secondaryQuote.standardPrice +
-                                secondaryQuote.piklPrice +
-                                secondaryQuote.familyLegalAddOnPrice +
-                                secondaryQuote.homeEmergencyAddOnPrice
-                              )
-                                .toFixed(2)
-                                .replace(".00", "")}
-                              <span className="text-[11px] font-medium text-muted-foreground">/mo.</span>
-                            </span>
-                          </div>
-                        </>
-                      )}
+                    <div className="w-full max-w-[960px]">
+                      <QuoteCardDf
+                        quote={secondaryQuote}
+                        policyType={filters.policyType}
+                        paymentOption={filters.paymentOption}
+                        onPaymentOptionChange={(option) =>
+                          setFilters((prev) => ({ ...prev, paymentOption: option }))
+                        }
+                        legalCover={filters.legalCover}
+                        homeEmergency={filters.homeEmergency}
+                        onLegalCoverChange={(checked) =>
+                          setFilters((prev) => ({ ...prev, legalCover: checked }))
+                        }
+                        onHomeEmergencyChange={(checked) =>
+                          setFilters((prev) => ({ ...prev, homeEmergency: checked }))
+                        }
+                        onMoreDetails={handleMoreDetails}
+                        onPurchase={() => handlePurchase()}
+                      />
                     </div>
                   </div>
                 )}
