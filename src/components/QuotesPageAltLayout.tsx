@@ -8,7 +8,7 @@ import type { useQuotesPage } from "@/hooks/useQuotesPage"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
-import { ArrowLeftRight, Check, Star } from "lucide-react"
+import { Check, Star } from "lucide-react"
 import { useState } from "react"
 import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
 
