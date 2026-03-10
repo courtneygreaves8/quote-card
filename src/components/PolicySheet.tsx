@@ -436,7 +436,7 @@ export function PolicySheet({
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
             className={cn(
-              "sticky top-0 z-20 -mt-px border-b border-border bg-white/95 px-4 py-2 backdrop-blur md:hidden",
+              "sticky top-0 z-20 -mt-px border-b border-border bg-white/95 px-4 py-2 max-[767px]:py-[10px] backdrop-blur md:hidden",
               "transition-[transform,opacity] duration-200 ease-out",
               showStickyBar
                 ? "translate-y-0 opacity-100"
@@ -453,21 +453,21 @@ export function PolicySheet({
               >
                 <X className="h-4 w-4" />
               </Button>
-              <div className="flex flex-1 flex-wrap items-center justify-start gap-1.5 pl-1 text-sm">
-                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs">
+              <div className="flex flex-1 flex-wrap items-center justify-start gap-1.5 pl-1 text-sm max-[767px]:text-base max-[767px]:gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs max-[767px]:border-0 max-[767px]:bg-transparent max-[767px]:p-0 max-[767px]:text-base">
                   <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground max-[767px]:hidden" aria-hidden />
                   <span className="font-semibold tabular-nums text-foreground">
                     £{annualPrice.toFixed(2)}
                   </span>
-                  <span className="text-xs font-medium text-muted-foreground">Annual</span>
+                  <span className="text-xs font-medium text-muted-foreground max-[767px]:text-base max-[767px]:text-muted-foreground">Annual</span>
                 </span>
-                <span className="text-muted-foreground">or</span>
-                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs">
+                <span className="text-muted-foreground max-[767px]:text-base">or</span>
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs max-[767px]:border-0 max-[767px]:bg-transparent max-[767px]:p-0 max-[767px]:text-base">
                   <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground max-[767px]:hidden" aria-hidden />
                   <span className="font-semibold tabular-nums text-foreground">
                     £{monthlyPrice.toFixed(2)}
                   </span>
-                  <span className="text-xs font-medium text-muted-foreground">/mo.</span>
+                  <span className="text-xs font-medium text-muted-foreground max-[767px]:text-base max-[767px]:text-muted-foreground">/mo.</span>
                 </span>
               </div>
               <Button

@@ -1,4 +1,3 @@
-import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
 import { Check, Star } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useLayoutEffect, useState } from "react"
 import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
 
 export type QuotesPageAltLayoutProps = ReturnType<typeof useQuotesPage> & {
@@ -25,19 +24,18 @@ export function QuotesPageAltLayout({
   optionsOpen,
   setOptionsOpen,
   setFilters,
-  showLoadingModal,
   displayedQuotes,
   handleSelectQuote,
   onLayoutChange,
   handleEditAnswers,
   handleMoreDetails,
   handlePurchase,
-  handleLoadingComplete,
 }: QuotesPageAltLayoutProps) {
   const activeQuote = selectedQuote ?? displayedQuotes[0] ?? null
   const [compareIds, setCompareIds] = useState<string[]>([])
   const [viewMode, setViewMode] = useState<"all" | "compare">("compare")
   const [sortMode, setSortMode] = useState<"price" | "rating">("price")
+  const [visibleQuoteCount, setVisibleQuoteCount] = useState(0)
 
   const primaryQuote =
     compareIds.length > 0
@@ -71,6 +69,32 @@ export function QuotesPageAltLayout({
       ? [...displayedQuotes].sort((a, b) => a.piklPrice - b.piklPrice)
       : [...displayedQuotes].sort((a, b) => b.trustpilotRating - a.trustpilotRating)
 
+  useLayoutEffect(() => {
+    const n = sortedQuotes.length
+    if (n === 0) {
+      setVisibleQuoteCount(0)
+      return
+    }
+    setVisibleQuoteCount(1)
+    const totalDurationMs = 7000
+    const timeouts: number[] = []
+    for (let i = 1; i < n; i++) {
+      const delayMs = n > 1 ? (i / (n - 1)) * totalDurationMs : 0
+      const t = window.setTimeout(() => {
+        setVisibleQuoteCount(i + 1)
+      }, delayMs)
+      timeouts.push(t)
+    }
+    return () => timeouts.forEach(clearTimeout)
+  }, [sortMode, displayedQuotes.length])
+
+  // When the quote list shrinks, cap the displayed count
+  useEffect(() => {
+    setVisibleQuoteCount((prev) =>
+      sortedQuotes.length < prev ? sortedQuotes.length : prev
+    )
+  }, [sortedQuotes.length])
+
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-[#F1F1F1]">
       <Navbar activeLayout="alt" onSelectLayout={onLayoutChange} />
@@ -94,7 +118,7 @@ export function QuotesPageAltLayout({
               {/* Small-screen heading + subcopy */}
               <div className="mb-4 hidden max-[1295px]:block">
                 <h1 className="text-xl max-[767px]:text-2xl max-[480px]:text-xl font-bold tracking-tight text-foreground">
-                  We have {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
+                  We have {visibleQuoteCount} quote{visibleQuoteCount === 1 ? "" : "s"} for you.
                 </h1>
                 <p className="mt-1 text-base max-[480px]:text-sm text-muted-foreground">
                   Find the quote right for you.
@@ -160,7 +184,7 @@ export function QuotesPageAltLayout({
               </div>
 
                 <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
-                  {sortedQuotes.map((quote) => {
+                  {sortedQuotes.map((quote, index) => {
                     const isActive = primaryQuote?.id === quote.id
                     const isCompared = compareIds.includes(quote.id)
                     const isCompareLimitReached = compareIds.length >= 3 && !isCompared
@@ -176,8 +200,18 @@ export function QuotesPageAltLayout({
                     const annualPrice = monthlyPrice * 12
                     const isMonthlyPrimary = filters.paymentOption === "monthly"
 
+                    const totalDurationMs = 7000
+                    const delayMs =
+                      sortedQuotes.length > 1
+                        ? (index / (sortedQuotes.length - 1)) * totalDurationMs
+                        : 0
+
                     return (
-                      <div key={quote.id} className="flex w-full items-stretch gap-2">
+                      <div
+                        key={quote.id}
+                        className="flex w-full items-stretch gap-2 quote-list-poll-in"
+                        style={{ animationDelay: `${delayMs}ms` }}
+                      >
                         <button
                           type="button"
                           onClick={() => {
@@ -191,7 +225,7 @@ export function QuotesPageAltLayout({
                             }
                           }}
                           className={[
-                            "flex w-full items-stretch gap-2 rounded-[10px] border px-3 py-2 text-left text-sm transition-colors",
+                            "flex w-full items-stretch gap-2 rounded-[10px] border px-3 py-2 max-[767px]:py-3 text-left text-sm transition-colors",
                             isActive
                               ? "border-[#111111] bg-white text-foreground"
                               : "border-border bg-white hover:bg-muted/60",
@@ -299,7 +333,7 @@ export function QuotesPageAltLayout({
                             <div className="mt-2 max-[767px]:flex min-[768px]:hidden">
                               <Button
                                 size="sm"
-                                className="h-9 w-full justify-center text-[11px] font-medium"
+                                className="h-9 w-full justify-center rounded-[4px] text-[11px] font-medium"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   handleMoreDetails(quote)
@@ -334,7 +368,7 @@ export function QuotesPageAltLayout({
                 <div className="mb-8 flex w-full flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
                   <div className="min-w-0 flex-1">
                     <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                      We've found {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
+                      We've found {visibleQuoteCount} quote{visibleQuoteCount === 1 ? "" : "s"} for you.
                     </h1>
                     <p className="mt-1 text-muted-foreground">
                       Select up to 3 insurers on the right to compare, or view all quotes.
@@ -658,8 +692,6 @@ export function QuotesPageAltLayout({
         onOpenChange={setSheetOpen}
         onPurchase={handlePurchase}
       />
-
-      <LoadingModal open={showLoadingModal} onClose={handleLoadingComplete} />
     </div>
   )
 }
