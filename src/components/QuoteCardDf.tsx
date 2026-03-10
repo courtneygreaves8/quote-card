@@ -518,10 +518,10 @@ export function QuoteCardDf({
                 </Tooltip>
               </div>
               <div className="flex items-baseline justify-between gap-2">
-                <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                <span className="text-[16px] font-semibold text-[#1E1E1E]">
                   {toDisplay(quote.standardPrice)}
                 </span>
-                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                <span className="whitespace-nowrap text-[12px] font-medium text-[#1E1E1E]">
                   Excess:{" "}
                   <span className="font-semibold">
                     {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
@@ -562,10 +562,10 @@ export function QuoteCardDf({
                 </Tooltip>
               </div>
               <div className="flex items-baseline justify-between gap-2">
-                <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                <span className="text-[16px] font-semibold text-[#1E1E1E]">
                   {toDisplay(quote.piklPrice)}
                 </span>
-                <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                <span className="whitespace-nowrap text-[12px] font-medium text-[#1E1E1E]">
                   Excess: <span className="font-semibold">£50</span>
                 </span>
               </div>
@@ -709,7 +709,7 @@ export function QuoteCardDf({
                 Premium
               </span>
             </div>
-            <span className="text-[14px] font-semibold text-[#1E1E1E]">
+            <span className="text-[16px] font-semibold text-[#1E1E1E]">
               {pricingMode === "annual"
                 ? formatPounds(displayedAnnualTotal)
                 : `${formatPounds(monthlyAmount)}/mo.`}
