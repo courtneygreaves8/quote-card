@@ -114,6 +114,8 @@ export function QuotesContent({
                   onHomeEmergencyChange={onHomeEmergencyChange}
                   onMoreDetails={onMoreDetails}
                   onPurchase={onPurchase}
+                  monthlyBreakdownInDropdown
+                  forceHorizontalLayout
                 />
               </div>
             ))

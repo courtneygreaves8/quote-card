@@ -411,13 +411,13 @@ export function QuoteCardDf({
           {/* Full width: More info, then Purchase */}
           <Button
             variant="outline"
-            className="h-10 w-full gap-1.5"
+            className="h-10 w-full gap-1.5 text-[12px]"
             onClick={() => onMoreDetails(quote)}
           >
             <Info className="h-4 w-4 shrink-0" />
             More info
           </Button>
-          <Button className="h-10 w-full gap-1.5" onClick={() => onPurchase?.(quote)}>
+          <Button className="h-10 w-full gap-1.5 text-[12px]" onClick={() => onPurchase?.(quote)}>
             <ShoppingCart className="h-4 w-4 shrink-0" />
             Purchase
           </Button>
@@ -481,7 +481,7 @@ export function QuoteCardDf({
             <Button
               type="button"
               variant="outline"
-              className="flex items-center justify-center gap-2 border-[#E2E8F0] bg-white px-4 py-2 text-[14px] font-medium text-slate-900"
+              className="flex items-center justify-center gap-2 border-[#E2E8F0] bg-white px-4 py-2 text-[12px] font-medium text-slate-900"
               onClick={() => onMoreDetails(quote)}
             >
               More info
@@ -490,7 +490,7 @@ export function QuoteCardDf({
             {/* Purchase */}
             <Button
               type="button"
-              className="flex items-center justify-center gap-2 bg-slate-900 px-4 py-2 text-[14px] font-medium text-white"
+              className="flex items-center justify-center gap-2 bg-slate-900 px-4 py-2 text-[12px] font-medium text-white"
               onClick={() => onPurchase?.(quote)}
             >
               Purchase

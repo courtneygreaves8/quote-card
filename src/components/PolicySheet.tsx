@@ -471,7 +471,7 @@ export function PolicySheet({
                 </span>
               </div>
               <Button
-                className="h-9 shrink-0 whitespace-nowrap px-3 text-xs"
+                className="h-9 shrink-0 whitespace-nowrap px-3"
                 onClick={handlePrimaryAction}
               >
                 Purchase

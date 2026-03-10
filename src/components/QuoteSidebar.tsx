@@ -96,7 +96,7 @@ export function QuoteSidebar({
       )}
       <Button
         variant="outline"
-        className="h-10 w-full justify-center gap-2 px-4 py-2 text-sm"
+        className="h-10 w-full justify-center gap-2 px-4 py-2"
         onClick={onEditAnswers}
       >
         <Pencil className="h-4 w-4" />
@@ -389,7 +389,7 @@ export function QuoteSidebar({
       {isSheet && (
         <div className="mt-4 mb-3 block card3:hidden">
           <Button
-            className="h-10 w-full justify-center gap-2 text-sm"
+            className="h-10 w-full justify-center gap-2"
             onClick={onCloseSheet}
           >
             Apply changes

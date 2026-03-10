@@ -40,7 +40,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
           {onSelectLayout && (
             <button
               type="button"
-              className={`hidden text-xs font-medium transition-colors md:inline-flex ${
+              className={`hidden text-[12px] font-medium transition-colors md:inline-flex ${
                 activeLayout === "alt" ? "text-black" : "text-neutral-500 hover:text-black"
               }`}
               onClick={() => onSelectLayout(activeLayout === "alt" ? "default" : "alt")}
