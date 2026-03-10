@@ -88,14 +88,15 @@ export function QuotesPageAltLayout({
         {/* Main area: quote list (secondary sidebar) + viewing pane */}
         <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50 pb-4">
           {primaryQuote ? (
-            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-0 md:py-0 min-[1120px]:pr-[320px]">
+            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 max-[1295px]:items-center max-[1295px]:justify-center md:flex-row md:px-0 md:py-0 min-[1296px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
-              <section className="w-full md:order-2 md:ml-auto md:w-[320px] md:shrink-0 md:border-l md:border-border md:bg-white md:px-6 md:py-6 min-[1120px]:fixed min-[1120px]:right-0 min-[1120px]:top-14 min-[1120px]:z-10 min-[1120px]:flex min-[1120px]:h-[calc(100vh-3.5rem)] min-[1120px]:flex-col min-[1120px]:overflow-hidden">
-                {/* Compare heading + sort control on one line */}
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="flex-1 text-sm font-semibold tracking-wide text-[#1E1E1E]">
-                    Select &amp; compare
-                  </span>
+              <section className="w-full max-w-[960px] md:order-2 md:shrink-0 min-[1296px]:ml-auto min-[1296px]:fixed min-[1296px]:right-0 min-[1296px]:top-14 min-[1296px]:z-10 min-[1296px]:flex min-[1296px]:w-[320px] min-[1296px]:h-[calc(100vh-3.5rem)] min-[1296px]:flex-col min-[1296px]:overflow-hidden min-[1296px]:border-l min-[1296px]:border-border min-[1296px]:bg-white min-[1296px]:px-6 min-[1296px]:py-6">
+              {/* Small-screen heading + subcopy */}
+              <div className="mb-4 hidden max-[1295px]:block">
+                <div className="flex items-start justify-between gap-2">
+                  <h1 className="text-xl max-[480px]:text-lg font-bold tracking-tight text-foreground">
+                    We have {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
+                  </h1>
                   <Button
                     variant="outline"
                     size="sm"
@@ -107,6 +108,26 @@ export function QuotesPageAltLayout({
                     {sortMode === "price" ? "Sort: Lowest price" : "Sort: Highest rating"}
                   </Button>
                 </div>
+                <p className="mt-1 text-sm max-[480px]:text-xs text-muted-foreground">
+                  Find the quote right for you.
+                </p>
+              </div>
+              {/* Compare heading + sort control on one line (desktop and larger) */}
+              <div className="mb-2 hidden items-center gap-2 min-[1296px]:flex">
+                <span className="flex-1 text-sm font-semibold tracking-wide text-[#1E1E1E]">
+                  Select &amp; compare
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 px-2 text-[11px] font-medium border-neutral-200"
+                  onClick={() =>
+                    setSortMode((prev) => (prev === "price" ? "rating" : "price"))
+                  }
+                >
+                  {sortMode === "price" ? "Sort: Lowest price" : "Sort: Highest rating"}
+                </Button>
+              </div>
 
                 <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
                   {sortedQuotes.map((quote) => {
@@ -140,13 +161,23 @@ export function QuotesPageAltLayout({
                             }
                           }}
                           className={[
-                            "flex w-full items-center justify-between gap-2 rounded-[10px] border px-3 py-2 text-left text-sm transition-colors",
+                            "flex w-full items-stretch gap-2 rounded-[10px] border px-3 py-2 text-left text-sm transition-colors",
                             isActive
                               ? "border-[#111111] bg-white text-foreground"
                               : "border-border bg-white hover:bg-muted/60",
                           ].join(" ")}
                         >
+                          {/* Logo block on the left for small screens */}
+                          <div className="hidden max-[1295px]:flex aspect-square shrink-0 items-center justify-center self-stretch rounded-[8px] bg-[#F5F5F5]">
+                            <span className="text-[10px] font-semibold text-muted-foreground">
+                              LOGO
+                            </span>
+                          </div>
                           <div className="flex min-w-0 flex-1 flex-col gap-1">
+                            {/* Policy type pill above insurer name on small screens */}
+                            <span className="mb-1 inline-flex w-fit self-start max-[1295px]:inline-flex min-[1296px]:hidden items-center rounded-[4px] border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                              {filters.policyType}
+                            </span>
                             <div className="flex items-center justify-between gap-2">
                               <div className="flex min-w-0 items-center gap-1.5">
                                 <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
@@ -162,49 +193,53 @@ export function QuotesPageAltLayout({
                                   </Tooltip>
                                 </span>
                               </div>
-                              {isCompareLimitReached && !isCompared ? (
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <button
-                                      type="button"
-                                      aria-pressed={isCompared}
-                                      aria-label="Select for compare"
-                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
-                                    >
-                                      {isCompared && (
-                                        <Check className="h-3 w-3 text-black" aria-hidden />
-                                      )}
-                                    </button>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="right">
-                                    You can only select three providers at one time.
-                                  </TooltipContent>
-                                </Tooltip>
-                              ) : (
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <button
-                                      type="button"
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleToggleCompare(quote.id)
-                                      }}
-                                      aria-pressed={isCompared}
-                                      aria-label="Select for compare"
-                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
-                                    >
-                                      {isCompared && (
-                                        <Check className="h-3 w-3 text-black" aria-hidden />
-                                      )}
-                                    </button>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="right">
-                                    {compareTooltipLabel}
-                                  </TooltipContent>
-                                </Tooltip>
-                              )}
+                              {/* Compare checkbox hidden on <=1295px */}
+                              <div className="max-[1295px]:hidden">
+                                {isCompareLimitReached && !isCompared ? (
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <button
+                                        type="button"
+                                        aria-pressed={isCompared}
+                                        aria-label="Select for compare"
+                                        className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
+                                      >
+                                        {isCompared && (
+                                          <Check className="h-3 w-3 text-black" aria-hidden />
+                                        )}
+                                      </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right">
+                                      You can only select three providers at one time.
+                                    </TooltipContent>
+                                  </Tooltip>
+                                ) : (
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          handleToggleCompare(quote.id)
+                                        }}
+                                        aria-pressed={isCompared}
+                                        aria-label="Select for compare"
+                                        className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
+                                      >
+                                        {isCompared && (
+                                          <Check className="h-3 w-3 text-black" aria-hidden />
+                                        )}
+                                      </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right">
+                                      {compareTooltipLabel}
+                                    </TooltipContent>
+                                  </Tooltip>
+                                )}
+                              </div>
                             </div>
-                            <span className="truncate text-[11px] text-muted-foreground">
+                            {/* Original inline policy text kept for >=1296px only */}
+                            <span className="truncate text-[11px] text-muted-foreground max-[1295px]:hidden">
                               {filters.policyType}
                             </span>
                             <div className="mt-0.5 flex w-full items-baseline justify-start gap-2">
@@ -237,14 +272,6 @@ export function QuotesPageAltLayout({
                   })}
                 </div>
                 <div className="mt-3 flex flex-col gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-9 w-full justify-center gap-1.5 border-border text-xs"
-                    onClick={() => setCompareIds([])}
-                  >
-                    Deselect all
-                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
