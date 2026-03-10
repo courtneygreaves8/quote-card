@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 
-const POLL_INTERVAL_MS = 180
+const POLL_INTERVALMS = 80
 const PROGRESS_STEP = 4
 
 interface LoadingModalProps {
