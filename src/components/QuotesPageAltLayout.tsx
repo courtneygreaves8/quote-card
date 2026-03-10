@@ -93,7 +93,7 @@ export function QuotesPageAltLayout({
               <section className="w-full max-w-[960px] md:order-2 md:shrink-0 min-[1296px]:ml-auto min-[1296px]:fixed min-[1296px]:right-0 min-[1296px]:top-14 min-[1296px]:z-10 min-[1296px]:flex min-[1296px]:w-[320px] min-[1296px]:h-[calc(100vh-3.5rem)] min-[1296px]:flex-col min-[1296px]:overflow-hidden min-[1296px]:border-l min-[1296px]:border-border min-[1296px]:bg-white min-[1296px]:px-6 min-[1296px]:py-6">
               {/* Small-screen heading + subcopy */}
               <div className="mb-4 hidden max-[1295px]:block">
-                <h1 className="text-xl max-[480px]:text-lg font-bold tracking-tight text-foreground">
+                <h1 className="text-xl max-[767px]:text-2xl max-[480px]:text-xl font-bold tracking-tight text-foreground">
                   We have {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
                 </h1>
                 <p className="mt-1 text-base max-[480px]:text-sm text-muted-foreground">
