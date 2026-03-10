@@ -88,29 +88,59 @@ export function QuotesPageAltLayout({
         {/* Main area: quote list (secondary sidebar) + viewing pane */}
         <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50 pb-4">
           {primaryQuote ? (
-            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 max-[1295px]:items-center max-[1295px]:justify-center md:flex-row md:px-3 md:py-4 min-[976px]:px-0 min-[976px]:py-0 min-[1296px]:pr-[320px]">
+            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 max-[1295px]:items-center max-[1295px]:justify-center max-[767px]:items-start max-[767px]:justify-start md:flex-row md:px-3 md:py-4 min-[976px]:px-0 min-[976px]:py-0 min-[1296px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
               <section className="w-full max-w-[960px] md:order-2 md:shrink-0 min-[1296px]:ml-auto min-[1296px]:fixed min-[1296px]:right-0 min-[1296px]:top-14 min-[1296px]:z-10 min-[1296px]:flex min-[1296px]:w-[320px] min-[1296px]:h-[calc(100vh-3.5rem)] min-[1296px]:flex-col min-[1296px]:overflow-hidden min-[1296px]:border-l min-[1296px]:border-border min-[1296px]:bg-white min-[1296px]:px-6 min-[1296px]:py-6">
               {/* Small-screen heading + subcopy */}
               <div className="mb-4 hidden max-[1295px]:block">
-                <div className="flex items-start justify-between gap-2">
-                  <h1 className="text-xl max-[480px]:text-lg font-bold tracking-tight text-foreground">
-                    We have {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
-                  </h1>
+                <h1 className="text-xl max-[480px]:text-lg font-bold tracking-tight text-foreground">
+                  We have {displayedQuotes.length} quote{displayedQuotes.length === 1 ? "" : "s"} for you.
+                </h1>
+                <p className="mt-1 text-base max-[480px]:text-sm text-muted-foreground">
+                  Find the quote right for you.
+                </p>
+                {/* Mobile actions row: sort + refine (≤767px) */}
+                <div className="mt-3 flex items-center gap-2 max-[767px]:flex min-[768px]:hidden">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-7 px-2 text-[11px] font-medium border-neutral-200"
+                    className="h-8 flex-1 px-3 text-[11px] font-medium border-neutral-200"
                     onClick={() =>
                       setSortMode((prev) => (prev === "price" ? "rating" : "price"))
                     }
                   >
                     {sortMode === "price" ? "Sort: Lowest price" : "Sort: Highest rating"}
                   </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 flex-1 px-3 text-[11px] font-medium border-border"
+                    onClick={() => setOptionsOpen(true)}
+                  >
+                    Refine results
+                  </Button>
                 </div>
-                <p className="mt-1 text-sm max-[480px]:text-xs text-muted-foreground">
-                  Find the quote right for you.
-                </p>
+                {/* Tablet heading row: sort + refine (768px–1295px) */}
+                <div className="mt-3 hidden items-center gap-2 min-[768px]:flex">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 flex-1 px-3 text-[11px] font-medium border-neutral-200"
+                    onClick={() =>
+                      setSortMode((prev) => (prev === "price" ? "rating" : "price"))
+                    }
+                  >
+                    {sortMode === "price" ? "Sort: Lowest price" : "Sort: Highest rating"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 flex-1 px-3 text-[11px] font-medium border-border"
+                    onClick={() => setOptionsOpen(true)}
+                  >
+                    Refine results
+                  </Button>
+                </div>
               </div>
               {/* Compare heading + sort control on one line (desktop and larger) */}
               <div className="mb-2 hidden items-center gap-2 min-[1296px]:flex">
@@ -265,6 +295,20 @@ export function QuotesPageAltLayout({
                                 </>
                               )}
                             </div>
+                            {/* Mobile-only view button at bottom of card */}
+                            <div className="mt-2 max-[767px]:flex min-[768px]:hidden">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 w-full justify-center text-[11px] font-medium"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleMoreDetails(quote)
+                                }}
+                              >
+                                View
+                              </Button>
+                            </div>
                           </div>
                         </button>
                       </div>
@@ -275,7 +319,7 @@ export function QuotesPageAltLayout({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-9 w-full justify-center gap-1.5 border-border text-xs min-[1513px]:hidden"
+                    className="h-9 w-full justify-center gap-1.5 border-border text-xs min-[1513px]:hidden max-[1295px]:hidden"
                     onClick={() => setOptionsOpen(true)}
                   >
                     Refine results
