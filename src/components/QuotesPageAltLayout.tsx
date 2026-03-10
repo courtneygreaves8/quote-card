@@ -298,9 +298,8 @@ export function QuotesPageAltLayout({
                             {/* Mobile-only view button at bottom of card */}
                             <div className="mt-2 max-[767px]:flex min-[768px]:hidden">
                               <Button
-                                variant="outline"
                                 size="sm"
-                                className="h-8 w-full justify-center text-[11px] font-medium"
+                                className="h-9 w-full justify-center text-[11px] font-medium"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   handleMoreDetails(quote)
