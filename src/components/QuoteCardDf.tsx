@@ -41,6 +41,8 @@ interface QuoteCardDfProps {
   onPurchase?: (quote: Quote) => void
   /** When true and monthly: show monthly breakdown in a dropdown below the row instead of in the row (e.g. alt layout). */
   monthlyBreakdownInDropdown?: boolean
+  /** When true, always use the horizontal (Df) layout regardless of screen width. */
+  forceHorizontalLayout?: boolean
 }
 
 /** Sm: click-to-open popover trigger */
@@ -68,6 +70,7 @@ export function QuoteCardDf({
   onMoreDetails,
   onPurchase,
   monthlyBreakdownInDropdown = false,
+  forceHorizontalLayout = false,
 }: QuoteCardDfProps) {
   const pricingMode = paymentOption
 
@@ -105,7 +108,13 @@ export function QuoteCardDf({
     <div className="flex min-w-0 w-full">
       <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 shadow-none transition-shadow duration-200 hover:shadow-lg min-[1513px]:gap-3">
         {/* Stacked layout (QuoteCardSm) — 1512px and below */}
-        <div className="flex min-w-0 w-full flex-col gap-2 p-0 min-[1513px]:hidden">
+        <div
+          className={
+            forceHorizontalLayout
+              ? "hidden"
+              : "flex min-w-0 w-full flex-col gap-2 p-0 min-[1513px]:hidden"
+          }
+        >
           {/* Logo + insurer name (left) | policyType badge (right) */}
           <div className="flex w-full items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
@@ -415,7 +424,13 @@ export function QuoteCardDf({
         </div>
 
         {/* Horizontal layout — 1513px and above */}
-        <div className="hidden min-w-0 w-full flex-col gap-3 min-[1513px]:flex">
+        <div
+          className={
+            forceHorizontalLayout
+              ? "flex min-w-0 w-full flex-col gap-3"
+              : "hidden min-w-0 w-full flex-col gap-3 min-[1513px]:flex"
+          }
+        >
           {/* Header */}
         <div className="flex w-full items-center justify-between">
           {/* Logo + insurer name */}
@@ -485,8 +500,14 @@ export function QuoteCardDf({
 
         {/* Content */}
         <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-3">
-          {/* Four coverage blocks: fixed-width columns, grid hugs content */}
-          <div className="grid w-max flex-shrink-0 grid-cols-4 gap-3">
+          {/* Four coverage blocks */}
+          <div
+            className={
+              monthlyBreakdownInDropdown
+                ? "grid flex-1 min-w-0 grid-cols-4 gap-3"
+                : "grid w-max flex-shrink-0 grid-cols-4 gap-3"
+            }
+          >
           {/* Home column */}
           <div className={COLUMN_BOX_GRID_CLASS}>
             <div className="flex items-center justify-between gap-2">
@@ -699,8 +720,14 @@ export function QuoteCardDf({
             </div>
           )}
 
-        {/* Total price block — fills remaining horizontal space (annual & monthly) */}
-          <div className="flex flex-1 min-w-0 flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center">
+        {/* Total price block — fixed width on Alt (dropdown), fills remaining space elsewhere */}
+          <div
+            className={
+              monthlyBreakdownInDropdown
+                ? "flex w-[134px] min-w-[134px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
+                : "flex flex-1 min-w-0 flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
+            }
+          >
             <div className="flex flex-col">
               <span className="text-[14px] font-medium text-[#1E1E1E]">
                 {pricingMode === "annual" ? "Total Annual" : "Total Monthly"}

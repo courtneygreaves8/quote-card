@@ -75,8 +75,8 @@ export function QuotesPageAltLayout({
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-neutral-200">
       <Navbar activeLayout="alt" onSelectLayout={onLayoutChange} />
       <div className="flex min-h-0 flex-1">
-        {/* Persistent sidebar on large screens */}
-        <div className="hidden min-[1513px]:flex">
+        {/* Persistent sidebar on very large screens */}
+        <div className="hidden min-[1620px]:flex">
           <QuoteSidebar
             quoteReference={quoteReference}
             filters={filters}
@@ -257,8 +257,8 @@ export function QuotesPageAltLayout({
               </section>
 
               {/* Right column: selected quote summary (full details are in PolicySheet) */}
-              {/* Hidden on <=1119px so small screens just use the list + sheet */}
-              <section className="mt-4 mb-4 hidden min-w-0 flex-1 md:order-1 md:mt-0 min-[1120px]:flex min-[1120px]:justify-center min-[1120px]:pt-6">
+              {/* Hidden on <1296px so small/medium screens just use the list + sheet */}
+              <section className="mt-4 mb-4 hidden min-w-0 flex-1 md:order-1 md:mt-0 min-[1296px]:flex min-[1296px]:justify-center min-[1296px]:pt-6">
                 <div className="w-full max-w-[960px]">
                 {/* Centre stage header — same as Org layout (QuotesContent) */}
                 <div className="mb-8 flex w-full flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
@@ -451,6 +451,7 @@ export function QuotesPageAltLayout({
                           onMoreDetails={handleMoreDetails}
                           onPurchase={() => handlePurchase()}
                           monthlyBreakdownInDropdown
+                          forceHorizontalLayout
                         />
                       </div>
                     ))}
@@ -476,6 +477,7 @@ export function QuotesPageAltLayout({
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
+                        forceHorizontalLayout
                       />
                     </div>
                   </div>
@@ -512,6 +514,7 @@ export function QuotesPageAltLayout({
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
+                        forceHorizontalLayout
                       />
                     </div>
                   </div>
@@ -540,6 +543,7 @@ export function QuotesPageAltLayout({
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
+                        forceHorizontalLayout
                       />
                     </div>
                   </div>
