@@ -37,6 +37,7 @@ export function QuotesPageAltLayout({
   const activeQuote = selectedQuote ?? displayedQuotes[0] ?? null
   const [compareIds, setCompareIds] = useState<string[]>([])
   const [viewMode, setViewMode] = useState<"all" | "compare">("compare")
+  const [sortMode, setSortMode] = useState<"price" | "rating">("price")
 
   const primaryQuote =
     compareIds.length > 0
@@ -65,7 +66,10 @@ export function QuotesPageAltLayout({
     })
   }
 
-  const sortedQuotes = [...displayedQuotes]
+  const sortedQuotes =
+    sortMode === "price"
+      ? [...displayedQuotes].sort((a, b) => a.piklPrice - b.piklPrice)
+      : [...displayedQuotes].sort((a, b) => b.trustpilotRating - a.trustpilotRating)
 
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-neutral-200">
@@ -87,26 +91,21 @@ export function QuotesPageAltLayout({
             <div className="flex h-full w-full flex-col gap-4 px-3 py-4 md:flex-row md:px-0 md:py-0 min-[1120px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
               <section className="w-full md:order-2 md:ml-auto md:w-[320px] md:shrink-0 md:border-l md:border-border md:bg-white md:px-6 md:py-6 min-[1120px]:fixed min-[1120px]:right-0 min-[1120px]:top-14 min-[1120px]:z-10 min-[1120px]:flex min-[1120px]:h-[calc(100vh-3.5rem)] min-[1120px]:flex-col min-[1120px]:overflow-hidden">
-                {/* Compare heading + arrow badge aligned above checkbox column */}
+                {/* Compare heading + sort control on one line */}
                 <div className="mb-2 flex items-center gap-2">
                   <span className="flex-1 text-sm font-semibold tracking-wide text-[#1E1E1E]">
-                    Select and compare
+                    Select &amp; compare
                   </span>
-                  <div className="flex w-6 justify-center">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span
-                          className="inline-flex cursor-default items-center justify-center rounded-full border border-neutral-200 bg-white p-1"
-                          aria-label="Select up to 3 insurers below and compare."
-                        >
-                          <ArrowLeftRight className="h-3 w-3 text-[#1E1E1E]" aria-hidden />
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent side="right">
-                        Select up to 3 insurers below and compare.
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-[11px] font-medium border-neutral-200"
+                    onClick={() =>
+                      setSortMode((prev) => (prev === "price" ? "rating" : "price"))
+                    }
+                  >
+                    {sortMode === "price" ? "Sort: Lowest price" : "Sort: Highest rating"}
+                  </Button>
                 </div>
 
                 <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
