@@ -88,7 +88,7 @@ export function QuotesPageAltLayout({
         {/* Main area: quote list (secondary sidebar) + viewing pane */}
         <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50 pb-4">
           {primaryQuote ? (
-            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 max-[1295px]:items-center max-[1295px]:justify-center md:flex-row md:px-0 md:py-0 min-[1296px]:pr-[320px]">
+            <div className="flex h-full w-full flex-col gap-4 px-3 py-4 max-[1295px]:items-center max-[1295px]:justify-center md:flex-row md:px-3 md:py-4 min-[976px]:px-0 min-[976px]:py-0 min-[1296px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
               <section className="w-full max-w-[960px] md:order-2 md:shrink-0 min-[1296px]:ml-auto min-[1296px]:fixed min-[1296px]:right-0 min-[1296px]:top-14 min-[1296px]:z-10 min-[1296px]:flex min-[1296px]:w-[320px] min-[1296px]:h-[calc(100vh-3.5rem)] min-[1296px]:flex-col min-[1296px]:overflow-hidden min-[1296px]:border-l min-[1296px]:border-border min-[1296px]:bg-white min-[1296px]:px-6 min-[1296px]:py-6">
               {/* Small-screen heading + subcopy */}
