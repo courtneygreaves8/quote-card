@@ -118,8 +118,16 @@ export function QuoteCardDf({
           {/* Logo + insurer name (left) | policyType badge (right) */}
           <div className="flex w-full items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-[#F5F5F5]">
-                <span className="text-xs font-bold text-muted-foreground">LOGO</span>
+              <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#F5F5F5]">
+                {quote.logo ? (
+                  <img
+                    src={quote.logo}
+                    alt=""
+                    className="h-full w-full object-contain object-center"
+                  />
+                ) : (
+                  <span className="text-xs font-bold text-muted-foreground">LOGO</span>
+                )}
               </div>
               <div className="flex min-w-0 items-center gap-1.5">
                 <span className="break-words text-base font-semibold text-foreground">
@@ -435,8 +443,16 @@ export function QuoteCardDf({
         <div className="flex w-full items-center justify-between">
           {/* Logo + insurer name */}
           <div className="flex items-center gap-3">
-            <div className="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-[10px] bg-[#F5F5F5]">
-              <span className="text-xs font-semibold text-slate-600">LOGO</span>
+            <div className="flex h-[76px] w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-[10px] bg-[#F5F5F5]">
+              {quote.logo ? (
+                <img
+                  src={quote.logo}
+                  alt=""
+                  className="h-full w-full object-contain object-center"
+                />
+              ) : (
+                <span className="text-xs font-semibold text-slate-600">LOGO</span>
+              )}
             </div>
             <div className="flex min-w-0 flex-col gap-1">
               <div className="inline-flex w-fit items-center gap-1 rounded-[4px] border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">

@@ -34,7 +34,7 @@ export const EXCESS_BTN_CLASS =
   "h-8 w-8 shrink-0 rounded-md border-neutral-200 p-0"
 
 export const MIN_QUOTES = 3
-export const MAX_QUOTES = 7
+export const MAX_QUOTES = 4
 
 /** Max price cap per filter option (null = no cap) */
 export const FILTER_MAX_PRICE: Record<FilterOption, number | null> = {

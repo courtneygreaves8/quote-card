@@ -232,10 +232,18 @@ export function QuotesPageAltLayout({
                           ].join(" ")}
                         >
                           {/* Logo block on the left for small screens */}
-                          <div className="hidden max-[1295px]:flex aspect-square shrink-0 items-center justify-center self-stretch rounded-[8px] bg-[#F5F5F5]">
-                            <span className="text-[10px] font-semibold text-muted-foreground">
-                              LOGO
-                            </span>
+                          <div className="hidden max-[1295px]:flex aspect-square shrink-0 items-center justify-center self-stretch overflow-hidden rounded-[8px] bg-[#F5F5F5]">
+                            {quote.logo ? (
+                              <img
+                                src={quote.logo}
+                                alt=""
+                                className="h-full w-full object-contain object-center"
+                              />
+                            ) : (
+                              <span className="text-[10px] font-semibold text-muted-foreground">
+                                LOGO
+                              </span>
+                            )}
                           </div>
                           <div className="flex min-w-0 flex-1 flex-col gap-1">
                             {/* Policy type pill above insurer name on small screens */}
@@ -401,10 +409,22 @@ export function QuotesPageAltLayout({
                 {/* Comparison table when at least two quotes are selected in Compare mode */}
                 {viewMode === "compare" && secondaryQuote && primaryQuote && (
                   <div className="mb-3 rounded-[16px] border border-border bg-white px-4 py-3">
-                    <div className="mb-3 text-xs font-semibold tracking-wide text-muted-foreground">
-                      {tertiaryQuote
-                        ? `${primaryQuote.providerName} vs ${secondaryQuote.providerName} vs ${tertiaryQuote.providerName}`
-                        : `${primaryQuote.providerName} vs ${secondaryQuote.providerName}`}
+                    <div className="mb-3 flex flex-wrap items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground">
+                      <span className="inline-flex w-fit items-center rounded-[4px] border border-border bg-muted px-2 py-1 text-[#1E1E1E]">
+                        {primaryQuote.providerName}
+                      </span>
+                      <span>vs</span>
+                      <span className="inline-flex w-fit items-center rounded-[4px] border border-border bg-muted px-2 py-1 text-[#1E1E1E]">
+                        {secondaryQuote.providerName}
+                      </span>
+                      {tertiaryQuote && (
+                        <>
+                          <span>vs</span>
+                          <span className="inline-flex w-fit items-center rounded-[4px] border border-border bg-muted px-2 py-1 text-[#1E1E1E]">
+                            {tertiaryQuote.providerName}
+                          </span>
+                        </>
+                      )}
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full min-w-[280px] border-collapse text-[11px] text-muted-foreground">
