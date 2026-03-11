@@ -122,7 +122,7 @@ export function QuoteCardDf({
                 {quote.logo ? (
                   <img
                     src={quote.logo}
-                    alt=""
+                    alt={`${quote.providerName} logo`}
                     className="h-full w-full object-contain object-center"
                   />
                 ) : (
@@ -131,7 +131,7 @@ export function QuoteCardDf({
               </div>
               <div className="flex min-w-0 items-center gap-1.5">
                 <span className="break-words text-base font-semibold text-foreground">
-                  {quote.providerName}
+                  {quote.providerName} + Pikl
                 </span>
                 <span className="hidden shrink-0 items-center gap-1 text-sm font-medium text-foreground">
                   {quote.trustpilotRating.toFixed(1)}
@@ -176,7 +176,8 @@ export function QuoteCardDf({
                         </PopoverTrigger>
                         <PopoverContent side="right" className="max-w-[220px]">
                           <p className="text-sm text-popover-foreground">
-                            Home Insurance: Covers the structure of your property and contents. This is included in your quote.
+                            Home Insurance: Covers the structure of your property and contents. This is included in your quote and provided by{" "}
+                            {quote.providerName}.
                           </p>
                         </PopoverContent>
                       </Popover>
@@ -222,7 +223,8 @@ export function QuoteCardDf({
                         </PopoverTrigger>
                         <PopoverContent side="right" className="max-w-[220px]">
                           <p className="text-sm text-popover-foreground">
-                            Host Insurance: Covers short-term letting and home sharing. This is included in your quote.
+                            Host Insurance: Covers short-term letting and home sharing. This is
+                            included in your quote and provided by Pikl.
                           </p>
                         </PopoverContent>
                       </Popover>
@@ -447,7 +449,7 @@ export function QuoteCardDf({
               {quote.logo ? (
                 <img
                   src={quote.logo}
-                  alt=""
+                  alt={`${quote.providerName} logo`}
                   className="h-full w-full object-contain object-center"
                 />
               ) : (
@@ -465,7 +467,7 @@ export function QuoteCardDf({
                 </Tooltip>
               </div>
               <span className="truncate text-[16px] font-semibold text-[#1E1E1E]">
-                {quote.providerName || "Insurer name"}
+                {(quote.providerName || "Insurer name") + " + Pikl"}
               </span>
               <span className="truncate text-xs text-muted-foreground">{policyType}</span>
             </div>
@@ -550,7 +552,10 @@ export function QuoteCardDf({
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[220px]">
-                    <p className="text-sm">Home Insurance: Covers the structure of your property and contents. This is included in your quote.</p>
+                    <p className="text-sm">
+                      Home Insurance: Covers the structure of your property and contents. This
+                      is included in your quote and provided by {quote.providerName}.
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -594,7 +599,10 @@ export function QuoteCardDf({
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[220px]">
-                    <p className="text-sm">Host Insurance: Covers short-term letting and home sharing. This is included in your quote.</p>
+                    <p className="text-sm">
+                      Host Insurance: Covers short-term letting and home sharing. This is
+                      included in your quote and provided by Pikl.
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </div>

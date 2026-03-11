@@ -188,7 +188,7 @@ export function PolicySheetRight({
   const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[5.5rem] max-[767px]:pt-4">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[6rem] max-[767px]:pt-5">
       <SheetSection
         title="Overview"
         open={openOverview}
@@ -399,7 +399,7 @@ export function PolicySheet({
 
   if (!quote) return null
 
-  const { policyDetails, providerName } = quote
+  const { policyDetails, providerName, logo } = quote
   const monthlyPrice = quote.piklPrice
   const annualPrice = monthlyPrice * 12
   const deposit = monthlyPrice
@@ -480,20 +480,22 @@ export function PolicySheet({
           </div>
 
           {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
-          <div className="flex w-full shrink-0 flex-col border-b border-border bg-white px-7 py-6 max-[767px]:px-5 max-[767px]:pt-4 max-[767px]:pb-0 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
+          <div className="flex w-full shrink-0 flex-col border-b border-border bg-white px-7 py-6 max-[767px]:px-5 max-[767px]:py-4 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
             <div className="flex flex-col items-center text-center">
-              <span
-                className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground max-[767px]:p-2"
-                aria-hidden
-              >
-                <Building2 className="h-3.5 w-3.5 max-[767px]:h-4 max-[767px]:w-4" />
+              <span className="-mb-1 inline-flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded-[12px] border border-border bg-muted text-muted-foreground">
+                {logo ? (
+                  <img
+                    src={logo}
+                    alt={`${providerName} logo`}
+                    className="h-full w-full object-contain object-center"
+                  />
+                ) : (
+                  <Building2 className="h-3.5 w-3.5 max-[767px]:h-4 max-[767px]:w-4" aria-hidden />
+                )}
               </span>
-              <p className="text-sm font-medium text-foreground max-[767px]:text-base max-[767px]:font-semibold">
-                {providerName}
-              </p>
             </div>
 
-            <div className="mt-[22px] flex flex-col items-center max-[767px]:mt-[14px]">
+            <div className="mt-[22px] flex flex-col items-center max-[767px]:mt-[18px]">
               <p className="text-sm text-muted-foreground">Pay annually</p>
               <p className="mt-1 text-3xl font-bold tabular-nums text-foreground">
                 £{annualPrice.toFixed(2)}
@@ -521,9 +523,9 @@ export function PolicySheet({
               </div>
             </div>
 
-            <div className="mt-[18px] flex flex-col gap-2 rounded-lg border border-border bg-muted/50 px-3 py-3 max-[767px]:mt-[10px]">
-              <AlertCircle className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-              <p className="text-sm text-muted-foreground">
+            <div className="mt-[18px] flex flex-col gap-1 rounded-lg border border-amber-400 bg-amber-50 px-2 py-2 max-[767px]:mt-[10px]">
+              
+              <p className="text-[12px] text-amber-900 italic">
                 Your quote will be saved for the next 1 day. After that, you&apos;ll
                 need to refresh your results to get the latest price.
               </p>
@@ -590,7 +592,7 @@ export function PolicySheet({
               </Tooltip>
             </div>
 
-            <div className="mt-[18px] max-[767px]:mt-[10px] flex flex-col gap-2 rounded-md border border-border bg-neutral-50 p-3">
+            <div className="mt-8 md:mt-auto flex flex-col gap-2 rounded-md border border-border bg-neutral-50 p-3">
               <div className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-3 py-2 text-[11px] font-semibold tracking-wide text-neutral-900 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
                 <Lock className="h-3 w-3 text-neutral-800" aria-hidden />
                 <span>256-bit SSL</span>
