@@ -70,13 +70,13 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
             <p className="text-sm text-muted-foreground">
               {progress < 100 ? "Finding your best quotes…" : "Ready"}
             </p>
-            <div className="mx-auto flex max-w-xs items-start gap-2 rounded-[10px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-left">
-              <span className="mt-0.5 text-neutral-500">
-                <Info className="h-4 w-4" aria-hidden />
+            <div className="mx-auto flex max-w-xs flex-col items-center gap-1.5 rounded-[10px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-center">
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-neutral-600">
+                <Info className="h-3.5 w-3.5" aria-hidden />
               </span>
               <p className="text-xs text-muted-foreground">
-                Did you know? People who Pikl&apos;d their property last year saved on average £7,000 in guest
-                related claims.
+                Did you know? People who Pikl&apos;d their property last year saved on average £7,000 in
+                {" guest-related\u00a0claims."}
               </p>
             </div>
           </div>
