@@ -5,11 +5,11 @@ import { QuoteCard } from "@/components/QuoteCard"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
 import { Check, Star } from "lucide-react"
 import { useEffect, useLayoutEffect, useState } from "react"
 import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
+import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 
 export type QuotesPageAltLayoutProps = ReturnType<typeof useQuotesPage> & {
   onLayoutChange: (variant: "default" | "alt") => void
@@ -257,56 +257,46 @@ export function QuotesPageAltLayout({
                                 </span>
                                 <span className="inline-flex shrink-0 items-center gap-0.5 text-[11px] font-medium text-foreground">
                                   {quote.trustpilotRating.toFixed(1)}
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Star className="h-3 w-3 fill-amber-400 text-amber-500" aria-hidden />
-                                    </TooltipTrigger>
-                                    <TooltipContent side="right">Defaqto rating</TooltipContent>
-                                  </Tooltip>
+                                  <ResponsiveTooltip side="right" content="Defaqto rating">
+                                    <Star className="h-3 w-3 fill-amber-400 text-amber-500" aria-hidden />
+                                  </ResponsiveTooltip>
                                 </span>
                               </div>
                               {/* Compare checkbox hidden on <=1295px */}
                               <div className="max-[1295px]:hidden">
                                 {isCompareLimitReached && !isCompared ? (
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <button
-                                        type="button"
-                                        aria-pressed={isCompared}
-                                        aria-label="Select for compare"
-                                        className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
-                                      >
-                                        {isCompared && (
-                                          <Check className="h-3 w-3 text-black" aria-hidden />
-                                        )}
-                                      </button>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="right">
-                                      You can only select three providers at one time.
-                                    </TooltipContent>
-                                  </Tooltip>
+                                  <ResponsiveTooltip
+                                    side="right"
+                                    content="You can only select three providers at one time."
+                                  >
+                                    <button
+                                      type="button"
+                                      aria-pressed={isCompared}
+                                      aria-label="Select for compare"
+                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
+                                    >
+                                      {isCompared && (
+                                        <Check className="h-3 w-3 text-black" aria-hidden />
+                                      )}
+                                    </button>
+                                  </ResponsiveTooltip>
                                 ) : (
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <button
-                                        type="button"
-                                        onClick={(e) => {
-                                          e.stopPropagation()
-                                          handleToggleCompare(quote.id)
-                                        }}
-                                        aria-pressed={isCompared}
-                                        aria-label="Select for compare"
-                                        className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
-                                      >
-                                        {isCompared && (
-                                          <Check className="h-3 w-3 text-black" aria-hidden />
-                                        )}
-                                      </button>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="right">
-                                      {compareTooltipLabel}
-                                    </TooltipContent>
-                                  </Tooltip>
+                                  <ResponsiveTooltip side="right" content={compareTooltipLabel}>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleToggleCompare(quote.id)
+                                      }}
+                                      aria-pressed={isCompared}
+                                      aria-label="Select for compare"
+                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
+                                    >
+                                      {isCompared && (
+                                        <Check className="h-3 w-3 text-black" aria-hidden />
+                                      )}
+                                    </button>
+                                  </ResponsiveTooltip>
                                 )}
                               </div>
                             </div>

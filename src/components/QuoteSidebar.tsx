@@ -10,11 +10,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 import {
   COVER_TYPES,
   EXCESS_BTN_CLASS,
@@ -115,40 +111,36 @@ export function QuoteSidebar({
               {quoteReference}
             </span>
           </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className={EXCESS_BTN_CLASS}
-                onClick={handleCopyRef}
-                aria-label="Copy quote reference"
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              Copy quote reference to clipboard
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className={EXCESS_BTN_CLASS}
-                onClick={handleEmailRef}
-                aria-label="Email quote reference"
-              >
-                <Mail className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              Email this quote reference to someone
-            </TooltipContent>
-          </Tooltip>
+          <ResponsiveTooltip
+            side="right"
+            content="Copy quote reference to clipboard"
+          >
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className={EXCESS_BTN_CLASS}
+              onClick={handleCopyRef}
+              aria-label="Copy quote reference"
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+          </ResponsiveTooltip>
+          <ResponsiveTooltip
+            side="right"
+            content="Email this quote reference to someone"
+          >
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className={EXCESS_BTN_CLASS}
+              onClick={handleEmailRef}
+              aria-label="Email quote reference"
+            >
+              <Mail className="h-4 w-4" />
+            </Button>
+          </ResponsiveTooltip>
         </div>
       </div>
 
@@ -172,23 +164,21 @@ export function QuoteSidebar({
             }
             className={COVER_DATE_INPUT_CLASS}
           />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className={SIDEBAR_ICON_BTN_CLASS}
-                onClick={handleOpenDatePicker}
-                aria-label="Open calendar"
-              >
-                <Calendar className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              Change when your cover begins.
-            </TooltipContent>
-          </Tooltip>
+          <ResponsiveTooltip
+            side="right"
+            content="Change when your cover begins."
+          >
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className={SIDEBAR_ICON_BTN_CLASS}
+              onClick={handleOpenDatePicker}
+              aria-label="Open calendar"
+            >
+              <Calendar className="h-4 w-4" />
+            </Button>
+          </ResponsiveTooltip>
         </div>
       </div>
 
@@ -228,29 +218,26 @@ export function QuoteSidebar({
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className={EXCESS_BTN_CLASS}
-                disabled={safeExcessIndex <= 0}
-                onClick={() => {
-                  if (safeExcessIndex > 0) {
-                    onFiltersChange({
-                      ...filters,
-                      excess: EXCESS_OPTIONS[safeExcessIndex - 1],
-                    })
-                  }
-                }}
-                aria-label="Decrease excess"
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">Decrease excess</TooltipContent>
-          </Tooltip>
+          <ResponsiveTooltip side="right" content="Decrease excess">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className={EXCESS_BTN_CLASS}
+              disabled={safeExcessIndex <= 0}
+              onClick={() => {
+                if (safeExcessIndex > 0) {
+                  onFiltersChange({
+                    ...filters,
+                    excess: EXCESS_OPTIONS[safeExcessIndex - 1],
+                  })
+                }
+              }}
+              aria-label="Decrease excess"
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+          </ResponsiveTooltip>
           <Slider
             className="min-w-0 flex-1"
             min={0}
@@ -261,29 +248,26 @@ export function QuoteSidebar({
               onFiltersChange({ ...filters, excess: EXCESS_OPTIONS[v ?? 0] })
             }
           />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className={EXCESS_BTN_CLASS}
-                disabled={safeExcessIndex >= 20}
-                onClick={() => {
-                  if (safeExcessIndex < 20) {
-                    onFiltersChange({
-                      ...filters,
-                      excess: EXCESS_OPTIONS[safeExcessIndex + 1],
-                    })
-                  }
-                }}
-                aria-label="Increase excess"
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">Increase excess</TooltipContent>
-          </Tooltip>
+          <ResponsiveTooltip side="right" content="Increase excess">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className={EXCESS_BTN_CLASS}
+              disabled={safeExcessIndex >= 20}
+              onClick={() => {
+                if (safeExcessIndex < 20) {
+                  onFiltersChange({
+                    ...filters,
+                    excess: EXCESS_OPTIONS[safeExcessIndex + 1],
+                  })
+                }
+              }}
+              aria-label="Increase excess"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </ResponsiveTooltip>
         </div>
       </div>
 

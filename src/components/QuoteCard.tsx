@@ -13,7 +13,7 @@ import type { PaymentOption } from "@/types/quote"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
 
@@ -96,12 +96,9 @@ export function QuoteCard({
               <div className="flex min-w-0 flex-col gap-1">
                 <div className="inline-flex w-fit items-center gap-1 rounded-[4px] border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">
                   <span className="font-medium">{quote.trustpilotRating.toFixed(1)}</span>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
-                    </TooltipTrigger>
-                    <TooltipContent>Defaqto rating</TooltipContent>
-                  </Tooltip>
+                  <ResponsiveTooltip content="Defaqto rating">
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
+                  </ResponsiveTooltip>
                 </div>
                 <span className="truncate text-[16px] font-semibold text-[#1E1E1E]">
                   Insurer &amp; Pikl
@@ -184,23 +181,24 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                       Home Insurance
                     </span>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          className={TOOLTIP_TRIGGER_CLASS_DF}
-                          aria-label="What is standard cover?"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="max-w-[220px]">
+                    <ResponsiveTooltip
+                      side="right"
+                      className="max-w-[220px]"
+                      content={
                         <p className="text-sm">
-                          Home Insurance: Covers the structure of your property and contents. This
-                          is included in your quote and provided by {quote.providerName}.
+                          Home Insurance: Covers the structure of your property and contents. This is
+                          included in your quote and provided by {quote.providerName}.
                         </p>
-                      </TooltipContent>
-                    </Tooltip>
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS_DF}
+                        aria-label="What is standard cover?"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </ResponsiveTooltip>
                   </div>
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="text-[16px] font-semibold text-[#1E1E1E]">
@@ -231,23 +229,24 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                       Host Insurance
                     </span>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          className={TOOLTIP_TRIGGER_CLASS_DF}
-                          aria-label="What is Pikl cover?"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="max-w-[220px]">
+                    <ResponsiveTooltip
+                      side="right"
+                      className="max-w-[220px]"
+                      content={
                         <p className="text-sm">
-                          Host Insurance: Covers short-term letting and home sharing. This is
-                          included in your quote and provided by Pikl.
+                          Host Insurance: Covers short-term letting and home sharing. This is included in
+                          your quote and provided by Pikl.
                         </p>
-                      </TooltipContent>
-                    </Tooltip>
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS_DF}
+                        aria-label="What is Pikl cover?"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </ResponsiveTooltip>
                   </div>
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="text-[16px] font-semibold text-[#1E1E1E]">
@@ -275,23 +274,24 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                       Legal Cover
                     </span>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          className={TOOLTIP_TRIGGER_CLASS_DF}
-                          aria-label="Family legal protection"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="max-w-[220px]">
+                    <ResponsiveTooltip
+                      side="right"
+                      className="max-w-[220px]"
+                      content={
                         <p className="text-sm">
-                          Legal cover is an optional add-on providing legal protection for you and
-                          your household.
+                          Legal cover is an optional add-on providing legal protection for you and your
+                          household.
                         </p>
-                      </TooltipContent>
-                    </Tooltip>
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS_DF}
+                        aria-label="Family legal protection"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </ResponsiveTooltip>
                   </div>
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[18px] font-semibold text-[#1E1E1E]">
@@ -321,22 +321,23 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
                       Emergency Cover
                     </span>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          className={TOOLTIP_TRIGGER_CLASS_DF}
-                          aria-label="What is home emergency cover?"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="max-w-[220px]">
+                    <ResponsiveTooltip
+                      side="right"
+                      className="max-w-[220px]"
+                      content={
                         <p className="text-sm">
                           Emergency cover is an optional add-on for home emergency cover.
                         </p>
-                      </TooltipContent>
-                    </Tooltip>
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS_DF}
+                        aria-label="What is home emergency cover?"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </ResponsiveTooltip>
                   </div>
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[18px] font-semibold text-[#1E1E1E]">
@@ -363,23 +364,23 @@ export function QuoteCard({
                 <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                   <div className="flex items-center gap-1">
                     <span className="text-[14px] font-medium text-[#1E1E1E]">× 1</span>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          className={TOOLTIP_TRIGGER_CLASS_DF}
-                          aria-label="Admin fee info"
-                        >
-                          <HelpCircle className="h-4 w-4" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="max-w-[220px]">
+                    <ResponsiveTooltip
+                      side="right"
+                      className="max-w-[220px]"
+                      content={
                         <p className="text-sm">
-                          First payment (×1): Our insurer PremFina charges a £5 admin fee on this
-                          instalment.
+                          First payment (×1): Our insurer PremFina charges a £5 admin fee on this instalment.
                         </p>
-                      </TooltipContent>
-                    </Tooltip>
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={TOOLTIP_TRIGGER_CLASS_DF}
+                        aria-label="Admin fee info"
+                      >
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </ResponsiveTooltip>
                   </div>
                   <span className="text-[14px] font-semibold text-[#1E1E1E]">
                     {formatPounds(x1Amount)}
@@ -457,23 +458,23 @@ export function QuoteCard({
                   <div className="flex items-center justify-between gap-4 border-b border-neutral-200 bg-neutral-100 px-4 py-2">
                     <div className="flex items-center gap-1">
                       <span className="text-[14px] font-medium text-[#1E1E1E]">× 1</span>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button
-                            type="button"
-                            className={TOOLTIP_TRIGGER_CLASS_DF}
-                            aria-label="Admin fee info"
-                          >
-                            <HelpCircle className="h-4 w-4" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="max-w-[220px]">
+                      <ResponsiveTooltip
+                        side="right"
+                        className="max-w-[220px]"
+                        content={
                           <p className="text-sm">
-                            First payment (×1): Our insurer PremFina charges a £5 admin fee on this
-                            instalment.
+                            First payment (×1): Our insurer PremFina charges a £5 admin fee on this instalment.
                           </p>
-                        </TooltipContent>
-                      </Tooltip>
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={TOOLTIP_TRIGGER_CLASS_DF}
+                          aria-label="Admin fee info"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </ResponsiveTooltip>
                     </div>
                     <span className="text-[14px] font-semibold text-[#1E1E1E]">
                       {formatPounds(x1Amount)}

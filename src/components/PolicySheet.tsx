@@ -12,11 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 
 const MOCK_PROPERTY_ADDRESS = "123 Example Street, London, SW1A 1AA"
 const MOCK_PROPOSER_NAME = "John Smith"
@@ -524,55 +520,43 @@ export function PolicySheet({
             <Separator className="my-[22px] max-[767px]:my-[14px]" />
 
             <div className="flex flex-col gap-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full gap-1.5"
-                    onClick={handleEmailQuote}
-                  >
-                    <Mail className="h-4 w-4" />
-                    Email quote
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  Send this quote by email
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="sm" className="w-full gap-1.5">
-                    <Save className="h-4 w-4" />
-                    Save quote
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  Save this quote for later
-                </TooltipContent>
-              </Tooltip>
+              <ResponsiveTooltip side="right" content="Send this quote by email">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={handleEmailQuote}
+                >
+                  <Mail className="h-4 w-4" />
+                  Email quote
+                </Button>
+              </ResponsiveTooltip>
+              <ResponsiveTooltip side="right" content="Save this quote for later">
+                <Button variant="outline" size="sm" className="w-full gap-1.5">
+                  <Save className="h-4 w-4" />
+                  Save quote
+                </Button>
+              </ResponsiveTooltip>
             </div>
 
             <div className="mt-[22px] flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 max-[767px]:mt-[14px]">
               <span className="flex-1 truncate font-mono text-sm">
                 {quoteReference}
               </span>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 shrink-0"
-                    onClick={handleCopyRef}
-                    aria-label="Copy quote reference"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  Copy quote reference to clipboard
-                </TooltipContent>
-              </Tooltip>
+              <ResponsiveTooltip
+                side="right"
+                content="Copy quote reference to clipboard"
+              >
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 shrink-0"
+                  onClick={handleCopyRef}
+                  aria-label="Copy quote reference"
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </ResponsiveTooltip>
             </div>
 
             <div className="mt-8 md:mt-auto flex flex-col gap-2 rounded-md border border-border bg-neutral-50 p-3">

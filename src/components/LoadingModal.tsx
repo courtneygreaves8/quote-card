@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Info } from "lucide-react"
+import { ShieldCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const POLL_INTERVAL_MS = 40
@@ -70,9 +70,9 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
             <p className="text-sm text-muted-foreground">
               {progress < 100 ? "Finding your best quotes…" : "Ready"}
             </p>
-            <div className="mx-auto flex max-w-xs flex-col items-center gap-1.5 rounded-[10px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-center">
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-neutral-600">
-                <Info className="h-3.5 w-3.5" aria-hidden />
+            <div className="mx-auto flex max-w-xs flex-col items-center gap-1.5 rounded-[10px] border border-[#15803D] bg-[#F4FBF7] px-3 py-2 text-center">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#15803D] bg-white text-[#15803D]">
+                <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
               </span>
               <p className="text-xs text-muted-foreground">
                 Did you know? People who Pikl&apos;d their property last year saved on average £7,000 in
