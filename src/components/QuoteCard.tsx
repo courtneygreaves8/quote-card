@@ -85,7 +85,7 @@ export function QuoteCard({
 
   return (
     <div className="flex min-w-0 w-full">
-      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 shadow-none transition-shadow duration-200 hover:shadow-lg lg:gap-3">
+      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border border-neutral-200 bg-white p-3 shadow-sm transition-shadow duration-200 hover:shadow-lg lg:border-none lg:shadow-none lg:gap-3">
         <div className="flex min-w-0 w-full flex-col gap-3">
           {/* Header */}
           <div className="flex w-full flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-between">
