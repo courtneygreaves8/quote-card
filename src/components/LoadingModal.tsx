@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ShieldCheck } from "lucide-react"
+import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const POLL_INTERVAL_MS = 40
@@ -12,6 +12,20 @@ interface LoadingModalProps {
 
 export function LoadingModal({ open, onClose }: LoadingModalProps) {
   const [progress, setProgress] = useState(0)
+  const FACTS = [
+    "Did you know? People who Pikl'd their property last year saved on average £7,000 in guest-related claims.",
+    "Last year we made hosting safer for 27,407 landlords.",
+    "We also offer B2B solutions working withsome of the major hosting companies like Business name, Business name and Business name.",
+  ]
+  const [factIndex, setFactIndex] = useState(0)
+
+  const handlePrevFact = () => {
+    setFactIndex((prev) => (prev - 1 + FACTS.length) % FACTS.length)
+  }
+
+  const handleNextFact = () => {
+    setFactIndex((prev) => (prev + 1) % FACTS.length)
+  }
 
   useEffect(() => {
     if (!open) return
@@ -70,14 +84,32 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
             <p className="text-sm text-muted-foreground">
               {progress < 100 ? "Finding your best quotes…" : "Ready"}
             </p>
-            <div className="mx-auto flex max-w-xs flex-col items-center gap-1.5 rounded-[10px] border border-[#15803D] bg-[#F4FBF7] px-3 py-2 text-center">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#15803D] bg-white text-[#15803D]">
-                <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
-              </span>
-              <p className="text-xs text-muted-foreground">
-                Did you know? People who Pikl&apos;d their property last year saved on average £7,000 in
-                {" guest-related\u00a0claims."}
-              </p>
+            <div className="mx-auto flex w-full max-w-sm items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePrevFact}
+                className="inline-flex shrink-0 items-center justify-center px-1 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors"
+                aria-label="Previous fact"
+              >
+                <ChevronLeft className="h-4 w-4" aria-hidden />
+              </button>
+              <div
+                key={factIndex}
+                className="min-w-0 flex flex-1 flex-col items-center gap-1.5 rounded-[10px] border border-[#15803D] bg-[#F4FBF7] px-3 py-2 text-center animate-fact-card-slide"
+              >
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#15803D] bg-white text-[#15803D]">
+                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+                </span>
+                <p className="text-xs text-muted-foreground">{FACTS[factIndex]}</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleNextFact}
+                className="inline-flex shrink-0 items-center justify-center px-1 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors"
+                aria-label="Next fact"
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden />
+              </button>
             </div>
           </div>
         </div>
