@@ -108,6 +108,28 @@ export function QuoteCard({
             </div>
 
             <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-end lg:gap-1.5">
+              {/* Mobile payment toggle – top-right on <=1023px */}
+              <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-0.5 px-1 py-0.5 lg:hidden">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
+                  onClick={() => onPaymentOptionChange("annual")}
+                >
+                  Annual
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
+                  onClick={() => onPaymentOptionChange("monthly")}
+                >
+                  Monthly
+                </Button>
+              </div>
+
               {/* Desktop payment toggle: styled like sidebar (pill-shaped) */}
               <div className="hidden lg:flex w-56 items-center rounded-full border border-input bg-muted/30 gap-1 px-1 py-0.5">
                 <Button
@@ -132,8 +154,8 @@ export function QuoteCard({
 
               <div className="hidden h-8 w-px shrink-0 bg-border lg:block" aria-hidden />
 
-              {/* Buttons: side by side on all breakpoints (fill width on small) */}
-              <div className="flex w-full flex-row gap-2 lg:gap-1.5">
+              {/* Buttons: in header on lg+ only */}
+              <div className="hidden w-full flex-row gap-2 lg:flex lg:w-auto lg:gap-1.5">
                 <Button
                   type="button"
                   variant="outline"
@@ -395,30 +417,6 @@ export function QuoteCard({
               </div>
             )}
 
-            {/* Mobile payment toggle – styled like sidebar, full-width below lg */}
-            <div className="order-2 w-full lg:hidden">
-              <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-0.5 px-1 py-0.5">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
-                  onClick={() => onPaymentOptionChange("annual")}
-                >
-                  Annual
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
-                  onClick={() => onPaymentOptionChange("monthly")}
-                >
-                  Monthly
-                </Button>
-              </div>
-            </div>
-
             {/* Total price block */}
             <div
               className={
@@ -490,6 +488,27 @@ export function QuoteCard({
               </CollapsibleContent>
             </Collapsible>
           )}
+
+          {/* More info + Purchase at bottom of card for 1023px and below */}
+          <div className="mt-1 flex w-full flex-row gap-2 lg:hidden">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-9 flex-1 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
+              onClick={() => onMoreDetails(quote)}
+            >
+              <Info className="h-4 w-4 shrink-0" />
+              More info
+            </Button>
+            <Button
+              type="button"
+              className="h-9 flex-1 justify-center gap-1.5 bg-slate-900 px-4 text-xs font-medium text-white"
+              onClick={() => onPurchase?.(quote)}
+            >
+              <ShoppingCart className="h-4 w-4 shrink-0" />
+              Purchase
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
