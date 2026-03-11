@@ -27,6 +27,7 @@ import { Switch } from "@/components/ui/switch"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
 
 interface QuoteCardProps {
   quote: Quote
@@ -50,7 +51,7 @@ const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700 transition-colors duration-150 group-hover:bg-[#FFF]"
 
 const COLUMN_BOX_GRID_CLASS =
-  "group flex w-[192px] min-w-[192px] flex-none flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
+  "group flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC] lg:w-[192px] lg:min-w-[192px] lg:flex-none"
 
 export function QuoteCard({
   quote,
@@ -98,21 +99,13 @@ export function QuoteCard({
 
   return (
     <div className="flex min-w-0 w-full">
-      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 shadow-none transition-shadow duration-200 hover:shadow-lg min-[1340px]:gap-3">
+      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 shadow-none transition-shadow duration-200 hover:shadow-lg lg:gap-3">
         <div className="flex min-w-0 w-full flex-col gap-3">
           {/* Header */}
-          <div className="flex w-full flex-col items-stretch gap-3 min-[1340px]:flex-row min-[1340px]:items-center min-[1340px]:justify-between">
+          <div className="flex w-full flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-[76px] w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-[10px] bg-[#F5F5F5]">
-                {quote.logo ? (
-                  <img
-                    src={quote.logo}
-                    alt={`${quote.providerName} logo`}
-                    className="h-full w-full object-contain object-center"
-                  />
-                ) : (
-                  <span className="text-xs font-semibold text-slate-600">LOGO</span>
-                )}
+              <div className="flex h-[72px] w-[72px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-[#F5F5F5]">
+                <span className="text-xs font-semibold text-slate-600">LOGO</span>
               </div>
               <div className="flex min-w-0 flex-col gap-1">
                 <div className="inline-flex w-fit items-center gap-1 rounded-[4px] border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">
@@ -131,9 +124,9 @@ export function QuoteCard({
               </div>
             </div>
 
-            <div className="flex w-full flex-col items-stretch gap-2 min-[1340px]:w-auto min-[1340px]:flex-row min-[1340px]:items-center min-[1340px]:justify-end min-[1340px]:gap-1.5">
-              {/* Badge + toggle: only show in header on ≥1340px */}
-              <div className="hidden items-center gap-2 min-[1340px]:flex">
+            <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-end lg:gap-1.5">
+              {/* Badge + toggle: only show in header on ≥lg (1024px) */}
+              <div className="hidden items-center gap-2 lg:flex">
                 {pricingMode === "annual" && (
                   <span className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-[#FFF] px-2 py-0.5 text-xs font-medium text-primary">
                     <Tag className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -152,12 +145,12 @@ export function QuoteCard({
                 />
               </div>
 
-              {/* Buttons: stacked on small, inline on ≥1340px */}
-              <div className="flex flex-col gap-2 min-[1340px]:flex-row min-[1340px]:gap-1.5">
+              {/* Buttons: side by side on all breakpoints (fill width on small) */}
+              <div className="flex w-full flex-row gap-2 lg:gap-1.5">
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-9 w-full justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-[12px] font-medium text-slate-900 min-[1340px]:w-auto"
+                  className="h-9 flex-1 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-[12px] font-medium text-slate-900"
                   onClick={() => onMoreDetails(quote)}
                 >
                   <Info className="h-4 w-4 shrink-0" />
@@ -166,7 +159,7 @@ export function QuoteCard({
 
                 <Button
                   type="button"
-                  className="h-9 w-full justify-center gap-1.5 bg-slate-900 px-4 text-[12px] font-medium text-white min-[1340px]:w-auto"
+                  className="h-9 flex-1 justify-center gap-1.5 bg-slate-900 px-4 text-[12px] font-medium text-white"
                   onClick={() => onPurchase?.(quote)}
                 >
                   <ShoppingCart className="h-4 w-4 shrink-0" />
@@ -177,13 +170,13 @@ export function QuoteCard({
           </div>
 
           {/* Content */}
-          <div className="flex min-w-0 w-full max-w-full flex-col gap-3 min-[1340px]:flex-row min-[1340px]:items-stretch min-[1340px]:gap-3">
-            {/* Four coverage blocks: 2×2 grid below 1340px, 4 columns on desktop */}
+          <div className="flex min-w-0 w-full max-w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-3">
+            {/* Four coverage blocks: 2×2 grid below lg, 4 columns on desktop */}
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "order-1 grid w-full flex-1 min-w-0 grid-cols-2 gap-3 min-[1340px]:grid-cols-4"
-                  : "order-1 grid w-full grid-cols-2 gap-3 min-[1340px]:grid-cols-4 min-[1340px]:w-max min-[1340px]:flex-shrink-0"
+                  ? "order-1 grid w-full flex-1 min-w-0 grid-cols-2 gap-3 lg:grid-cols-4"
+                  : "order-1 grid w-full grid-cols-2 gap-3 lg:grid-cols-4 lg:w-max lg:flex-shrink-0"
               }
             >
               {/* Home column */}
@@ -370,7 +363,7 @@ export function QuoteCard({
             </div>
 
             {pricingMode === "monthly" && !monthlyBreakdownInDropdown && (
-              <div className="order-3 flex w-full flex-col justify-center py-2 min-[1340px]:order-2 min-[1340px]:w-fit min-[1340px]:flex-none min-[1340px]:self-stretch">
+              <div className="order-4 flex w-full flex-col justify-center py-2 lg:order-2 lg:w-fit lg:flex-none lg:self-stretch">
                 <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                   <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
                   <span className="text-[14px] font-semibold text-[#1E1E1E]">
@@ -411,12 +404,40 @@ export function QuoteCard({
               </div>
             )}
 
+            {/* Mobile payment toggle – styled like sidebar, full-width below lg */}
+            <div className="order-2 w-full lg:hidden">
+              <div className="flex w-full items-center rounded-[999px] border border-input bg-muted/30 gap-0.5 px-1 py-1">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={
+                    pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
+                  }
+                  onClick={() => onPaymentOptionChange("annual")}
+                >
+                  Annual
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={
+                    pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
+                  }
+                  onClick={() => onPaymentOptionChange("monthly")}
+                >
+                  Monthly
+                </Button>
+              </div>
+            </div>
+
             {/* Total price block */}
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "order-2 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center min-[1340px]:order-3 min-[1340px]:w-[134px] min-[1340px]:min-w-[134px] min-[1340px]:flex-none"
-                  : "order-2 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center min-[1340px]:order-3 min-[1340px]:flex-1 min-[1340px]:min-w-0"
+                  ? "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[134px] lg:min-w-[134px] lg:flex-none"
+                  : "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:flex-1 lg:min-w-0"
               }
             >
               <div className="flex flex-col">

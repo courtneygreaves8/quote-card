@@ -479,19 +479,14 @@ export function PolicySheet({
             </div>
           </div>
 
-          {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
+        {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
           <div className="flex w-full shrink-0 flex-col border-b border-border bg-white px-7 py-6 max-[767px]:px-5 max-[767px]:py-4 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
             <div className="flex flex-col items-center text-center">
-              <span className="-mb-1 inline-flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded-[12px] border border-border bg-muted text-muted-foreground">
-                {logo ? (
-                  <img
-                    src={logo}
-                    alt={`${providerName} logo`}
-                    className="h-full w-full object-contain object-center"
-                  />
-                ) : (
-                  <Building2 className="h-3.5 w-3.5 max-[767px]:h-4 max-[767px]:w-4" aria-hidden />
-                )}
+              <span className="-mb-1 inline-flex h-[48px] w-[48px] items-center justify-center overflow-hidden rounded-[12px] border border-border bg-muted text-muted-foreground">
+                <Shield className="h-6 w-6" aria-hidden />
+              </span>
+              <span className="mt-2 text-md font-semibold text-muted-foreground">
+                {(providerName || "Insurer name") + " + Pikl"}
               </span>
             </div>
 
