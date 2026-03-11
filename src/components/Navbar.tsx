@@ -21,7 +21,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
       <header className={`flex h-14 shrink-0 items-center justify-between border-b border-border bg-white ${LAYOUT_PADDING_X}`}>
         <div className="flex items-center gap-4">
           <span
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-neutral-200"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200"
             aria-hidden
           >
             <Rocket className="h-4 w-4" stroke="url(#navbarRocketGrad)" strokeWidth={2} />
@@ -40,7 +40,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
           {onSelectLayout && (
             <button
               type="button"
-              className={`hidden text-[12px] font-medium transition-colors md:inline-flex ${
+              className={`hidden text-xs font-medium transition-colors md:inline-flex ${
                 activeLayout === "alt" ? "text-black" : "text-neutral-500 hover:text-black"
               }`}
               onClick={() => onSelectLayout(activeLayout === "alt" ? "default" : "alt")}
@@ -98,11 +98,11 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
       <Sheet open={navOpen} onOpenChange={setNavOpen}>
         <SheetContent
           side="top"
-          className="flex w-full max-w-none flex-col border-b border-border bg-white p-4 pt-[52px]"
+          className="flex w-full max-w-none flex-col border-b border-border bg-white p-4 pt-12"
         >
           <div className="mb-4 flex w-full items-center justify-center gap-2 md:hidden">
             <span
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-neutral-200"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200"
               aria-hidden
             >
               <Rocket className="h-4 w-4" stroke="url(#navbarRocketGrad)" strokeWidth={2} />
