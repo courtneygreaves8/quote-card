@@ -472,7 +472,7 @@ export function QuoteCardDf({
           </div>
 
           {/* Header actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
             {/* Annual toggle: badge (when annual), label, then toggle */}
             <div className="flex items-center gap-2">
               {pricingMode === "annual" && (
@@ -497,7 +497,7 @@ export function QuoteCardDf({
             <Button
               type="button"
               variant="outline"
-              className="flex items-center justify-center gap-2 border-[#E2E8F0] bg-white px-4 py-2 text-[12px] font-medium text-slate-900"
+              className="flex items-center justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 py-2 text-[12px] font-medium text-slate-900"
               onClick={() => onMoreDetails(quote)}
             >
               More info
@@ -506,7 +506,7 @@ export function QuoteCardDf({
             {/* Purchase */}
             <Button
               type="button"
-              className="flex items-center justify-center gap-2 bg-slate-900 px-4 py-2 text-[12px] font-medium text-white"
+              className="flex items-center justify-center gap-1.5 bg-slate-900 px-4 py-2 text-[12px] font-medium text-white"
               onClick={() => onPurchase?.(quote)}
             >
               Purchase
