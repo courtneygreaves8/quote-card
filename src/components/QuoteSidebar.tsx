@@ -76,7 +76,7 @@ export function QuoteSidebar({
 
   const containerClass = [
     "flex min-h-0 shrink-0 flex-col gap-4 overflow-y-auto bg-white py-6",
-    isSheet ? "w-full" : "w-[308px] border-r border-border",
+    isSheet ? "w-full" : "w-80 border-r border-border",
     LAYOUT_PADDING_X,
   ].join(" ")
 
@@ -377,7 +377,7 @@ export function QuoteSidebar({
           </Button>
         </div>
         {filters.paymentOption === "monthly" && (
-          <div className="mt-2 rounded-[8px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-700">
+          <div className="mt-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-700">
             <div className="flex flex-col gap-1">
               <p>
                 Paying monthly is usually a little more expensive as you'll pay interest.

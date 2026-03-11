@@ -38,7 +38,7 @@ const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700 transition-colors duration-150 group-hover:bg-[#FFF]"
 
 const COLUMN_BOX_GRID_CLASS =
-  "group flex w-full flex-col gap-3 rounded-[12px] border border-neutral-200 bg-[#FFF] p-3 transition-colors duration-150 hover:bg-[#FCFCFC] lg:w-[192px] lg:min-w-[192px] lg:flex-none"
+  "group flex w-full flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-colors duration-150 hover:bg-[#FCFCFC] lg:w-48 lg:min-w-48 lg:flex-none"
 
 export function QuoteCard({
   quote,
@@ -85,22 +85,22 @@ export function QuoteCard({
 
   return (
     <div className="flex min-w-0 w-full">
-      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border border-neutral-200 bg-white p-3 shadow-sm transition-shadow duration-200 hover:shadow-lg lg:border-none lg:shadow-none lg:gap-3">
+      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-2xl border border-neutral-200 bg-white p-3 shadow-sm transition-shadow duration-200 hover:shadow-lg lg:border-none lg:shadow-none lg:gap-3">
         <div className="flex min-w-0 w-full flex-col gap-3">
           {/* Header */}
           <div className="flex w-full flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-[72px] w-[72px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-[#F5F5F5]">
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#F5F5F5]">
                 <span className="text-xs font-semibold text-slate-600">LOGO</span>
               </div>
               <div className="flex min-w-0 flex-col gap-1">
-                <div className="inline-flex w-fit items-center gap-1 rounded-[4px] border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">
+                <div className="inline-flex w-fit items-center gap-1 rounded-sm border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">
                   <span className="font-medium">{quote.trustpilotRating.toFixed(1)}</span>
                   <ResponsiveTooltip content="Defaqto rating">
                     <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
                   </ResponsiveTooltip>
                 </div>
-                <span className="truncate text-[16px] font-semibold text-[#1E1E1E]">
+                <span className="truncate text-base font-semibold text-[#1E1E1E]">
                   Insurer &amp; Pikl
                 </span>
                 <span className="truncate text-xs text-muted-foreground">{policyType}</span>
@@ -109,12 +109,12 @@ export function QuoteCard({
 
             <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-end lg:gap-1.5">
               {/* Desktop payment toggle: styled like sidebar (pill-shaped) */}
-              <div className="hidden lg:flex w-[220px] items-center rounded-full border border-input bg-muted/30 gap-1 px-1 py-0.5">
+              <div className="hidden lg:flex w-56 items-center rounded-full border border-input bg-muted/30 gap-1 px-1 py-0.5">
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
                   onClick={() => onPaymentOptionChange("annual")}
                 >
                   Annual
@@ -123,7 +123,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
                   onClick={() => onPaymentOptionChange("monthly")}
                 >
                   Monthly
@@ -137,7 +137,7 @@ export function QuoteCard({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-9 flex-1 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-[12px] font-medium text-slate-900"
+                  className="h-9 flex-1 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
                   onClick={() => onMoreDetails(quote)}
                 >
                   <Info className="h-4 w-4 shrink-0" />
@@ -146,7 +146,7 @@ export function QuoteCard({
 
                 <Button
                   type="button"
-                  className="h-9 flex-1 justify-center gap-1.5 bg-slate-900 px-4 text-[12px] font-medium text-white"
+                  className="h-9 flex-1 justify-center gap-1.5 bg-slate-900 px-4 text-xs font-medium text-white"
                   onClick={() => onPurchase?.(quote)}
                 >
                   <ShoppingCart className="h-4 w-4 shrink-0" />
@@ -178,12 +178,12 @@ export function QuoteCard({
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-1">
-                    <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                    <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Home Insurance
                     </span>
                     <ResponsiveTooltip
                       side="right"
-                      className="max-w-[220px]"
+                      className="max-w-xs"
                       content={
                         <p className="text-sm">
                           Home Insurance: Covers the structure of your property and contents. This is
@@ -201,10 +201,10 @@ export function QuoteCard({
                     </ResponsiveTooltip>
                   </div>
                   <div className="flex items-baseline justify-between gap-2">
-                    <span className="text-[16px] font-semibold text-[#1E1E1E]">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.standardPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-[12px] font-medium text-[#1E1E1E]">
+                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
                       Excess:{" "}
                       <span className="font-semibold">
                         {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
@@ -226,12 +226,12 @@ export function QuoteCard({
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-1">
-                    <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                    <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Host Insurance
                     </span>
                     <ResponsiveTooltip
                       side="right"
-                      className="max-w-[220px]"
+                      className="max-w-xs"
                       content={
                         <p className="text-sm">
                           Host Insurance: Covers short-term letting and home sharing. This is included in
@@ -249,10 +249,10 @@ export function QuoteCard({
                     </ResponsiveTooltip>
                   </div>
                   <div className="flex items-baseline justify-between gap-2">
-                    <span className="text-[16px] font-semibold text-[#1E1E1E]">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.piklPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-[12px] font-medium text-[#1E1E1E]">
+                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
                       Excess: <span className="font-semibold">£50</span>
                     </span>
                   </div>
@@ -271,12 +271,12 @@ export function QuoteCard({
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-1">
-                    <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                    <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Legal Cover
                     </span>
                     <ResponsiveTooltip
                       side="right"
-                      className="max-w-[220px]"
+                      className="max-w-xs"
                       content={
                         <p className="text-sm">
                           Legal cover is an optional add-on providing legal protection for you and your
@@ -294,7 +294,7 @@ export function QuoteCard({
                     </ResponsiveTooltip>
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                    <span className="text-lg font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.familyLegalAddOnPrice)}
                     </span>
                     <Switch
@@ -318,12 +318,12 @@ export function QuoteCard({
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-1">
-                    <span className="whitespace-nowrap text-[14px] font-medium text-[#1E1E1E]">
+                    <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Emergency Cover
                     </span>
                     <ResponsiveTooltip
                       side="right"
-                      className="max-w-[220px]"
+                      className="max-w-xs"
                       content={
                         <p className="text-sm">
                           Emergency cover is an optional add-on for home emergency cover.
@@ -340,7 +340,7 @@ export function QuoteCard({
                     </ResponsiveTooltip>
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[18px] font-semibold text-[#1E1E1E]">
+                    <span className="text-lg font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.homeEmergencyAddOnPrice)}
                     </span>
                     <Switch
@@ -356,17 +356,17 @@ export function QuoteCard({
             {pricingMode === "monthly" && !monthlyBreakdownInDropdown && (
               <div className="order-4 flex w-full flex-col justify-center py-2 lg:order-2 lg:w-fit lg:flex-none lg:self-stretch">
                 <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
-                  <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
-                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                  <span className="text-sm font-medium text-[#1E1E1E]">Deposit</span>
+                  <span className="text-sm font-semibold text-[#1E1E1E]">
                     {formatPounds(depositAmount)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                   <div className="flex items-center gap-1">
-                    <span className="text-[14px] font-medium text-[#1E1E1E]">× 1</span>
+                    <span className="text-sm font-medium text-[#1E1E1E]">× 1</span>
                     <ResponsiveTooltip
                       side="right"
-                      className="max-w-[220px]"
+                      className="max-w-xs"
                       content={
                         <p className="text-sm">
                           First payment (×1): Our insurer PremFina charges a £5 admin fee on this instalment.
@@ -382,13 +382,13 @@ export function QuoteCard({
                       </button>
                     </ResponsiveTooltip>
                   </div>
-                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                  <span className="text-sm font-semibold text-[#1E1E1E]">
                     {formatPounds(x1Amount)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4 py-2">
-                  <span className="text-[14px] font-medium text-[#1E1E1E]">× 9</span>
-                  <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                  <span className="text-sm font-medium text-[#1E1E1E]">× 9</span>
+                  <span className="text-sm font-semibold text-[#1E1E1E]">
                     {formatPounds(monthlyAmount)}
                   </span>
                 </div>
@@ -402,7 +402,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
                   onClick={() => onPaymentOptionChange("annual")}
                 >
                   Annual
@@ -411,7 +411,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-xs`}
                   onClick={() => onPaymentOptionChange("monthly")}
                 >
                   Monthly
@@ -423,17 +423,17 @@ export function QuoteCard({
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[134px] lg:min-w-[134px] lg:flex-none"
-                  : "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:flex-1 lg:min-w-0"
+                  ? "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-32 lg:min-w-32 lg:flex-none"
+                  : "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:flex-1 lg:min-w-0"
               }
             >
               <div className="flex flex-col">
-                <span className="text-[14px] font-medium text-[#1E1E1E]">
+                <span className="text-sm font-medium text-[#1E1E1E]">
                   {pricingMode === "annual" ? "Total Annual" : "Total Monthly"}
                 </span>
-                <span className="text-[14px] font-medium text-[#1E1E1E]">Premium</span>
+                <span className="text-sm font-medium text-[#1E1E1E]">Premium</span>
               </div>
-              <span className="text-[16px] font-semibold text-[#1E1E1E]">
+              <span className="text-base font-semibold text-[#1E1E1E]">
                 {pricingMode === "annual"
                   ? formatPounds(displayedAnnualTotal)
                   : `${formatPounds(monthlyAmount)}/mo.`}
@@ -443,24 +443,24 @@ export function QuoteCard({
 
           {pricingMode === "monthly" && monthlyBreakdownInDropdown && (
             <Collapsible className="group/breakdown w-full">
-              <CollapsibleTrigger className="flex w-full items-center justify-between rounded-[12px] border border-neutral-200 bg-white px-4 py-3 text-left text-[14px] font-medium text-[#1E1E1E] shadow-sm hover:bg-neutral-50">
+              <CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-neutral-200 bg-white px-4 py-3 text-left text-sm font-medium text-[#1E1E1E] shadow-sm hover:bg-neutral-50">
                 <span>Monthly breakdown</span>
                 <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]/breakdown:rotate-180" />
               </CollapsibleTrigger>
               <CollapsibleContent className="overflow-visible">
-                <div className="mt-3 w-full overflow-hidden rounded-b-[12px] rounded-t-[12px] border border-neutral-200 bg-white shadow-sm">
+                <div className="mt-3 w-full overflow-hidden rounded-b-xl rounded-t-xl border border-neutral-200 bg-white shadow-sm">
                   <div className="flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 py-2">
-                    <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
-                    <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    <span className="text-sm font-medium text-[#1E1E1E]">Deposit</span>
+                    <span className="text-sm font-semibold text-[#1E1E1E]">
                       {formatPounds(depositAmount)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-4 border-b border-neutral-200 bg-neutral-100 px-4 py-2">
                     <div className="flex items-center gap-1">
-                      <span className="text-[14px] font-medium text-[#1E1E1E]">× 1</span>
+                      <span className="text-sm font-medium text-[#1E1E1E]">× 1</span>
                       <ResponsiveTooltip
                         side="right"
-                        className="max-w-[220px]"
+                        className="max-w-xs"
                         content={
                           <p className="text-sm">
                             First payment (×1): Our insurer PremFina charges a £5 admin fee on this instalment.
@@ -476,13 +476,13 @@ export function QuoteCard({
                         </button>
                       </ResponsiveTooltip>
                     </div>
-                    <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                    <span className="text-sm font-semibold text-[#1E1E1E]">
                       {formatPounds(x1Amount)}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between gap-4 rounded-b-[12px] bg-white px-4 py-2">
-                    <span className="text-[14px] font-medium text-[#1E1E1E]">× 9</span>
-                    <span className="text-[14px] font-semibold text-[#1E1E1E]">
+                  <div className="flex items-center justify-between gap-4 rounded-b-xl bg-white px-4 py-2">
+                    <span className="text-sm font-medium text-[#1E1E1E]">× 9</span>
+                    <span className="text-sm font-semibold text-[#1E1E1E]">
                       {formatPounds(monthlyAmount)}
                     </span>
                   </div>
