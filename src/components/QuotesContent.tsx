@@ -47,10 +47,10 @@ export function QuotesContent({
   onOpenOptions,
 }: QuotesContentProps) {
   return (
-    <div className="w-full overflow-x-hidden py-8 px-4 md:px-6 card3:px-6">
-      {/* Centre stage: 3-col stacked up to 1512px; single horizontal card at 1513px+ */}
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col min-[1513px]:w-fit min-[1513px]:max-w-none min-[1513px]:items-center">
-        <div className="mb-8 w-full flex flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between">
+    <div className="w-full overflow-x-hidden py-8 px-4 sm:px-6">
+      {/* Centre stage: 3-col stacked up to lg; single horizontal card at xl+ */}
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col xl:w-fit xl:max-w-none xl:items-center">
+        <div className="mb-8 w-full flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
               {displayedQuotes.length === 0
@@ -61,8 +61,8 @@ export function QuotesContent({
               Find the cover right for you.
             </p>
           </div>
-          <div className="flex w-full flex-row gap-3 min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
-            <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
+          <div className="flex w-full flex-row gap-3 lg:w-auto lg:flex-none lg:items-center lg:justify-end">
+            <div className="flex-1 lg:w-[240px] lg:flex-none">
               <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
                 <SelectTrigger className="w-full" aria-label="Sort">
                   <SelectValue placeholder="Sort by" />
@@ -74,7 +74,7 @@ export function QuotesContent({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex-1 min-[960px]:w-[240px] min-[960px]:flex-none">
+            <div className="flex-1 lg:w-[240px] lg:flex-none">
               <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
                 <SelectTrigger className="w-full" aria-label="Filter">
                   <SelectValue placeholder="Filter" />
@@ -88,18 +88,14 @@ export function QuotesContent({
               </Select>
             </div>
             {onOpenOptions && (
-              <Button
-                type="button"
-                className="flex-1 min-[1513px]:hidden"
-                onClick={onOpenOptions}
-              >
+              <Button type="button" className="flex-1 xl:hidden" onClick={onOpenOptions}>
                 Options
               </Button>
             )}
           </div>
         </div>
 
-        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 card3:grid-cols-2 min-[1220px]:grid-cols-3 min-[1513px]:grid-cols-1 min-[1513px]:w-max min-[1513px]:max-w-none">
+        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 xl:w-max xl:max-w-none">
           {displayedQuotes.length > 0 ? (
             displayedQuotes.map((quote) => (
               <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
