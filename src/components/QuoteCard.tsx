@@ -101,7 +101,7 @@ export function QuoteCard({
       <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 shadow-none transition-shadow duration-200 hover:shadow-lg min-[1340px]:gap-3">
         <div className="flex min-w-0 w-full flex-col gap-3">
           {/* Header */}
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full flex-col items-stretch gap-3 min-[1340px]:flex-row min-[1340px]:items-center min-[1340px]:justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-[76px] w-[76px] shrink-0 items-center justify-center overflow-hidden rounded-[10px] bg-[#F5F5F5]">
                 {quote.logo ? (
@@ -131,8 +131,9 @@ export function QuoteCard({
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <div className="flex items-center gap-2">
+            <div className="flex w-full flex-col items-stretch gap-2 min-[1340px]:w-auto min-[1340px]:flex-row min-[1340px]:items-center min-[1340px]:justify-end min-[1340px]:gap-1.5">
+              {/* Badge + toggle: only show in header on ≥1340px */}
+              <div className="hidden items-center gap-2 min-[1340px]:flex">
                 {pricingMode === "annual" && (
                   <span className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-[#FFF] px-2 py-0.5 text-xs font-medium text-primary">
                     <Tag className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -151,33 +152,38 @@ export function QuoteCard({
                 />
               </div>
 
-              <Button
-                type="button"
-                variant="outline"
-                className="flex items-center justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 py-2 text-[12px] font-medium text-slate-900"
-                onClick={() => onMoreDetails(quote)}
-              >
-                More info
-              </Button>
+              {/* Buttons: stacked on small, inline on ≥1340px */}
+              <div className="flex flex-col gap-2 min-[1340px]:flex-row min-[1340px]:gap-1.5">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-9 w-full justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-[12px] font-medium text-slate-900 min-[1340px]:w-auto"
+                  onClick={() => onMoreDetails(quote)}
+                >
+                  <Info className="h-4 w-4 shrink-0" />
+                  More info
+                </Button>
 
-              <Button
-                type="button"
-                className="flex items-center justify-center gap-1.5 bg-slate-900 px-4 py-2 text-[12px] font-medium text-white"
-                onClick={() => onPurchase?.(quote)}
-              >
-                Purchase
-              </Button>
+                <Button
+                  type="button"
+                  className="h-9 w-full justify-center gap-1.5 bg-slate-900 px-4 text-[12px] font-medium text-white min-[1340px]:w-auto"
+                  onClick={() => onPurchase?.(quote)}
+                >
+                  <ShoppingCart className="h-4 w-4 shrink-0" />
+                  Purchase
+                </Button>
+              </div>
             </div>
           </div>
 
           {/* Content */}
-          <div className="flex min-w-0 w-full max-w-full flex-nowrap items-stretch gap-3">
-            {/* Four coverage blocks */}
+          <div className="flex min-w-0 w-full max-w-full flex-col gap-3 min-[1340px]:flex-row min-[1340px]:items-stretch min-[1340px]:gap-3">
+            {/* Four coverage blocks: 2×2 grid below 1340px, 4 columns on desktop */}
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "grid flex-1 min-w-0 grid-cols-4 gap-3"
-                  : "grid w-max flex-shrink-0 grid-cols-4 gap-3"
+                  ? "order-1 grid w-full flex-1 min-w-0 grid-cols-2 gap-3 min-[1340px]:grid-cols-4"
+                  : "order-1 grid w-full grid-cols-2 gap-3 min-[1340px]:grid-cols-4 min-[1340px]:w-max min-[1340px]:flex-shrink-0"
               }
             >
               {/* Home column */}
@@ -364,7 +370,7 @@ export function QuoteCard({
             </div>
 
             {pricingMode === "monthly" && !monthlyBreakdownInDropdown && (
-              <div className="flex w-fit flex-none flex-col justify-center self-stretch py-2">
+              <div className="order-3 flex w-full flex-col justify-center py-2 min-[1340px]:order-2 min-[1340px]:w-fit min-[1340px]:flex-none min-[1340px]:self-stretch">
                 <div className="flex items-center justify-between gap-4 border-b border-neutral-200 py-2">
                   <span className="text-[14px] font-medium text-[#1E1E1E]">Deposit</span>
                   <span className="text-[14px] font-semibold text-[#1E1E1E]">
@@ -409,8 +415,8 @@ export function QuoteCard({
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "flex w-[134px] min-w-[134px] flex-none flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
-                  : "flex flex-1 min-w-0 flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center"
+                  ? "order-2 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center min-[1340px]:order-3 min-[1340px]:w-[134px] min-[1340px]:min-w-[134px] min-[1340px]:flex-none"
+                  : "order-2 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-[12px] border border-neutral-200 bg-[#FAFAFA] p-3 text-center min-[1340px]:order-3 min-[1340px]:flex-1 min-[1340px]:min-w-0"
               }
             >
               <div className="flex flex-col">
