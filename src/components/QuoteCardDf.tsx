@@ -106,13 +106,13 @@ export function QuoteCardDf({
 
   return (
     <div className="flex min-w-0 w-full">
-      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 shadow-none transition-shadow duration-200 hover:shadow-lg min-[1513px]:gap-3">
+      <Card className="flex min-w-0 w-full max-w-full flex-col items-stretch rounded-[20px] border-none bg-white p-3 shadow-none transition-shadow duration-200 hover:shadow-lg min-[1340px]:gap-3">
         {/* Stacked layout (QuoteCardSm) — 1512px and below */}
         <div
           className={
             forceHorizontalLayout
               ? "hidden"
-              : "flex min-w-0 w-full flex-col gap-2 p-0 min-[1513px]:hidden"
+              : "flex min-w-0 w-full flex-col gap-2 p-0 min-[1340px]:hidden"
           }
         >
           {/* Logo + insurer name (left) | policyType badge (right) */}
@@ -433,12 +433,12 @@ export function QuoteCardDf({
           </Button>
         </div>
 
-        {/* Horizontal layout — 1513px and above */}
+        {/* Horizontal layout — 1340px and above */}
         <div
           className={
             forceHorizontalLayout
               ? "flex min-w-0 w-full flex-col gap-3"
-              : "hidden min-w-0 w-full flex-col gap-3 min-[1513px]:flex"
+              : "hidden min-w-0 w-full flex-col gap-3 min-[1340px]:flex"
           }
         >
           {/* Header */}

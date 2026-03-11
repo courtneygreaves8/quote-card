@@ -36,7 +36,7 @@ export function QuotesPageLayout({
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-neutral-200">
       <Navbar activeLayout="default" onSelectLayout={onLayoutChange} />
       <div className="flex min-h-0 flex-1">
-        <div className="hidden xl:flex">
+        <div className="hidden min-[1340px]:flex">
           <QuoteSidebar
             quoteReference={quoteReference}
             filters={filters}

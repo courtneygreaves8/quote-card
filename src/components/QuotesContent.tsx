@@ -48,8 +48,8 @@ export function QuotesContent({
 }: QuotesContentProps) {
   return (
     <div className="w-full overflow-x-hidden py-8 px-4 sm:px-6">
-      {/* Centre stage: 3-col stacked up to lg; single horizontal card at xl+ */}
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col xl:w-fit xl:max-w-none xl:items-center">
+      {/* Centre stage: 3-col stacked up to lg; single horizontal card at ≥1340px */}
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col min-[1340px]:w-fit min-[1340px]:max-w-none min-[1340px]:items-center">
         <div className="mb-8 w-full flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
@@ -88,14 +88,18 @@ export function QuotesContent({
               </Select>
             </div>
             {onOpenOptions && (
-              <Button type="button" className="flex-1 xl:hidden" onClick={onOpenOptions}>
+              <Button
+                type="button"
+                className="flex-1 min-[1340px]:hidden"
+                onClick={onOpenOptions}
+              >
                 Options
               </Button>
             )}
           </div>
         </div>
 
-        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1 xl:w-max xl:max-w-none">
+        <div className="grid w-full min-w-0 grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-3 min-[1340px]:grid-cols-1 min-[1340px]:w-max min-[1340px]:max-w-none">
           {displayedQuotes.length > 0 ? (
             displayedQuotes.map((quote) => (
               <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
@@ -111,7 +115,6 @@ export function QuotesContent({
                   onMoreDetails={onMoreDetails}
                   onPurchase={onPurchase}
                   monthlyBreakdownInDropdown
-                  forceHorizontalLayout
                 />
               </div>
             ))
