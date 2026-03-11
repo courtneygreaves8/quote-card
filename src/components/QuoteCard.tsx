@@ -100,11 +100,11 @@ export function QuoteCard({
                     <TooltipTrigger asChild>
                       <Star className="h-4 w-4 fill-amber-400 text-amber-500" aria-hidden />
                     </TooltipTrigger>
-                    <TooltipContent>TrustPilot</TooltipContent>
+                    <TooltipContent>Defaqto rating</TooltipContent>
                   </Tooltip>
                 </div>
                 <span className="truncate text-[16px] font-semibold text-[#1E1E1E]">
-                  {(quote.providerName || "Insurer name") + " + Pikl"}
+                  Insurer &amp; Pikl
                 </span>
                 <span className="truncate text-xs text-muted-foreground">{policyType}</span>
               </div>

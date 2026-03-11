@@ -261,7 +261,7 @@ export function QuotesPageAltLayout({
                                     <TooltipTrigger asChild>
                                       <Star className="h-3 w-3 fill-amber-400 text-amber-500" aria-hidden />
                                     </TooltipTrigger>
-                                    <TooltipContent side="right">TrustPilot</TooltipContent>
+                                    <TooltipContent side="right">Defaqto rating</TooltipContent>
                                   </Tooltip>
                                 </span>
                               </div>

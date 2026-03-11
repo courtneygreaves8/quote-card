@@ -176,7 +176,7 @@ export function PolicySheetRight({
   const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[6.625rem] max-[767px]:pt-5">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[6.5rem] max-[767px]:pt-5">
       <SheetSection
         title="Overview"
         open={openOverview}
@@ -462,7 +462,7 @@ export function PolicySheet({
                 className="h-9 shrink-0 whitespace-nowrap px-3"
                 onClick={handlePrimaryAction}
               >
-                Purchase
+                <span className="w-full text-center leading-none">Purchase</span>
               </Button>
             </div>
           </div>
@@ -474,7 +474,7 @@ export function PolicySheet({
                 <Shield className="h-6 w-6" aria-hidden />
               </span>
               <span className="mt-2 text-md font-semibold text-muted-foreground">
-                {(providerName || "Insurer name") + " + Pikl"}
+                Insurer &amp; Pikl
               </span>
             </div>
 
