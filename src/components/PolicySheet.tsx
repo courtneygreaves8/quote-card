@@ -188,7 +188,7 @@ export function PolicySheetRight({
   const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[6rem] max-[767px]:pt-5">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[6.625rem] max-[767px]:pt-5">
       <SheetSection
         title="Overview"
         open={openOverview}

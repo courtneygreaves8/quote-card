@@ -126,14 +126,12 @@ export function QuoteCard({
 
             <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-end lg:gap-1.5">
               {/* Desktop payment toggle: styled like sidebar (pill-shaped) */}
-              <div className="hidden lg:flex w-[220px] items-center rounded-full border border-input bg-muted/30 gap-1 px-1.5 py-1.5">
+              <div className="hidden lg:flex w-[220px] items-center rounded-full border border-input bg-muted/30 gap-1 px-1 py-0.5">
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={
-                    pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-                  }
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
                   onClick={() => onPaymentOptionChange("annual")}
                 >
                   Annual
@@ -142,9 +140,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={
-                    pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-                  }
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
                   onClick={() => onPaymentOptionChange("monthly")}
                 >
                   Monthly
@@ -412,14 +408,12 @@ export function QuoteCard({
 
             {/* Mobile payment toggle – styled like sidebar, full-width below lg */}
             <div className="order-2 w-full lg:hidden">
-              <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-0.5 px-1 py-1">
+              <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-0.5 px-1 py-0.5">
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={
-                    pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-                  }
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
                   onClick={() => onPaymentOptionChange("annual")}
                 >
                   Annual
@@ -428,9 +422,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={
-                    pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-                  }
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 px-2 text-[10px]`}
                   onClick={() => onPaymentOptionChange("monthly")}
                 >
                   Monthly
