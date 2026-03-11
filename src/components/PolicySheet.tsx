@@ -597,21 +597,21 @@ export function PolicySheet({
               </div>
               <div className="mt-2 flex w-full flex-nowrap items-center gap-1.5">
                 <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="/assets/mastercard.png" alt="Mastercard" className="h-4 w-auto max-w-full object-contain" />
+                  <img src="assets/mastercard.png" alt="Mastercard" className="h-4 w-auto max-w-full object-contain" />
                 </span>
                 <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="/assets/visa.png" alt="Visa" className="h-4 w-auto max-w-full object-contain" />
+                  <img src="assets/visa.png" alt="Visa" className="h-4 w-auto max-w-full object-contain" />
                 </span>
                 <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="/assets/applepay.png" alt="Apple Pay" className="h-4 w-auto max-w-full object-contain" />
+                  <img src="assets/applepay.png" alt="Apple Pay" className="h-4 w-auto max-w-full object-contain" />
                 </span>
                 <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="/assets/googlepay.png" alt="Google Pay" className="h-4 w-auto max-w-full object-contain" />
+                  <img src="assets/googlepay.png" alt="Google Pay" className="h-4 w-auto max-w-full object-contain" />
                 </span>
               </div>
               <div className="mt-1 flex w-full items-center justify-between text-[11px] text-muted-foreground">
                 <span>Powered by:</span>
-                <img src="/assets/stripe.png" alt="Stripe" className="h-4 w-auto object-contain" />
+                <img src="assets/stripe.png" alt="Stripe" className="h-4 w-auto object-contain" />
               </div>
             </div>
           </div>
