@@ -10,6 +10,14 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 import {
   COVER_TYPES,
@@ -368,6 +376,36 @@ export function QuoteSidebar({
             Monthly
           </Button>
         </div>
+        {filters.paymentOption === "monthly" && (
+          <div className="mt-2 rounded-[8px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-700">
+            <div className="flex flex-col gap-1">
+              <p>
+                Paying monthly is usually a little more expensive as you'll pay interest.
+              </p>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex w-fit items-center justify-start text-xs font-semibold text-[#1D4ED8] underline-offset-2 hover:underline"
+                  >
+                    Find out more
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <SheetHeader>
+                    <SheetTitle>Paying monthly vs annually</SheetTitle>
+                    <SheetDescription>
+                      When you spread your payments over the year, the insurer usually adds
+                      interest or a credit charge. This means the total you pay across 12
+                      instalments is often higher than if you pay the full annual premium
+                      upfront.
+                    </SheetDescription>
+                  </SheetHeader>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+        )}
       </div>
 
       {isSheet && (
