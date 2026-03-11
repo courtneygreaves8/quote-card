@@ -1,15 +1,4 @@
-import {
-  ChevronDown,
-  HelpCircle,
-  Home,
-  Info,
-  Scale,
-  Tag,
-  ShoppingCart,
-  Star,
-  Users,
-  Wrench,
-} from "lucide-react"
+import { ChevronDown, HelpCircle, Home, Info, Scale, ShoppingCart, Star, Users, Wrench } from "lucide-react"
 import {
   ANNUAL_DISPLAY_MAX,
   ANNUAL_DISPLAY_MIN,
@@ -24,7 +13,6 @@ import type { PaymentOption } from "@/types/quote"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
@@ -41,7 +29,6 @@ interface QuoteCardProps {
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
   monthlyBreakdownInDropdown?: boolean
-  forceHorizontalLayout?: boolean
 }
 
 const TOOLTIP_TRIGGER_CLASS_DF =
@@ -65,7 +52,6 @@ export function QuoteCard({
   onMoreDetails,
   onPurchase,
   monthlyBreakdownInDropdown = false,
-  forceHorizontalLayout = false,
 }: QuoteCardProps) {
   const pricingMode = paymentOption
 

@@ -1,16 +1,4 @@
-import {
-  AlertCircle,
-  Building2,
-  Check,
-  ChevronDown,
-  Copy,
-  Download,
-  Lock,
-  Mail,
-  Save,
-  Shield,
-  X,
-} from "lucide-react"
+import { Building2, Check, ChevronDown, Copy, Download, Lock, Mail, Save, Shield, X } from "lucide-react"
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
 import { COMPULSORY_EXCESS } from "@/lib/constants"
 import { cn, parseExcessNum } from "@/lib/utils"
@@ -399,7 +387,7 @@ export function PolicySheet({
 
   if (!quote) return null
 
-  const { policyDetails, providerName, logo } = quote
+  const { policyDetails, providerName } = quote
   const monthlyPrice = quote.piklPrice
   const annualPrice = monthlyPrice * 12
   const deposit = monthlyPrice

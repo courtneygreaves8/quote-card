@@ -575,7 +575,6 @@ export function QuotesPageAltLayout({
                           onMoreDetails={handleMoreDetails}
                           onPurchase={() => handlePurchase()}
                           monthlyBreakdownInDropdown
-                          forceHorizontalLayout
                         />
                       </div>
                     ))}
@@ -601,7 +600,6 @@ export function QuotesPageAltLayout({
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
-                        forceHorizontalLayout
                       />
                     </div>
                   </div>
@@ -638,7 +636,6 @@ export function QuotesPageAltLayout({
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
-                        forceHorizontalLayout
                       />
                     </div>
                   </div>
@@ -667,7 +664,6 @@ export function QuotesPageAltLayout({
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
-                        forceHorizontalLayout
                       />
                     </div>
                   </div>
