@@ -3,7 +3,7 @@ import type { FilterOption } from "@/types/quote"
 /**
  * Layout breakpoints (use in Tailwind: min-[1440px], min-[1513px], etc.):
  * - 1440px: persistent QuoteSidebar visible; Options button hidden.
- * - 1513px: QuoteCardDf horizontal layout + single-card grid; below 1513px = stacked cards (1/2/3 cols by width).
+ * - 1513px: QuoteCard horizontal layout + single-card grid; below 1513px = stacked cards (1/2/3 cols by width).
  * - card3 (1100px): 3-column grid starts.
  */
 /** Horizontal padding for navbar and sidebar (aligns nav content with sidebar content) */

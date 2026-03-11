@@ -1,5 +1,5 @@
 import type { FilterOption, PaymentOption, Quote, SortOption } from "@/types/quote"
-import { QuoteCardDf } from "@/components/QuoteCardDf"
+import { QuoteCard } from "@/components/QuoteCard"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -103,7 +103,7 @@ export function QuotesContent({
           {displayedQuotes.length > 0 ? (
             displayedQuotes.map((quote) => (
               <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
-                <QuoteCardDf
+                <QuoteCard
                   quote={quote}
                   policyType={policyType}
                   paymentOption={paymentOption}

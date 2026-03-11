@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/Navbar"
 import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
-import { QuoteCardDf } from "@/components/QuoteCardDf"
+import { QuoteCard } from "@/components/QuoteCard"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
 import { Button } from "@/components/ui/button"
@@ -557,7 +557,7 @@ export function QuotesPageAltLayout({
                   <div className="mb-0 flex flex-col gap-3">
                     {displayedQuotes.map((quote) => (
                       <div key={quote.id} className="w-full max-w-[960px]">
-                        <QuoteCardDf
+                        <QuoteCard
                           quote={quote}
                           policyType={filters.policyType}
                           paymentOption={filters.paymentOption}
@@ -583,7 +583,7 @@ export function QuotesPageAltLayout({
                 ) : primaryQuote ? (
                   <div className="mb-0 flex flex-col gap-1">
                     <div className="w-full max-w-[960px]">
-                      <QuoteCardDf
+                      <QuoteCard
                         quote={primaryQuote}
                         policyType={filters.policyType}
                         paymentOption={filters.paymentOption}
@@ -620,7 +620,7 @@ export function QuotesPageAltLayout({
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
                     <div className="w-full max-w-[960px]">
-                      <QuoteCardDf
+                      <QuoteCard
                         quote={secondaryQuote}
                         policyType={filters.policyType}
                         paymentOption={filters.paymentOption}
@@ -649,7 +649,7 @@ export function QuotesPageAltLayout({
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
                     <div className="w-full max-w-[960px]">
-                      <QuoteCardDf
+                      <QuoteCard
                         quote={tertiaryQuote}
                         policyType={filters.policyType}
                         paymentOption={filters.paymentOption}
