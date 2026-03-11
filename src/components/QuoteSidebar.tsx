@@ -352,7 +352,7 @@ export function QuoteSidebar({
         <Label className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
           Payment
         </Label>
-        <div className="flex h-10 w-full items-center rounded-[8px] border border-input bg-muted/30 gap-0.5 p-0.5">
+        <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-1 px-1 py-1">
           <Button
             type="button"
             variant="ghost"

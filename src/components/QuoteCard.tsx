@@ -125,24 +125,30 @@ export function QuoteCard({
             </div>
 
             <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-end lg:gap-1.5">
-              {/* Badge + toggle: only show in header on ≥lg (1024px) */}
-              <div className="hidden items-center gap-2 lg:flex">
-                {pricingMode === "annual" && (
-                  <span className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-[#FFF] px-3 py-0.5 text-xs font-medium text-primary whitespace-nowrap">
-                    <Tag className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                    10% cheaper
-                  </span>
-                )}
-                <span className="text-[14px] font-medium leading-[14px] text-[#1E1E1E]">
-                  {pricingMode === "annual" ? "Annual" : "Monthly"}
-                </span>
-                <Switch
-                  checked={pricingMode === "monthly"}
-                  onCheckedChange={(checked) =>
-                    onPaymentOptionChange(checked ? "monthly" : "annual")
+              {/* Desktop payment toggle: styled like sidebar (pill-shaped) */}
+              <div className="hidden lg:flex w-[220px] items-center rounded-full border border-input bg-muted/30 gap-1 px-1.5 py-1.5">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={
+                    pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
                   }
-                  aria-label="Toggle annual or monthly"
-                />
+                  onClick={() => onPaymentOptionChange("annual")}
+                >
+                  Annual
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={
+                    pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
+                  }
+                  onClick={() => onPaymentOptionChange("monthly")}
+                >
+                  Monthly
+                </Button>
               </div>
 
               {/* Buttons: side by side on all breakpoints (fill width on small) */}
@@ -406,7 +412,7 @@ export function QuoteCard({
 
             {/* Mobile payment toggle – styled like sidebar, full-width below lg */}
             <div className="order-2 w-full lg:hidden">
-              <div className="flex w-full items-center rounded-[999px] border border-input bg-muted/30 gap-0.5 px-1 py-1">
+              <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-0.5 px-1 py-1">
                 <Button
                   type="button"
                   variant="ghost"
