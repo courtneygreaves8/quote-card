@@ -90,10 +90,11 @@ export function QuotesContent({
             {onOpenOptions && (
               <Button
                 type="button"
+                variant="outline"
                 className="flex-1 min-[1340px]:hidden"
                 onClick={onOpenOptions}
               >
-                Options
+                Refine results
               </Button>
             )}
           </div>

@@ -128,7 +128,7 @@ export function QuoteCard({
               {/* Badge + toggle: only show in header on ≥lg (1024px) */}
               <div className="hidden items-center gap-2 lg:flex">
                 {pricingMode === "annual" && (
-                  <span className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-[#FFF] px-2 py-0.5 text-xs font-medium text-primary">
+                  <span className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-[#FFF] px-3 py-0.5 text-xs font-medium text-primary whitespace-nowrap">
                     <Tag className="h-3.5 w-3.5 shrink-0" aria-hidden />
                     10% cheaper
                   </span>
