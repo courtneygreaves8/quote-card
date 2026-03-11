@@ -163,7 +163,6 @@ export function useQuotesPage() {
     filter,
     setFilter,
     showLoadingModal,
-    setShowLoadingModal,
     showPurchaseConfirmed,
     displayedQuotes,
     handleSelectQuote,

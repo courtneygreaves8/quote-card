@@ -15,7 +15,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
   const FACTS = [
     "Did you know? People who Pikl'd their property last year saved on average £7,000 in guest-related claims.",
     "Last year we made hosting safer for 27,407 landlords.",
-    "We also offer B2B solutions working withsome of the major hosting companies like Business name, Business name and Business name.",
+    "We also offer B2B solutions for some of the major hosting companies like Business name, Business name and Business name.",
   ]
   const [factIndex, setFactIndex] = useState(0)
 
@@ -95,9 +95,9 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
               </button>
               <div
                 key={factIndex}
-                className="min-w-0 flex flex-1 flex-col items-center gap-1.5 rounded-[10px] border border-[#15803D] bg-[#F4FBF7] px-3 py-2 text-center animate-fact-card-slide"
+                className="min-w-0 flex flex-1 flex-col items-center gap-1.5 rounded-[10px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-center animate-fact-card-slide"
               >
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#15803D] bg-white text-[#15803D]">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-500">
                   <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
                 </span>
                 <p className="text-xs text-muted-foreground">{FACTS[factIndex]}</p>
