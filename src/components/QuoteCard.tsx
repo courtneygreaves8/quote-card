@@ -133,6 +133,8 @@ export function QuoteCard({
                 </Button>
               </div>
 
+              <div className="hidden h-8 w-px shrink-0 bg-border lg:block" aria-hidden />
+
               {/* Buttons: side by side on all breakpoints (fill width on small) */}
               <div className="flex w-full flex-row gap-2 lg:gap-1.5">
                 <Button
