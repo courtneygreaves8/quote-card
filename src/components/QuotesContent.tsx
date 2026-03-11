@@ -49,7 +49,7 @@ export function QuotesContent({
   return (
     <div className="w-full overflow-x-hidden py-8 px-4 sm:px-6">
       {/* Centre stage: compact up to lg; single horizontal card at ≥1340px */}
-    <div className="mx-auto flex w-full max-w-4xl flex-col min-[1340px]:w-fit min-[1340px]:max-w-none min-[1340px]:items-center">
+      <div className="mx-auto flex w-full max-w-full flex-col min-[1024px]:max-w-[968px] min-[1340px]:w-fit min-[1340px]:max-w-none min-[1340px]:items-center">
         <div className="mb-8 w-full flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">

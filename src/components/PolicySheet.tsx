@@ -214,7 +214,7 @@ export function PolicySheetRight({
           {POLICY_INCLUDES_LIST.map((item, i) => (
             <li
               key={i}
-              className="flex items-start gap-2 rounded-[8px] px-3 py-2 transition-colors hover:bg-neutral-50"
+              className="flex items-start gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-neutral-50"
             >
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-foreground" />
               <div>
@@ -314,7 +314,7 @@ export function PolicySheetRight({
         open={openAboutInsurer}
         onToggle={() => setOpenAboutInsurer((v) => !v)}
       >
-        <Card className="overflow-hidden rounded-[8px] border border-border">
+        <Card className="overflow-hidden rounded-lg border border-border">
           <CardContent className="p-4">
             <span
               className="mb-2 inline-flex items-center justify-center rounded-md border border-border bg-muted p-1.5 text-muted-foreground"
@@ -466,7 +466,7 @@ export function PolicySheet({
         {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
           <div className="flex w-full shrink-0 flex-col border-b border-border bg-white px-7 py-6 max-[767px]:px-5 max-[767px]:py-4 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
             <div className="flex flex-col items-center text-center">
-              <span className="-mb-1 inline-flex h-[48px] w-[48px] items-center justify-center overflow-hidden rounded-[12px] border border-border bg-muted text-muted-foreground">
+              <span className="-mb-1 inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-muted-foreground">
                 <Shield className="h-6 w-6" aria-hidden />
               </span>
               <span className="mt-2 text-md font-semibold text-muted-foreground">
@@ -503,8 +503,7 @@ export function PolicySheet({
             </div>
 
             <div className="mt-[18px] flex flex-col gap-1 rounded-lg border border-amber-400 bg-amber-50 px-2 py-2 max-[767px]:mt-[10px]">
-              
-              <p className="text-[12px] text-amber-900 italic">
+              <p className="text-xs text-amber-900 italic">
                 Your quote will be saved for the next 1 day. After that, you&apos;ll
                 need to refresh your results to get the latest price.
               </p>
@@ -560,7 +559,7 @@ export function PolicySheet({
             </div>
 
             <div className="mt-8 md:mt-auto flex flex-col gap-2 rounded-md border border-border bg-neutral-50 p-3">
-              <div className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-3 py-2 text-[11px] font-semibold tracking-wide text-neutral-900 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+              <div className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-3 py-2 text-xs font-semibold tracking-wide text-neutral-900 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
                 <Lock className="h-3 w-3 text-neutral-800" aria-hidden />
                 <span>256-bit SSL</span>
               </div>
@@ -578,7 +577,7 @@ export function PolicySheet({
                   <img src="assets/googlepay.png" alt="Google Pay" className="h-4 w-auto max-w-full object-contain" />
                 </span>
               </div>
-              <div className="mt-1 flex w-full items-center justify-between text-[11px] text-muted-foreground">
+              <div className="mt-1 flex w-full items-center justify-between text-xs text-muted-foreground">
                 <span>Powered by:</span>
                 <img src="assets/stripe.png" alt="Stripe" className="h-4 w-auto object-contain" />
               </div>

@@ -66,7 +66,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
             />
           ))}
           {/* Pikl logo: circle with thick stroke + text – same center */}
-          <div className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-[6px] border-foreground bg-white">
+          <div className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-foreground bg-white">
             <span className="text-lg font-bold tracking-tight text-foreground">
               Pikl
             </span>
@@ -95,7 +95,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
               </button>
               <div
                 key={factIndex}
-                className="min-w-0 flex flex-1 flex-col items-center gap-1.5 rounded-[10px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-center animate-fact-card-slide"
+                className="min-w-0 flex flex-1 flex-col items-center gap-1.5 rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 text-center animate-fact-card-slide"
               >
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-500">
                   <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
