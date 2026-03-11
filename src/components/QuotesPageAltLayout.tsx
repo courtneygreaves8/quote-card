@@ -232,7 +232,7 @@ export function QuotesPageAltLayout({
                           ].join(" ")}
                         >
                           {/* Logo block on the left for small screens */}
-                          <div className="hidden max-[1295px]:flex aspect-square shrink-0 items-center justify-center self-stretch overflow-hidden rounded-[8px] bg-[#F5F5F5]">
+                          <div className="hidden max-[1295px]:flex h-[131px] w-[131px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-[#F5F5F5]">
                             {quote.logo ? (
                               <img
                                 src={quote.logo}
