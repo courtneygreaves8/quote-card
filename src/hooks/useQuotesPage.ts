@@ -36,14 +36,6 @@ export function useQuotesPage() {
     "QR-" + Math.random().toString(36).slice(2, 10).toUpperCase()
   )
 
-  // Auto-complete initial loading state after 2 seconds (used by Org layout's loading modal)
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setShowLoadingModal(false)
-    }, 2000)
-    return () => window.clearTimeout(timeoutId)
-  }, [])
-
   const quotes = useMemo(() => {
     const selectedExcessNum = parseExcessNum(filters.excess)
     let list = mockQuotes.filter(

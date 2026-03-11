@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button"
+import { Info } from "lucide-react"
 import { useEffect, useState } from "react"
 
-const POLL_INTERVAL_MS = 80
+const POLL_INTERVAL_MS = 40
 const PROGRESS_STEP = 4
 
 interface LoadingModalProps {
@@ -65,9 +66,20 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-center text-sm text-muted-foreground">
-            {progress < 100 ? "Finding your best quotes…" : "Ready"}
-          </p>
+          <div className="space-y-2 text-center">
+            <p className="text-sm text-muted-foreground">
+              {progress < 100 ? "Finding your best quotes…" : "Ready"}
+            </p>
+            <div className="mx-auto flex max-w-xs items-start gap-2 rounded-[10px] border border-neutral-200 bg-neutral-50 px-3 py-2 text-left">
+              <span className="mt-0.5 text-neutral-500">
+                <Info className="h-4 w-4" aria-hidden />
+              </span>
+              <p className="text-xs text-muted-foreground">
+                Did you know? People who Pikl&apos;d their property last year saved on average £7,000 in guest
+                related claims.
+              </p>
+            </div>
+          </div>
         </div>
 
         <Button
