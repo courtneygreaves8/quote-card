@@ -5,17 +5,17 @@ import {
   MONTHLY_DEPOSIT_EXTRA,
   MONTHLY_DIVISOR,
   MONTHLY_X1_EXTRA,
+  PAYMENT_ACTIVE_CLASS,
+  PAYMENT_INACTIVE_CLASS,
   SOURCE_TOTAL_MAX,
   SOURCE_TOTAL_MIN,
 } from "@/lib/constants"
-import { Quote } from "@/types/quote"
-import type { PaymentOption } from "@/types/quote"
+import type { PaymentOption, Quote } from "@/types/quote"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
-import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
+import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
+import { Switch } from "@/components/ui/switch"
 
 interface QuoteCardProps {
   quote: Quote

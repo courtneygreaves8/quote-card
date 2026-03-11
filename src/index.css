@@ -105,6 +105,7 @@
 .quote-list-poll-in {
   opacity: 0;
   animation: prefilled-fade-in 0.4s ease-out forwards;
+  animation-delay: var(--quote-poll-delay, 0ms);
 }
 
 @keyframes fact-card-slide {

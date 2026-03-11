@@ -15,7 +15,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
   const FACTS = [
     "Did you know? People who Pikl'd their property last year saved on average £7,000 in guest-related claims.",
     "Last year we made hosting safer for 27,407 landlords.",
-    "We also offer B2B solutions working withsome of the major hosting companies like Business name, Business name and Business name.",
+    "We also offer B2B solutions for some of the major hosting companies like Business name, Business name and Business name.",
   ]
   const [factIndex, setFactIndex] = useState(0)
 

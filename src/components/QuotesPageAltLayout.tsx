@@ -1,15 +1,15 @@
+import { Check, Star } from "lucide-react"
 import { Navbar } from "@/components/Navbar"
 import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
 import { QuoteCard } from "@/components/QuoteCard"
+import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
-import type { useQuotesPage } from "@/hooks/useQuotesPage"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Check, Star } from "lucide-react"
-import { useEffect, useLayoutEffect, useState } from "react"
-import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
-import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
+import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS, QUOTE_LIST_POLL_DURATION_MS } from "@/lib/constants"
+import type { useQuotesPage } from "@/hooks/useQuotesPage"
+import { useQuotesAltLayout } from "@/hooks/useQuotesAltLayout"
 
 export type QuotesPageAltLayoutProps = ReturnType<typeof useQuotesPage> & {
   onLayoutChange: (variant: "default" | "alt") => void
@@ -31,69 +31,25 @@ export function QuotesPageAltLayout({
   handleMoreDetails,
   handlePurchase,
 }: QuotesPageAltLayoutProps) {
-  const activeQuote = selectedQuote ?? displayedQuotes[0] ?? null
-  const [compareIds, setCompareIds] = useState<string[]>([])
-  const [viewMode, setViewMode] = useState<"all" | "compare">("compare")
-  const [sortMode, setSortMode] = useState<"price" | "rating">("price")
-  const [visibleQuoteCount, setVisibleQuoteCount] = useState(0)
-
-  const primaryQuote =
-    compareIds.length > 0
-      ? displayedQuotes.find((q) => q.id === compareIds[0]) ?? activeQuote
-      : activeQuote
-
-  const secondaryQuote =
-    compareIds.length > 1
-      ? displayedQuotes.find((q) => q.id === compareIds[1]) ?? null
-      : null
-
-  const tertiaryQuote =
-    compareIds.length > 2
-      ? displayedQuotes.find((q) => q.id === compareIds[2]) ?? null
-      : null
-
-  const handleToggleCompare = (id: string) => {
-    setCompareIds((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((x) => x !== id)
-      }
-      if (prev.length >= 3) {
-        return prev
-      }
-      return [...prev, id]
-    })
-  }
-
-  const sortedQuotes =
-    sortMode === "price"
-      ? [...displayedQuotes].sort((a, b) => a.piklPrice - b.piklPrice)
-      : [...displayedQuotes].sort((a, b) => b.trustpilotRating - a.trustpilotRating)
-
-  useLayoutEffect(() => {
-    const n = sortedQuotes.length
-    if (n === 0) {
-      setVisibleQuoteCount(0)
-      return
-    }
-    setVisibleQuoteCount(1)
-    const totalDurationMs = 7000
-    const timeouts: number[] = []
-    for (let i = 1; i < n; i++) {
-      const delayMs = n > 1 ? (i / (n - 1)) * totalDurationMs : 0
-      const t = window.setTimeout(() => {
-        setVisibleQuoteCount(i + 1)
-      }, delayMs)
-      timeouts.push(t)
-    }
-    return () => timeouts.forEach(clearTimeout)
-  }, [sortMode, displayedQuotes.length])
-
-  // When the quote list shrinks, cap the displayed count
-  useEffect(() => {
-    setVisibleQuoteCount((prev) =>
-      sortedQuotes.length < prev ? sortedQuotes.length : prev
-    )
-  }, [sortedQuotes.length])
+  const {
+    primaryQuote,
+    secondaryQuote,
+    tertiaryQuote,
+    viewMode,
+    setViewMode,
+    sortMode,
+    setSortMode,
+    visibleQuoteCount,
+    sortedQuotes,
+    compareIds,
+    handleToggleCompare,
+    handleQuoteListClick,
+  } = useQuotesAltLayout({
+    displayedQuotes,
+    selectedQuote,
+    onMoreDetails: handleMoreDetails,
+    onSelectQuote: handleSelectQuote,
+  })
 
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-[#F1F1F1]">
@@ -200,30 +156,20 @@ export function QuotesPageAltLayout({
                     const annualPrice = monthlyPrice * 12
                     const isMonthlyPrimary = filters.paymentOption === "monthly"
 
-                    const totalDurationMs = 7000
                     const delayMs =
                       sortedQuotes.length > 1
-                        ? (index / (sortedQuotes.length - 1)) * totalDurationMs
+                        ? (index / (sortedQuotes.length - 1)) * QUOTE_LIST_POLL_DURATION_MS
                         : 0
 
                     return (
                       <div
                         key={quote.id}
                         className="flex w-full items-stretch gap-2 quote-list-poll-in"
-                        style={{ animationDelay: `${delayMs}ms` }}
+                        style={{ ["--quote-poll-delay" as string]: `${delayMs}ms` }}
                       >
                         <button
                           type="button"
-                          onClick={() => {
-                            // On narrower viewports, open the policy sheet instead of showing the preview card
-                            if (window.innerWidth <= 1119) {
-                              handleMoreDetails(quote)
-                            } else {
-                              // Only control which quote is shown on the right;
-                              // compare checkboxes exclusively control comparison selection.
-                              handleSelectQuote(quote)
-                            }
-                          }}
+                          onClick={() => handleQuoteListClick(quote)}
                           className={[
                             "flex w-full items-stretch gap-2 rounded-[10px] border px-3 py-2 max-[767px]:py-3 text-left text-sm transition-colors",
                             isActive
