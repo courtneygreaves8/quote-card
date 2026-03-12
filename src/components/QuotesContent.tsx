@@ -1,4 +1,5 @@
 import type { FilterOption, PaymentOption, Quote, SortOption } from "@/types/quote"
+import { useState } from "react"
 import { QuoteCard } from "@/components/QuoteCard"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,8 +25,8 @@ interface QuotesContentProps {
   onLegalCoverChange: (checked: boolean) => void
   homeEmergency: boolean
   onHomeEmergencyChange: (checked: boolean) => void
-   buildingsAccidentalDamage: boolean
-   contentsAccidentalDamage: boolean
+  buildingsAccidentalDamage: boolean
+  contentsAccidentalDamage: boolean
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
   onOpenOptions?: () => void
@@ -50,6 +51,13 @@ export function QuotesContent({
   onPurchase,
   onOpenOptions,
 }: QuotesContentProps) {
+  const [selectedQuoteId, setSelectedQuoteId] = useState<string | null>(null)
+
+  const selectedQuote =
+    selectedQuoteId != null
+      ? displayedQuotes.find((q) => q.id === selectedQuoteId) ?? null
+      : null
+
   return (
     <div className="w-full overflow-x-hidden py-8 px-4 sm:px-6">
       {/* Centre stage: compact up to lg; single horizontal card at ≥1340px */}
@@ -104,7 +112,56 @@ export function QuotesContent({
           </div>
         </div>
 
-        <div className="grid w-full min-w-0 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1">
+        {/* Compact quote list row under heading on small/medium screens */}
+        {displayedQuotes.length > 0 && (
+          <div className="mb-4 flex w-full flex-wrap gap-2 pb-1 max-[1295px]:flex min-[1296px]:hidden">
+            {displayedQuotes.map((quote) => {
+              const monthlyPrice = quote.piklPrice
+              const annualPrice = monthlyPrice * 12
+              const isMonthlyPrimary = paymentOption === "monthly"
+
+              return (
+                <button
+                  key={quote.id}
+                  type="button"
+                  onClick={() => setSelectedQuoteId(quote.id)}
+                  className="flex flex-1 min-w-[220px] items-center justify-between rounded-xl border border-border bg-white px-3 py-2 text-left text-xs shadow-sm hover:bg-muted/60"
+                >
+                  <span className="mr-2 flex min-w-0 flex-col">
+                    <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
+                      {quote.providerName}
+                    </span>
+                    <span className="truncate text-[11px] text-muted-foreground">
+                      {policyType}
+                    </span>
+                  </span>
+                  <span className="flex flex-col items-end">
+                    <span className="text-sm font-semibold text-[#1E1E1E]">
+                      £{(isMonthlyPrimary ? monthlyPrice : annualPrice).toFixed(2)}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground">
+                      {isMonthlyPrimary ? "/mo." : "annual"}
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Empty placeholder panel under compact list on small/medium screens */}
+        {displayedQuotes.length > 0 && !selectedQuote && (
+          <div className="mb-6 w-full max-[1295px]:block min-[1296px]:hidden">
+            <div className="w-full rounded-xl border border-dashed border-neutral-300 bg-[#FAFAFA] px-4 py-6 text-center">
+              <p className="text-sm font-medium text-[#1E1E1E]">
+                Select a quote to view it here.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Desktop / large layout: full grid of QuoteCards */}
+        <div className="grid w-full min-w-0 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1 max-[1295px]:hidden">
           {displayedQuotes.length > 0 ? (
             displayedQuotes.map((quote) => (
               <div key={quote.id} className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
@@ -134,6 +191,29 @@ export function QuotesContent({
             </div>
           )}
         </div>
+
+        {/* Small/medium screens: show only the selected QuoteCard */}
+        {selectedQuote && (
+          <div className="w-full max-[1295px]:block min-[1296px]:hidden">
+            <div className="min-w-0 w-full min-h-0 [&>*]:min-w-0 [&>*]:w-full">
+              <QuoteCard
+                quote={selectedQuote}
+                policyType={policyType}
+                paymentOption={paymentOption}
+                onPaymentOptionChange={onPaymentOptionChange}
+                legalCover={legalCover}
+                homeEmergency={homeEmergency}
+                buildingsAccidentalDamage={buildingsAccidentalDamage}
+                contentsAccidentalDamage={contentsAccidentalDamage}
+                onLegalCoverChange={onLegalCoverChange}
+                onHomeEmergencyChange={onHomeEmergencyChange}
+                onMoreDetails={onMoreDetails}
+                onPurchase={onPurchase}
+                monthlyBreakdownInDropdown
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -9,6 +9,8 @@ import type { useQuotesPage } from "@/hooks/useQuotesPage"
 
 export type QuotesPageLayoutProps = ReturnType<typeof useQuotesPage> & {
   onLayoutChange: (variant: "default" | "alt") => void
+  /** Allow alt layout to reuse body without rendering a second navbar */
+  showNavbar?: boolean
 }
 
 export function QuotesPageLayout({
@@ -31,10 +33,11 @@ export function QuotesPageLayout({
   handlePurchase,
   handleLoadingComplete,
   onLayoutChange,
+  showNavbar = true,
 }: QuotesPageLayoutProps) {
   return (
     <div className="flex h-screen flex-col bg-neutral-50">
-      <Navbar activeLayout="default" onSelectLayout={onLayoutChange} />
+      {showNavbar && <Navbar activeLayout="default" onSelectLayout={onLayoutChange} />}
       <div className="flex min-h-0 flex-1">
         <div className="hidden min-[1340px]:flex">
           <QuoteSidebar

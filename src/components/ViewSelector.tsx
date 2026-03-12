@@ -6,7 +6,7 @@ import { useState } from "react"
 
 export function ViewSelector() {
   const state = useQuotesPage()
-  const [layoutVariant, setLayoutVariant] = useState<"default" | "alt">("default")
+  const [layoutVariant, setLayoutVariant] = useState<"default" | "alt">("alt")
 
   if (state.showPurchaseConfirmed) {
     return <PurchaseConfirmed onSkip={state.handleClosePurchaseConfirmed} />
