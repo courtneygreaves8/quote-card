@@ -22,6 +22,7 @@ export function useQuotesAltLayout({
   const [viewMode, setViewMode] = useState<"all" | "compare">("compare")
   const [sortMode, setSortMode] = useState<AltSortMode>("price")
   const [visibleQuoteCount, setVisibleQuoteCount] = useState(0)
+  const [hasCompletedInitialPoll, setHasCompletedInitialPoll] = useState(false)
 
   const sortedQuotes = useMemo(
     () =>
@@ -66,8 +67,10 @@ export function useQuotesAltLayout({
     const n = sortedQuotes.length
     if (n === 0) {
       setVisibleQuoteCount(0)
+      setHasCompletedInitialPoll(false)
       return
     }
+    setHasCompletedInitialPoll(false)
     setVisibleQuoteCount(1)
     const timeouts: number[] = []
     for (let i = 1; i < n; i++) {
@@ -77,13 +80,19 @@ export function useQuotesAltLayout({
       timeouts.push(t)
     }
     return () => timeouts.forEach(clearTimeout)
-  }, [sortMode, sortedQuotes.length])
+  }, [sortedQuotes.length])
 
   useEffect(() => {
     setVisibleQuoteCount((prev) =>
       sortedQuotes.length < prev ? sortedQuotes.length : prev
     )
   }, [sortedQuotes.length])
+
+  useEffect(() => {
+    if (sortedQuotes.length > 0 && visibleQuoteCount >= sortedQuotes.length) {
+      setHasCompletedInitialPoll(true)
+    }
+  }, [sortedQuotes.length, visibleQuoteCount])
 
   return {
     activeQuote,
@@ -93,6 +102,7 @@ export function useQuotesAltLayout({
     sortMode,
     setSortMode,
     visibleQuoteCount,
+    hasCompletedInitialPoll,
     sortedQuotes,
     primaryQuote,
     secondaryQuote,

@@ -197,29 +197,50 @@ export function QuotesContent({
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100">
                       <span className="text-[10px] font-semibold text-slate-600">LOGO</span>
                     </span>
-                    <span className="flex min-w-0 flex-col gap-0.5">
-                      <span className="flex w-full items-baseline gap-3">
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      {/* Mobile (≤767px): row1 = insurer + price (right), row2 = policy + annual (right) */}
+                      <span className="flex w-full items-baseline justify-between gap-2 max-[767px]:flex min-[768px]:hidden">
                         <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
                           {quote.providerName}
                         </span>
                         <span
                           data-debug-id="default-compact-price"
-                          className="ml-auto flex items-baseline gap-1 whitespace-nowrap text-sm font-semibold text-[#1E1E1E]"
+                          className="shrink-0 text-sm font-semibold text-[#1E1E1E]"
                         >
                           £{(isMonthlyPrimary ? monthlyPrice : annualPrice).toFixed(2)}
                         </span>
                       </span>
-                      <span className="flex w-full items-baseline gap-7">
-                        {/* Full label on ≤767px, truncated on 768–1295px */}
-                        <span className="truncate text-[11px] text-muted-foreground max-[767px]:inline min-[768px]:hidden">
+                      <span className="flex w-full items-baseline justify-between gap-2 max-[767px]:flex min-[768px]:hidden">
+                        <span className="truncate text-[11px] text-muted-foreground">
                           {policyType}
                         </span>
-                        <span className="truncate text-[11px] text-muted-foreground max-[767px]:hidden min-[768px]:inline">
+                        <span
+                          data-debug-id="default-compact-price-label"
+                          className="shrink-0 text-[11px] font-normal text-muted-foreground"
+                        >
+                          {isMonthlyPrimary ? "/mo." : "annual"}
+                        </span>
+                      </span>
+
+                      {/* Tablet/desktop (≥768px): insurer + price (right), policy + term (right) */}
+                      <span className="hidden w-full items-baseline justify-between gap-3 min-[768px]:flex">
+                        <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
+                          {quote.providerName}
+                        </span>
+                        <span
+                          data-debug-id="default-compact-price"
+                          className="shrink-0 flex items-baseline gap-1 whitespace-nowrap text-sm font-semibold text-[#1E1E1E]"
+                        >
+                          £{(isMonthlyPrimary ? monthlyPrice : annualPrice).toFixed(2)}
+                        </span>
+                      </span>
+                      <span className="hidden w-full items-baseline justify-between gap-7 min-[768px]:flex">
+                        <span className="truncate text-[11px] text-muted-foreground">
                           {policyType === "Buildings & Contents" ? "Buildings & Conten" : policyType}
                         </span>
                         <span
                           data-debug-id="default-compact-price-label"
-                          className="ml-auto text-[11px] font-normal text-muted-foreground"
+                          className="shrink-0 text-[11px] font-normal text-muted-foreground"
                         >
                           {isMonthlyPrimary ? "/mo." : "annual"}
                         </span>

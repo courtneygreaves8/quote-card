@@ -46,6 +46,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
     setSortMode,
     visibleQuoteCount,
     sortedQuotes,
+    hasCompletedInitialPoll,
     compareIds,
     handleToggleCompare,
     handleQuoteListClick,
@@ -276,8 +277,14 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                     return (
                       <div
                         key={quote.id}
-                        className="flex w-full items-stretch gap-2 quote-list-poll-in"
-                        style={{ ["--quote-poll-delay" as string]: `${delayMs}ms` }}
+                        className={`flex w-full items-stretch gap-2 ${
+                          hasCompletedInitialPoll ? "" : "quote-list-poll-in"
+                        }`}
+                        style={
+                          hasCompletedInitialPoll
+                            ? undefined
+                            : { ["--quote-poll-delay" as string]: `${delayMs}ms` }
+                        }
                       >
                         <button
                           type="button"
