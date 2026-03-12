@@ -101,6 +101,63 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
     return () => window.removeEventListener("resize", update)
   }, [])
 
+  // #region agent log
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const chip = document.querySelector<HTMLElement>("[data-debug-id='compact-quote-chip']")
+    if (!chip) return
+
+    const price = chip.querySelector<HTMLElement>("[data-debug-id='compact-price']")
+    const label = chip.querySelector<HTMLElement>("[data-debug-id='compact-price-label']")
+
+    const chipRect = chip.getBoundingClientRect()
+    const styles = window.getComputedStyle(chip)
+    const priceRect = price?.getBoundingClientRect()
+    const labelRect = label?.getBoundingClientRect()
+
+    fetch("http://127.0.0.1:7243/ingest/11a05263-57d5-49cd-ac30-6dc80d1d7b44", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Debug-Session-Id": "493dbf",
+      },
+      body: JSON.stringify({
+        sessionId: "493dbf",
+        runId: "pre-fix",
+        hypothesisId: "H-compact-chip-spacing",
+        location: "QuotesPageAltLayout.tsx:compact-chip-metrics",
+        message: "Compact quote chip layout metrics",
+        data: {
+          chip: {
+            width: chipRect.width,
+            height: chipRect.height,
+            paddingLeft: styles.paddingLeft,
+            paddingRight: styles.paddingRight,
+            marginLeft: styles.marginLeft,
+            marginRight: styles.marginRight,
+          },
+          price: priceRect
+            ? {
+                width: priceRect.width,
+                right: priceRect.right,
+                gapToChipRight: chipRect.right - priceRect.right,
+              }
+            : null,
+          label: labelRect
+            ? {
+                width: labelRect.width,
+                right: labelRect.right,
+                gapToChipRight: chipRect.right - labelRect.right,
+              }
+            : null,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {})
+  }, [visibleQuoteCount, filters.paymentOption])
+  // #endregion agent log
+
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-[#F1F1F1]">
       <Navbar activeLayout="alt" onSelectLayout={onLayoutChange} />
@@ -230,117 +287,111 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                             }
                             handleQuoteListClick(quote)
                           }}
-                          className="flex w-full items-stretch gap-2 rounded-xl border border-border bg-white px-3 py-2 max-[767px]:py-3 text-left text-sm transition-colors hover:bg-muted/60"
+                          className="flex w-full flex-col gap-2 rounded-xl border border-border bg-white px-3 py-2 max-[767px]:py-3 text-left text-sm transition-colors hover:bg-muted/60"
                         >
-                          {/* Logo block on the left for small screens */}
-                          <div className="hidden max-[1295px]:flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#F5F5F5]">
-                            {quote.logo ? (
-                              <img
-                                src={quote.logo}
-                                alt=""
-                                className="h-full w-full object-contain object-center"
-                              />
-                            ) : (
-                              <span className="text-xs font-semibold text-muted-foreground">
+                          <div className="flex w-full items-start gap-2">
+                            {/* Logo block on the left (responsive size), matching compact/list cards */}
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100 max-[767px]:h-20 max-[767px]:w-20">
+                              <span className="text-[10px] font-semibold text-slate-600">
                                 LOGO
                               </span>
+                            </div>
+                            <div className="flex min-w-0 flex-1 flex-col gap-1">
+                              {/* Policy type pill above insurer name on small screens */}
+                              <span className="mb-1 inline-flex w-fit self-start max-[1295px]:inline-flex min-[1296px]:hidden items-center rounded border border-border px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                {filters.policyType}
+                              </span>
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex min-w-0 items-center gap-1.5">
+                                  <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
+                                    {quote.providerName}
+                                  </span>
+                                  <span className="inline-flex shrink-0 items-center gap-0.5 text-xs font-medium text-foreground">
+                                    {quote.trustpilotRating.toFixed(1)}
+                                    <ResponsiveTooltip side="right" content="Defaqto rating">
+                                      <Star className="h-3 w-3 fill-amber-400 text-amber-500" aria-hidden />
+                                    </ResponsiveTooltip>
+                                  </span>
+                                </div>
+                                {/* Compare checkbox hidden on <=1295px */}
+                                <div className="max-[1295px]:hidden">
+                                  {isCompareLimitReached && !isCompared ? (
+                                    <ResponsiveTooltip
+                                      side="right"
+                                      content="You can only select three providers at one time."
+                                    >
+                                      <button
+                                        type="button"
+                                        aria-pressed={isCompared}
+                                        aria-label="Select for compare"
+                                        className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
+                                      >
+                                        {isCompared && (
+                                          <Check className="h-3 w-3 text-brand-dark" aria-hidden />
+                                        )}
+                                      </button>
+                                    </ResponsiveTooltip>
+                                  ) : (
+                                    <ResponsiveTooltip side="right" content={compareTooltipLabel}>
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          handleToggleCompare(quote.id)
+                                        }}
+                                        aria-pressed={isCompared}
+                                        aria-label="Select for compare"
+                                        className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
+                                      >
+                                        {isCompared && (
+                                          <Check className="h-3 w-3 text-brand-dark" aria-hidden />
+                                        )}
+                                      </button>
+                                    </ResponsiveTooltip>
+                                  )}
+                                </div>
+                              </div>
+                              {/* Original inline policy text kept for >=1296px only */}
+                              <span className="truncate text-xs text-muted-foreground max-[1295px]:hidden">
+                                {filters.policyType}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex w-full items-baseline justify-start gap-2">
+                            {isMonthlyPrimary ? (
+                              <>
+                                <span className="text-sm font-semibold tabular-nums text-foreground">
+                                  £{monthlyPrice.toFixed(2)}/mo.
+                                </span>
+                                <span className="text-xs text-muted-foreground">or</span>
+                                <span className="text-sm tabular-nums text-muted-foreground">
+                                  £{annualPrice.toFixed(2)} <span>annual</span>
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-sm font-semibold tabular-nums text-foreground">
+                                  £{annualPrice.toFixed(2)} <span>annual</span>
+                                </span>
+                                <span className="text-xs text-muted-foreground">or</span>
+                                <span className="text-sm tabular-nums text-muted-foreground">
+                                  £{monthlyPrice.toFixed(2)}/mo.
+                                </span>
+                              </>
                             )}
                           </div>
-                          <div className="flex min-w-0 flex-1 flex-col gap-1">
-                            {/* Policy type pill above insurer name on small screens */}
-                            <span className="mb-1 inline-flex w-fit self-start max-[1295px]:inline-flex min-[1296px]:hidden items-center rounded border border-border px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                              {filters.policyType}
-                            </span>
-                            <div className="flex items-center justify-between gap-2">
-                              <div className="flex min-w-0 items-center gap-1.5">
-                                <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
-                                  {quote.providerName}
-                                </span>
-                                <span className="inline-flex shrink-0 items-center gap-0.5 text-xs font-medium text-foreground">
-                                  {quote.trustpilotRating.toFixed(1)}
-                                  <ResponsiveTooltip side="right" content="Defaqto rating">
-                                    <Star className="h-3 w-3 fill-amber-400 text-amber-500" aria-hidden />
-                                  </ResponsiveTooltip>
-                                </span>
-                              </div>
-                              {/* Compare checkbox hidden on <=1295px */}
-                              <div className="max-[1295px]:hidden">
-                                {isCompareLimitReached && !isCompared ? (
-                                  <ResponsiveTooltip
-                                    side="right"
-                                    content="You can only select three providers at one time."
-                                  >
-                                    <button
-                                      type="button"
-                                      aria-pressed={isCompared}
-                                      aria-label="Select for compare"
-                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
-                                    >
-                                      {isCompared && (
-                                        <Check className="h-3 w-3 text-brand-dark" aria-hidden />
-                                      )}
-                                    </button>
-                                  </ResponsiveTooltip>
-                                ) : (
-                                  <ResponsiveTooltip side="right" content={compareTooltipLabel}>
-                                    <button
-                                      type="button"
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleToggleCompare(quote.id)
-                                      }}
-                                      aria-pressed={isCompared}
-                                      aria-label="Select for compare"
-                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
-                                    >
-                                      {isCompared && (
-                                        <Check className="h-3 w-3 text-brand-dark" aria-hidden />
-                                      )}
-                                    </button>
-                                  </ResponsiveTooltip>
-                                )}
-                              </div>
-                            </div>
-                            {/* Original inline policy text kept for >=1296px only */}
-                            <span className="truncate text-xs text-muted-foreground max-[1295px]:hidden">
-                              {filters.policyType}
-                            </span>
-                            <div className="mt-0.5 flex w-full items-baseline justify-start gap-2">
-                              {isMonthlyPrimary ? (
-                                <>
-                                  <span className="text-sm font-semibold tabular-nums text-foreground">
-                                    £{monthlyPrice.toFixed(2)}/mo.
-                                  </span>
-                                  <span className="text-xs text-muted-foreground">or</span>
-                                  <span className="text-sm tabular-nums text-muted-foreground">
-                                    £{annualPrice.toFixed(2)} <span>annual</span>
-                                  </span>
-                                </>
-                              ) : (
-                                <>
-                                  <span className="text-sm font-semibold tabular-nums text-foreground">
-                                    £{annualPrice.toFixed(2)} <span>annual</span>
-                                  </span>
-                                  <span className="text-xs text-muted-foreground">or</span>
-                                  <span className="text-sm tabular-nums text-muted-foreground">
-                                    £{monthlyPrice.toFixed(2)}/mo.
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                            {/* Mobile-only view button at bottom of card */}
-                            <div className="mt-2 max-[767px]:flex min-[768px]:hidden">
-                              <Button
-                                size="sm"
-                                className="h-9 w-full justify-center rounded text-xs font-medium"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleMoreDetails(quote)
-                                }}
-                              >
-                                View
-                              </Button>
-                            </div>
+                          {/* Mobile-only view button at bottom of card */}
+                          <div className="mt-2 max-[767px]:flex min-[768px]:hidden">
+                            <Button
+                              size="sm"
+                              className="h-9 w-full justify-center rounded text-xs font-medium"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleMoreDetails(quote)
+                              }}
+                            >
+                              View
+                            </Button>
                           </div>
                         </button>
                       </div>
@@ -376,28 +427,41 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                     const monthlyPrice = quote.piklPrice
                     const annualPrice = monthlyPrice * 12
                     const isMonthlyPrimary = filters.paymentOption === "monthly"
+                    const compactPolicyLabel =
+                      filters.policyType === "Buildings & Contents"
+                        ? "Buildings & Conten"
+                        : filters.policyType
 
                     return (
                       <button
                         key={quote.id}
                         type="button"
                         onClick={() => handleQuoteListClick(quote)}
-                        className="flex min-w-[220px] items-center justify-between rounded-xl border border-border bg-white px-3 py-2 text-left text-xs transition-colors hover:bg-muted/60"
+                        data-debug-id="compact-quote-chip"
+                        className="flex min-w-[220px] items-start rounded-xl border border-border bg-white pl-3 pr-0 py-3 text-left text-xs transition-colors hover:bg-muted/60"
                       >
-                        <span className="mr-2 flex min-w-0 flex-col">
-                          <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
-                            {quote.providerName}
+                        <span className="flex min-w-0 w-full flex-col gap-0.5">
+                            <span className="flex w-full items-baseline gap-3">
+                            <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
+                              {quote.providerName}
+                            </span>
+                            <span
+                              data-debug-id="compact-price"
+                              className="ml-auto flex items-baseline gap-1 whitespace-nowrap text-sm font-semibold text-[#1E1E1E]"
+                            >
+                              £{(isMonthlyPrimary ? monthlyPrice : annualPrice).toFixed(2)}
+                            </span>
                           </span>
-                          <span className="truncate text-[11px] text-muted-foreground">
-                            {filters.policyType}
-                          </span>
-                        </span>
-                        <span className="flex flex-col items-end">
-                          <span className="text-sm font-semibold text-[#1E1E1E]">
-                            £{(isMonthlyPrimary ? monthlyPrice : annualPrice).toFixed(2)}
-                          </span>
-                          <span className="text-[11px] text-muted-foreground">
-                            {isMonthlyPrimary ? "/mo." : "annual"}
+                          <span className="flex w-full items-baseline gap-3">
+                            <span className="truncate text-[11px] text-muted-foreground">
+                              {compactPolicyLabel}
+                            </span>
+                            <span
+                              data-debug-id="compact-price-label"
+                              className="ml-auto text-[11px] font-normal text-muted-foreground"
+                            >
+                              {isMonthlyPrimary ? "/mo." : "annual"}
+                            </span>
                           </span>
                         </span>
                       </button>
@@ -421,12 +485,6 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         homeEmergency={filters.homeEmergency}
                         buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
                         contentsAccidentalDamage={filters.contentsAccidentalDamage}
-                        onLegalCoverChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, legalCover: checked }))
-                        }
-                        onHomeEmergencyChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, homeEmergency: checked }))
-                        }
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
@@ -647,12 +705,6 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                           homeEmergency={filters.homeEmergency}
                           buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
                           contentsAccidentalDamage={filters.contentsAccidentalDamage}
-                          onLegalCoverChange={(checked) =>
-                            setFilters((prev) => ({ ...prev, legalCover: checked }))
-                          }
-                          onHomeEmergencyChange={(checked) =>
-                            setFilters((prev) => ({ ...prev, homeEmergency: checked }))
-                          }
                           onMoreDetails={handleMoreDetails}
                           onPurchase={() => handlePurchase()}
                           monthlyBreakdownInDropdown
@@ -683,12 +735,6 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         homeEmergency={filters.homeEmergency}
                         buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
                         contentsAccidentalDamage={filters.contentsAccidentalDamage}
-                        onLegalCoverChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, legalCover: checked }))
-                        }
-                        onHomeEmergencyChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, homeEmergency: checked }))
-                        }
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
@@ -713,12 +759,6 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         homeEmergency={filters.homeEmergency}
                         buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
                         contentsAccidentalDamage={filters.contentsAccidentalDamage}
-                        onLegalCoverChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, legalCover: checked }))
-                        }
-                        onHomeEmergencyChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, homeEmergency: checked }))
-                        }
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown
@@ -743,12 +783,6 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         homeEmergency={filters.homeEmergency}
                         buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
                         contentsAccidentalDamage={filters.contentsAccidentalDamage}
-                        onLegalCoverChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, legalCover: checked }))
-                        }
-                        onHomeEmergencyChange={(checked) =>
-                          setFilters((prev) => ({ ...prev, homeEmergency: checked }))
-                        }
                         onMoreDetails={handleMoreDetails}
                         onPurchase={() => handlePurchase()}
                         monthlyBreakdownInDropdown

@@ -25,12 +25,10 @@ export function QuotesPageLayout({
   setSort,
   filter,
   setFilter,
-  showLoadingModal,
   displayedQuotes,
   handleEditAnswers,
   handleMoreDetails,
   handlePurchase,
-  handleLoadingComplete,
   onLayoutChange,
   showNavbar = true,
 }: QuotesPageLayoutProps) {
@@ -59,13 +57,7 @@ export function QuotesPageLayout({
               setFilters((f) => ({ ...f, paymentOption: option }))
             }
             legalCover={filters.legalCover}
-            onLegalCoverChange={(checked) =>
-              setFilters((f) => ({ ...f, legalCover: checked }))
-            }
             homeEmergency={filters.homeEmergency}
-            onHomeEmergencyChange={(checked) =>
-              setFilters((f) => ({ ...f, homeEmergency: checked }))
-            }
             buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
             contentsAccidentalDamage={filters.contentsAccidentalDamage}
             onMoreDetails={handleMoreDetails}

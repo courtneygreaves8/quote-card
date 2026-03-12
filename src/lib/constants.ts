@@ -23,7 +23,7 @@ export const COVER_TYPES = [
 
 /** Payment option button: active (selected) state */
 export const PAYMENT_ACTIVE_CLASS =
-  "flex-1 rounded-full bg-button text-white hover:opacity-90"
+  "flex-1 rounded-full bg-button text-white hover:bg-button hover:text-white"
 
 /** Payment option button: inactive state */
 export const PAYMENT_INACTIVE_CLASS =

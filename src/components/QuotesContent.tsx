@@ -1,5 +1,5 @@
 import type { FilterOption, PaymentOption, Quote, SortOption } from "@/types/quote"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { QuoteCard } from "@/components/QuoteCard"
 import { Button } from "@/components/ui/button"
 import {
@@ -22,9 +22,7 @@ interface QuotesContentProps {
   paymentOption: PaymentOption
   onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
-  onLegalCoverChange: (checked: boolean) => void
   homeEmergency: boolean
-  onHomeEmergencyChange: (checked: boolean) => void
   buildingsAccidentalDamage: boolean
   contentsAccidentalDamage: boolean
   onMoreDetails: (quote: Quote) => void
@@ -42,9 +40,7 @@ export function QuotesContent({
   paymentOption,
   onPaymentOptionChange,
   legalCover,
-  onLegalCoverChange,
   homeEmergency,
-  onHomeEmergencyChange,
   buildingsAccidentalDamage,
   contentsAccidentalDamage,
   onMoreDetails,
@@ -57,6 +53,63 @@ export function QuotesContent({
     selectedQuoteId != null
       ? displayedQuotes.find((q) => q.id === selectedQuoteId) ?? null
       : null
+
+  // #region agent log
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const chip = document.querySelector<HTMLElement>("[data-debug-id='default-compact-chip']")
+    if (!chip) return
+
+    const price = chip.querySelector<HTMLElement>("[data-debug-id='default-compact-price']")
+    const label = chip.querySelector<HTMLElement>("[data-debug-id='default-compact-price-label']")
+
+    const chipRect = chip.getBoundingClientRect()
+    const styles = window.getComputedStyle(chip)
+    const priceRect = price?.getBoundingClientRect()
+    const labelRect = label?.getBoundingClientRect()
+
+    fetch("http://127.0.0.1:7243/ingest/11a05263-57d5-49cd-ac30-6dc80d1d7b44", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Debug-Session-Id": "493dbf",
+      },
+      body: JSON.stringify({
+        sessionId: "493dbf",
+        runId: "pre-fix",
+        hypothesisId: "H-default-compact-chip-spacing",
+        location: "QuotesContent.tsx:default-compact-chip-metrics",
+        message: "Default compact quote chip layout metrics",
+        data: {
+          chip: {
+            width: chipRect.width,
+            height: chipRect.height,
+            paddingLeft: styles.paddingLeft,
+            paddingRight: styles.paddingRight,
+            marginLeft: styles.marginLeft,
+            marginRight: styles.marginRight,
+          },
+          price: priceRect
+            ? {
+                width: priceRect.width,
+                right: priceRect.right,
+                gapToChipRight: chipRect.right - priceRect.right,
+              }
+            : null,
+          label: labelRect
+            ? {
+                width: labelRect.width,
+                right: labelRect.right,
+                gapToChipRight: chipRect.right - labelRect.right,
+              }
+            : null,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {})
+  }, [displayedQuotes.length, paymentOption])
+  // #endregion agent log
 
   return (
     <div className="w-full overflow-x-hidden py-8 px-4 sm:px-6">
@@ -137,22 +190,40 @@ export function QuotesContent({
                   key={quote.id}
                   type="button"
                   onClick={() => setSelectedQuoteId(quote.id)}
-                  className="flex w-full min-[768px]:w-auto min-[768px]:flex-1 min-[768px]:basis-0 min-[768px]:min-w-0 items-center justify-between rounded-xl border border-border bg-white px-3 py-2 text-left text-xs shadow-sm hover:bg-muted/60"
+                  data-debug-id="default-compact-chip"
+                  className="flex w-full min-[768px]:w-auto min-[768px]:flex-1 min-[768px]:basis-0 min-[768px]:min-w-0 items-start rounded-xl border border-border bg-white px-3 py-3 text-left text-xs shadow-sm hover:bg-muted/60"
                 >
-                  <span className="mr-2 flex min-w-0 flex-col">
-                    <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
-                      {quote.providerName}
+                  <span className="flex w-full min-w-0 items-start gap-2">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100">
+                      <span className="text-[10px] font-semibold text-slate-600">LOGO</span>
                     </span>
-                    <span className="truncate text-[11px] text-muted-foreground">
-                      {policyType}
-                    </span>
-                  </span>
-                  <span className="flex flex-col items-end">
-                    <span className="text-sm font-semibold text-[#1E1E1E]">
-                      £{(isMonthlyPrimary ? monthlyPrice : annualPrice).toFixed(2)}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground">
-                      {isMonthlyPrimary ? "/mo." : "annual"}
+                    <span className="flex min-w-0 flex-col gap-0.5">
+                      <span className="flex w-full items-baseline gap-3">
+                        <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
+                          {quote.providerName}
+                        </span>
+                        <span
+                          data-debug-id="default-compact-price"
+                          className="ml-auto flex items-baseline gap-1 whitespace-nowrap text-sm font-semibold text-[#1E1E1E]"
+                        >
+                          £{(isMonthlyPrimary ? monthlyPrice : annualPrice).toFixed(2)}
+                        </span>
+                      </span>
+                      <span className="flex w-full items-baseline gap-7">
+                        {/* Full label on ≤767px, truncated on 768–1295px */}
+                        <span className="truncate text-[11px] text-muted-foreground max-[767px]:inline min-[768px]:hidden">
+                          {policyType}
+                        </span>
+                        <span className="truncate text-[11px] text-muted-foreground max-[767px]:hidden min-[768px]:inline">
+                          {policyType === "Buildings & Contents" ? "Buildings & Conten" : policyType}
+                        </span>
+                        <span
+                          data-debug-id="default-compact-price-label"
+                          className="ml-auto text-[11px] font-normal text-muted-foreground"
+                        >
+                          {isMonthlyPrimary ? "/mo." : "annual"}
+                        </span>
+                      </span>
                     </span>
                   </span>
                 </button>
@@ -186,8 +257,6 @@ export function QuotesContent({
                   homeEmergency={homeEmergency}
                   buildingsAccidentalDamage={buildingsAccidentalDamage}
                   contentsAccidentalDamage={contentsAccidentalDamage}
-                  onLegalCoverChange={onLegalCoverChange}
-                  onHomeEmergencyChange={onHomeEmergencyChange}
                   onMoreDetails={onMoreDetails}
                   onPurchase={onPurchase}
                   monthlyBreakdownInDropdown
@@ -217,8 +286,6 @@ export function QuotesContent({
                 homeEmergency={homeEmergency}
                 buildingsAccidentalDamage={buildingsAccidentalDamage}
                 contentsAccidentalDamage={contentsAccidentalDamage}
-                onLegalCoverChange={onLegalCoverChange}
-                onHomeEmergencyChange={onHomeEmergencyChange}
                 onMoreDetails={onMoreDetails}
                 onPurchase={onPurchase}
                 monthlyBreakdownInDropdown

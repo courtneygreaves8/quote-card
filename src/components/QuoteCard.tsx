@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
-import { Switch } from "@/components/ui/switch"
 
 interface QuoteCardProps {
   quote: Quote
@@ -27,8 +26,6 @@ interface QuoteCardProps {
   /** Sidebar toggles that affect base buildings/contents pricing */
   buildingsAccidentalDamage: boolean
   contentsAccidentalDamage: boolean
-  onLegalCoverChange: (checked: boolean) => void
-  onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
   onPurchase?: (quote: Quote) => void
   monthlyBreakdownInDropdown?: boolean
@@ -52,8 +49,6 @@ export function QuoteCard({
   homeEmergency,
   buildingsAccidentalDamage,
   contentsAccidentalDamage,
-  onLegalCoverChange,
-  onHomeEmergencyChange,
   onMoreDetails,
   onPurchase,
   monthlyBreakdownInDropdown = false,
