@@ -66,7 +66,7 @@ export function QuotesPageAltLayout({
         </div>
 
         {/* Main area: quote list (secondary sidebar) + viewing pane */}
-        <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50 pb-4 max-[767px]:bg-[#F1F1F1]">
+        <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-50 pb-4 max-[767px]:bg-[#F1F1F1] max-[1295px]:hidden">
           {primaryQuote ? (
             <div className="flex h-full w-full flex-col gap-4 px-3 py-4 max-[1295px]:items-center max-[1295px]:justify-center max-[767px]:items-start max-[767px]:justify-start md:flex-row md:px-3 md:py-4 min-[976px]:px-0 min-[976px]:py-0 min-[1296px]:pr-[320px]">
               {/* Secondary sidebar: compact list of results (fixed right on desktop, scrollable) */}
