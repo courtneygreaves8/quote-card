@@ -41,7 +41,7 @@ const COLUMN_ICON_CLASS =
   "flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-[#FCFCFC] text-neutral-700 transition-colors duration-150 group-hover:bg-[#FFF]"
 
 const COLUMN_BOX_GRID_CLASS =
-  "group flex w-full flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-colors duration-150 hover:bg-[#FCFCFC] lg:w-48 lg:min-w-48 lg:flex-none"
+  "group flex w-full flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-3 transition-colors duration-150 hover:bg-[#FCFCFC]"
 
 export function QuoteCard({
   quote,
@@ -175,7 +175,7 @@ export function QuoteCard({
                   <Button
                     type="button"
                     variant="outline"
-                    className="h-9 w-[150px] justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
+                    className="h-9 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
                     onClick={() => onMoreDetails(quote)}
                   >
                     <Info className="h-4 w-4 shrink-0" />
@@ -196,13 +196,13 @@ export function QuoteCard({
           </div>
 
           {/* Content */}
-          <div className="flex min-w-0 w-full max-w-full flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-3">
+          <div className="flex min-w-0 w-full max-w-full flex-col gap-2 lg:flex-row lg:items-stretch lg:gap-2">
             {/* Four coverage blocks: 2×2 grid below lg, 4 columns on desktop */}
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "order-1 grid w-full flex-1 min-w-0 grid-cols-2 gap-3 lg:grid-cols-4"
-                  : "order-1 grid w-full grid-cols-2 gap-3 lg:grid-cols-4 lg:w-max lg:flex-shrink-0"
+                  ? "order-1 grid w-full flex-1 min-w-0 grid-cols-2 gap-2 lg:grid-cols-4"
+                  : "order-1 grid w-full grid-cols-2 gap-2 lg:grid-cols-4 lg:w-max lg:flex-shrink-0"
               }
             >
               {/* Home column */}
@@ -511,8 +511,8 @@ export function QuoteCard({
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[150px] lg:min-w-[150px] lg:flex-none"
-                  : "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[150px] lg:min-w-[150px] lg:flex-none"
+                  ? "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[160.5px] lg:min-w-[160.5px] lg:flex-none"
+                  : "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[160.5px] lg:min-w-[160.5px] lg:flex-none"
               }
             >
               <div className="flex flex-col">

@@ -408,7 +408,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   {displayedQuotes.map((quote) => (
                     <div
                       key={quote.id}
-                      className="w-full max-w-full min-[1024px]:max-w-[968px]"
+                      className="w-full max-w-full min-[1024px]:max-w-[960px]"
                     >
                       <QuoteCard
                         quote={quote}
@@ -439,7 +439,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
               {/* Right column: selected quote summary (full details are in PolicySheet) */}
               {/* Hidden on <1296px so small/medium screens just use the list + sheet */}
               <section className="mt-4 mb-4 hidden min-w-0 flex-1 md:order-1 md:mt-0 min-[1296px]:flex min-[1296px]:justify-center min-[1296px]:pt-6">
-                <div className="w-full max-w-full min-[1024px]:max-w-[968px]">
+                <div className="w-full max-w-full min-[1024px]:max-w-[960px]">
                 {/* Centre stage header — same as Org layout (QuotesContent) */}
                 <div
                   id="alt-layout-heading"
@@ -635,7 +635,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 {viewMode === "all" ? (
                   <div className="mb-0 flex flex-col gap-3">
                     {displayedQuotes.map((quote) => (
-                      <div key={quote.id} className="w-full max-w-full min-[1024px]:max-w-[968px]">
+                      <div key={quote.id} className="w-full max-w-full min-[1024px]:max-w-[960px]">
                         <QuoteCard
                           quote={quote}
                           policyType={filters.policyType}
@@ -671,7 +671,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   </div>
                 ) : primaryQuote ? (
                   <div className="mb-0 flex flex-col gap-1">
-                    <div className="w-full max-w-full min-[1024px]:max-w-[968px]">
+                    <div className="w-full max-w-full min-[1024px]:max-w-[960px]">
                       <QuoteCard
                         quote={primaryQuote}
                         policyType={filters.policyType}
@@ -701,7 +701,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 {viewMode === "compare" && secondaryQuote && (
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
-                    <div className="w-full max-w-full min-[1024px]:max-w-[968px]">
+                    <div className="w-full max-w-full min-[1024px]:max-w-[960px]">
                       <QuoteCard
                         quote={secondaryQuote}
                         policyType={filters.policyType}
@@ -731,7 +731,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 {viewMode === "compare" && tertiaryQuote && (
                   <div className="mt-0 flex flex-col gap-1">
                     <Separator className="my-4" />
-                    <div className="w-full max-w-full min-[1024px]:max-w-[968px]">
+                    <div className="w-full max-w-full min-[1024px]:max-w-[960px]">
                       <QuoteCard
                         quote={tertiaryQuote}
                         policyType={filters.policyType}
