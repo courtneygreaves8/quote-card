@@ -218,7 +218,7 @@ export function QuoteCard({
                     Included
                   </span>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Home Insurance
@@ -247,21 +247,21 @@ export function QuoteCard({
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(adjustedStandardPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
-                      Excess:{" "}
-                      <span className="font-semibold">
+                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess{" "}
+                      <span className="ml-1 font-semibold text-[#1E1E1E]">
                         {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
                       </span>
                     </span>
                   </div>
-                  {/* Desktop (lg+): excess stacked under price on the left */}
-                  <div className="hidden flex-col items-start gap-1 lg:flex">
+                  {/* Desktop (lg+): price and excess badge on one line */}
+                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(adjustedStandardPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
-                      Excess:{" "}
-                      <span className="font-semibold">
+                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess{" "}
+                      <span className="ml-1 font-semibold text-[#1E1E1E]">
                         {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
                       </span>
                     </span>
@@ -279,7 +279,7 @@ export function QuoteCard({
                     Included
                   </span>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Host Insurance
@@ -308,17 +308,17 @@ export function QuoteCard({
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.piklPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
-                      Excess: <span className="font-semibold">£50</span>
+                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£50</span>
                     </span>
                   </div>
-                  {/* Desktop (lg+): excess stacked under price on the left */}
-                  <div className="hidden flex-col items-start gap-1 lg:flex">
+                  {/* Desktop (lg+): price and excess badge on one line */}
+                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.piklPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
-                      Excess: <span className="font-semibold">£50</span>
+                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£50</span>
                     </span>
                   </div>
                 </div>
@@ -334,7 +334,7 @@ export function QuoteCard({
                     {legalCover ? "Selected" : "Optional"}
                   </span>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Legal Cover
@@ -369,13 +369,13 @@ export function QuoteCard({
                       aria-label="Family legal protection"
                     />
                   </div>
-                  {/* Desktop (lg+): price with excess stacked underneath on the left */}
-                  <div className="hidden flex-col items-start gap-1 lg:flex">
+                  {/* Desktop (lg+): price and excess badge on one line */}
+                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.familyLegalAddOnPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
-                      Excess: <span className="font-semibold">£25</span>
+                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
                     </span>
                   </div>
                 </div>
@@ -391,7 +391,7 @@ export function QuoteCard({
                     {homeEmergency ? "Selected" : "Optional"}
                   </span>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Emergency Cover
@@ -425,13 +425,13 @@ export function QuoteCard({
                       aria-label="Home emergency cover"
                     />
                   </div>
-                  {/* Desktop (lg+): price with excess stacked underneath on the left */}
-                  <div className="hidden flex-col items-start gap-1 lg:flex">
+                  {/* Desktop (lg+): price and excess badge on one line */}
+                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.homeEmergencyAddOnPrice)}
                     </span>
-                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
-                      Excess: <span className="font-semibold">£25</span>
+                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
                     </span>
                   </div>
                 </div>
