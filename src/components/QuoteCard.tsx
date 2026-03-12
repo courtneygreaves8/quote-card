@@ -1,4 +1,4 @@
-import { ChevronDown, HelpCircle, Home, Info, Scale, ShieldCheck, Star, Tag, Users, Wrench } from "lucide-react"
+import { Check, ChevronDown, HelpCircle, Home, Info, Scale, ShieldCheck, Star, Tag, Users, Wrench } from "lucide-react"
 import {
   ANNUAL_DISPLAY_MAX,
   ANNUAL_DISPLAY_MIN,
@@ -118,7 +118,7 @@ export function QuoteCard({
               </div>
             </div>
 
-            <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-end lg:gap-1.5">
+            <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-start lg:justify-end lg:gap-1.5">
               {/* Mobile payment toggle – top-right on <=1023px */}
               <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-0.5 p-0.5 lg:hidden">
                 <Button
@@ -145,55 +145,52 @@ export function QuoteCard({
                 </Button>
               </div>
 
-              {/* Desktop payment toggle: styled like sidebar (pill-shaped) */}
-              <div className="hidden lg:flex w-auto items-center rounded-full border border-input bg-muted/30 gap-0.5 p-0.5">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 gap-1.5 px-2 py-2 text-xs`}
-                  onClick={() => onPaymentOptionChange("annual")}
-                >
-                  <span className="inline-flex items-center gap-0.5">
-                    <Tag className="h-3 w-3 shrink-0" aria-hidden />
-                    <span>-10%</span>
-                  </span>
-                  Annual
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 px-2 py-2 text-xs`}
-                  onClick={() => onPaymentOptionChange("monthly")}
-                >
-                  Monthly
-                </Button>
-              </div>
-
-              <div className="hidden h-8 w-px shrink-0 bg-border lg:block" aria-hidden />
-
-              {/* Buttons: in header on lg+ only */}
-              <div className="hidden w-full flex-row gap-2 lg:flex lg:w-auto lg:gap-1.5">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-9 flex-1 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
-                  onClick={() => onMoreDetails(quote)}
-                >
-                  <Info className="h-4 w-4 shrink-0" />
-                  More info
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="default"
-                  className="h-9 flex-1 justify-center gap-1.5 px-4 text-xs font-medium"
-                  onClick={() => onPurchase?.(quote)}
-                >
-                  <ShieldCheck className="h-4 w-4 shrink-0" />
-                  Continue
-                </Button>
+              {/* Desktop (lg+): annual/monthly toggle next to More info + Continue column */}
+              <div className="hidden w-full flex-row items-start gap-2 lg:flex lg:w-auto">
+                <div className="flex w-fit items-center rounded-full border border-input bg-muted/30 gap-0.5 p-0.5">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 gap-1.5 px-2 py-2 text-xs`}
+                    onClick={() => onPaymentOptionChange("annual")}
+                  >
+                    <span className="inline-flex items-center gap-0.5">
+                      <Tag className="h-3 w-3 shrink-0" aria-hidden />
+                      <span>-10%</span>
+                    </span>
+                    Annual
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 px-2 py-2 text-xs`}
+                    onClick={() => onPaymentOptionChange("monthly")}
+                  >
+                    Monthly
+                  </Button>
+                </div>
+                <div className="flex flex-row gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-9 w-[150px] justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
+                    onClick={() => onMoreDetails(quote)}
+                  >
+                    <Info className="h-4 w-4 shrink-0" />
+                    More info
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="default"
+                    className="h-9 justify-center gap-1.5 px-4 text-xs font-medium"
+                    onClick={() => onPurchase?.(quote)}
+                  >
+                    <ShieldCheck className="h-4 w-4 shrink-0" />
+                    Continue
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -337,11 +334,18 @@ export function QuoteCard({
                   <span
                     className={
                       legalCover
-                        ? "rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
+                        ? "inline-flex items-center gap-1 rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
                         : "rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground"
                     }
                   >
-                    {legalCover ? "Selected" : "Optional"}
+                    {legalCover ? (
+                      <>
+                        <Check className="h-3 w-3 shrink-0" aria-hidden />
+                        Selected
+                      </>
+                    ) : (
+                      "Optional"
+                    )}
                   </span>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -400,11 +404,18 @@ export function QuoteCard({
                   <span
                     className={
                       homeEmergency
-                        ? "rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
+                        ? "inline-flex items-center gap-1 rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
                         : "rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground"
                     }
                   >
-                    {homeEmergency ? "Selected" : "Optional"}
+                    {homeEmergency ? (
+                      <>
+                        <Check className="h-3 w-3 shrink-0" aria-hidden />
+                        Selected
+                      </>
+                    ) : (
+                      "Optional"
+                    )}
                   </span>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -569,7 +580,7 @@ export function QuoteCard({
           )}
 
           {/* More info + Purchase at bottom of card for 1023px and below */}
-          <div className="mt-1 flex w-full flex-row gap-2 lg:hidden">
+          <div className="mt-1 flex w-full flex-col gap-2 lg:hidden">
             <Button
               type="button"
               variant="outline"

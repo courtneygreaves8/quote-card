@@ -9,7 +9,7 @@ import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS, QUOTE_LIST_POLL_DURATION_MS } from "@/lib/constants"
+import { QUOTE_LIST_POLL_DURATION_MS } from "@/lib/constants"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
 import { useQuotesAltLayout } from "@/hooks/useQuotesAltLayout"
 
@@ -459,9 +459,11 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className={`${
-                          viewMode === "all" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-                        } rounded-[8px]`}
+                        className={`flex-1 rounded-[8px] ${
+                          viewMode === "all"
+                            ? "bg-button text-white hover:bg-button hover:text-white"
+                            : "hover:bg-neutral-200"
+                        }`}
                         onClick={() => setViewMode("all")}
                       >
                         View all quotes
@@ -470,9 +472,11 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className={`${
-                          viewMode === "compare" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-                        } rounded-[8px]`}
+                        className={`flex-1 rounded-[8px] ${
+                          viewMode === "compare"
+                            ? "bg-button text-white hover:bg-button hover:text-white"
+                            : "hover:bg-neutral-200"
+                        }`}
                         onClick={() => setViewMode("compare")}
                       >
                         Compare quotes

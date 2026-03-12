@@ -126,7 +126,7 @@ export function QuotesContent({
 
         {/* Compact quote list under heading on small/medium screens */}
         {displayedQuotes.length > 0 && (
-          <div className="mb-4 flex w-full gap-2 pb-1 max-[767px]:flex-col min-[768px]:flex min-[768px]:flex-nowrap min-[768px]:overflow-x-auto min-[1296px]:hidden">
+          <div className="mb-4 flex w-full gap-2 pb-1 max-[767px]:flex-col min-[768px]:flex min-[768px]:flex-nowrap min-[1296px]:hidden">
             {displayedQuotes.map((quote) => {
               const monthlyPrice = quote.piklPrice
               const annualPrice = monthlyPrice * 12
@@ -137,7 +137,7 @@ export function QuotesContent({
                   key={quote.id}
                   type="button"
                   onClick={() => setSelectedQuoteId(quote.id)}
-                  className="flex w-full min-[768px]:basis-1/4 min-[768px]:flex-none items-center justify-between rounded-xl border border-border bg-white px-3 py-2 text-left text-xs shadow-sm hover:bg-muted/60"
+                  className="flex w-full min-[768px]:w-auto min-[768px]:flex-1 min-[768px]:basis-0 min-[768px]:min-w-0 items-center justify-between rounded-xl border border-border bg-white px-3 py-2 text-left text-xs shadow-sm hover:bg-muted/60"
                 >
                   <span className="mr-2 flex min-w-0 flex-col">
                     <span className="truncate text-xs font-medium uppercase tracking-wide opacity-80">
