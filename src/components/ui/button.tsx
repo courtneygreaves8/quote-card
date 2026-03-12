@@ -9,7 +9,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white shadow hover:opacity-90 transition-opacity focus-visible:ring-[#1a1a1a]",
+          "bg-brand-dark text-white shadow hover:opacity-90 transition-opacity focus-visible:ring-brand-dark",
+        purchase:
+          "bg-purchase text-purchase-foreground shadow hover:opacity-90 transition-opacity focus-visible:ring-purchase",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",

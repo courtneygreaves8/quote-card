@@ -455,10 +455,10 @@ export function PolicySheet({
                 </span>
               </div>
               <Button
-                className="h-9 shrink-0 whitespace-nowrap px-3"
+                className="h-9 shrink-0 whitespace-nowrap bg-purchase text-purchase-foreground px-3 hover:opacity-90"
                 onClick={handlePrimaryAction}
               >
-                <span className="w-full text-center leading-none">Purchase</span>
+                <span className="w-full text-center leading-none">Continue</span>
               </Button>
             </div>
           </div>
@@ -470,7 +470,7 @@ export function PolicySheet({
                 <Shield className="h-6 w-6" aria-hidden />
               </span>
               <span className="mt-2 text-md font-semibold text-muted-foreground">
-                Insurer &amp; Pikl
+                {providerName} &amp; Pikl
               </span>
             </div>
 
@@ -510,10 +510,10 @@ export function PolicySheet({
             </div>
 
             <Button
-              className="mt-[22px] w-full max-[767px]:mt-[14px]"
+              className="mt-[22px] w-full bg-purchase text-purchase-foreground max-[767px]:mt-[14px] hover:opacity-90"
               onClick={handlePrimaryAction}
             >
-              Purchase
+              Continue
             </Button>
 
             <Separator className="my-[22px] max-[767px]:my-[14px]" />

@@ -19,15 +19,16 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
   return (
     <>
       <header className={`flex h-14 shrink-0 items-center justify-between border-b border-border bg-white ${LAYOUT_PADDING_X}`}>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <span
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200"
             aria-hidden
           >
             <Rocket className="h-4 w-4" stroke="url(#navbarRocketGrad)" strokeWidth={2} />
           </span>
-          <span className="text-lg font-black uppercase tracking-tight text-black">
-            Pikl <span className="font-light">Prototype</span>
+          <span className="text-lg tracking-tight text-brand-dark">
+            <span className="font-semibold">PIKL</span>{" "}
+            <span className="font-light">Prototype</span>
           </span>
           <svg width={0} height={0} aria-hidden>
             <defs>
@@ -37,17 +38,6 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
               </linearGradient>
             </defs>
           </svg>
-          {onSelectLayout && (
-            <button
-              type="button"
-              className={`hidden text-xs font-medium transition-colors md:inline-flex ${
-                activeLayout === "alt" ? "text-black" : "text-neutral-500 hover:text-black"
-              }`}
-              onClick={() => onSelectLayout(activeLayout === "alt" ? "default" : "alt")}
-            >
-              {activeLayout === "alt" ? "Org Layout" : "Alt Layout"}
-            </button>
-          )}
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {/* Desktop / tablet buttons */}
@@ -107,8 +97,9 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
             >
               <Rocket className="h-4 w-4" stroke="url(#navbarRocketGrad)" strokeWidth={2} />
             </span>
-            <span className="text-lg font-black uppercase tracking-tight text-black">
-              Pikl <span className="font-light">Prototype</span>
+            <span className="text-lg uppercase tracking-tight text-brand-dark">
+              <span className="font-semibold">PIKL</span>{" "}
+              <span className="font-light">Prototype</span>
             </span>
           </div>
           <div className="flex flex-col gap-3">
@@ -130,18 +121,6 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
               <UserPlus className="h-4 w-4" />
               Create account
             </Button>
-            {onSelectLayout && (
-              <Button
-                variant="outline"
-                className="h-10 w-full justify-center gap-1.5 border-border"
-                onClick={() => {
-                  setNavOpen(false)
-                  onSelectLayout(activeLayout === "alt" ? "default" : "alt")
-                }}
-              >
-                {activeLayout === "alt" ? "Org Layout" : "Alt Layout"}
-              </Button>
-            )}
             <Button
               variant="outline"
               className="h-10 w-full justify-center gap-1.5 border-border"

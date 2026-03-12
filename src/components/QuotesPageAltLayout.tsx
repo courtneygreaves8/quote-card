@@ -222,7 +222,7 @@ export function QuotesPageAltLayout({
                                       className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white opacity-60 cursor-not-allowed"
                                     >
                                       {isCompared && (
-                                        <Check className="h-3 w-3 text-black" aria-hidden />
+                                        <Check className="h-3 w-3 text-brand-dark" aria-hidden />
                                       )}
                                     </button>
                                   </ResponsiveTooltip>
@@ -239,7 +239,7 @@ export function QuotesPageAltLayout({
                                       className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border bg-white cursor-pointer"
                                     >
                                       {isCompared && (
-                                        <Check className="h-3 w-3 text-black" aria-hidden />
+                                        <Check className="h-3 w-3 text-brand-dark" aria-hidden />
                                       )}
                                     </button>
                                   </ResponsiveTooltip>

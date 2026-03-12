@@ -24,11 +24,18 @@
     --input: 0 0% 90%;
     --ring: 0 0% 70%;
     --radius: 0.75rem;
+    /* Purchase / CTA – black (matches primary) */
+    --purchase: 0 0% 9%;
+    --purchase-foreground: 0 0% 100%;
+    /* Brand dark – black text/buttons (matches primary) */
+    --brand-dark: 0 0% 9%;
   }
 
   .dark {
     --background: 0 0% 9%;
     --foreground: 0 0% 98%;
+    --purchase: 0 0% 15%;
+    --purchase-foreground: 0 0% 100%;
     --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 9%;

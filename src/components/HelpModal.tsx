@@ -34,7 +34,7 @@ export function HelpModal({ open, onOpenChange }: HelpModalProps) {
         <Card className="border-0 shadow-none">
           <CardHeader className="pb-1 pr-8 p-[14.4px]">
             <div
-              className="mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
+              className="mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-dark text-white"
               aria-hidden
             >
               <Headset className="h-5 w-5" />

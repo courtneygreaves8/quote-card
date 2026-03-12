@@ -56,6 +56,11 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        purchase: {
+          DEFAULT: 'hsl(var(--purchase))',
+          foreground: 'hsl(var(--purchase-foreground))',
+        },
+        'brand-dark': 'hsl(var(--brand-dark))',
       },
     },
   },

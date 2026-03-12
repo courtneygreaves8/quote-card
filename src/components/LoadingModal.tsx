@@ -65,18 +65,16 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
               }}
             />
           ))}
-          {/* Pikl logo: circle with thick stroke + text – same center */}
+          {/* PIKL logo: circle with thick stroke + text – same center */}
           <div className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-foreground bg-white">
-            <span className="text-lg font-bold tracking-tight text-foreground">
-              Pikl
-            </span>
+            <span className="text-lg font-semibold tracking-tight text-foreground">PIKL</span>
           </div>
         </div>
 
         <div className="w-full space-y-2">
           <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
             <div
-              className="h-full rounded-full bg-foreground transition-[width] duration-300 ease-out"
+              className="h-full rounded-full bg-purchase transition-[width] duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>

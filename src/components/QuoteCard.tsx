@@ -1,4 +1,4 @@
-import { ChevronDown, HelpCircle, Home, Info, Scale, ShoppingCart, Star, Users, Wrench } from "lucide-react"
+import { ChevronDown, HelpCircle, Home, Info, Scale, ShieldCheck, Star, Users, Wrench } from "lucide-react"
 import {
   ANNUAL_DISPLAY_MAX,
   ANNUAL_DISPLAY_MIN,
@@ -91,7 +91,15 @@ export function QuoteCard({
           <div className="flex w-full flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#F5F5F5]">
-                <span className="text-xs font-semibold text-slate-600">LOGO</span>
+                {quote.logo ? (
+                  <img
+                    src={quote.logo}
+                    alt=""
+                    className="h-full w-full object-contain object-center"
+                  />
+                ) : (
+                  <span className="text-xs font-semibold text-slate-600">LOGO</span>
+                )}
               </div>
               <div className="flex min-w-0 flex-col gap-1">
                 <div className="inline-flex w-fit items-center gap-1 rounded-sm border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">
@@ -101,7 +109,7 @@ export function QuoteCard({
                   </ResponsiveTooltip>
                 </div>
                 <span className="truncate text-base font-semibold text-[#1E1E1E]">
-                  Insurer &amp; Pikl
+                  {quote.providerName} &amp; Pikl
                 </span>
                 <span className="truncate text-xs text-muted-foreground">{policyType}</span>
               </div>
@@ -168,11 +176,12 @@ export function QuoteCard({
 
                 <Button
                   type="button"
-                  className="h-9 flex-1 justify-center gap-1.5 bg-slate-900 px-4 text-xs font-medium text-white"
+                  variant="purchase"
+                  className="h-9 flex-1 justify-center gap-1.5 px-4 text-xs font-medium"
                   onClick={() => onPurchase?.(quote)}
                 >
-                  <ShoppingCart className="h-4 w-4 shrink-0" />
-                  Purchase
+                  <ShieldCheck className="h-4 w-4 shrink-0" />
+                  Continue
                 </Button>
               </div>
             </div>
@@ -502,11 +511,12 @@ export function QuoteCard({
             </Button>
             <Button
               type="button"
-              className="h-9 flex-1 justify-center gap-1.5 bg-slate-900 px-4 text-xs font-medium text-white"
+              variant="purchase"
+              className="h-9 flex-1 justify-center gap-1.5 px-4 text-xs font-medium"
               onClick={() => onPurchase?.(quote)}
             >
-              <ShoppingCart className="h-4 w-4 shrink-0" />
-              Purchase
+              <ShieldCheck className="h-4 w-4 shrink-0" />
+              Continue
             </Button>
           </div>
         </div>

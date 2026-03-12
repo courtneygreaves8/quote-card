@@ -35,7 +35,7 @@ const SIDEBAR_ICON_BTN_CLASS = "h-8 w-8 shrink-0"
 const ADDON_ROW_CLASS = "flex items-center justify-between gap-4"
 const ADDON_LABEL_CLASS = "font-normal text-muted-foreground"
 const COVER_DATE_INPUT_CLASS =
-  "flex h-full flex-1 rounded-md border-0 bg-transparent py-2.5 pl-3.5 pr-2 text-sm text-foreground placeholder:text-neutral-400 transition-colors [color-scheme:light] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a]/25 focus-visible:ring-offset-2 focus-visible:bg-white [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10 [&::-webkit-calendar-picker-indicator]:h-10 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+  "flex h-full flex-1 rounded-md border-0 bg-transparent py-2.5 pl-3.5 pr-2 text-sm text-foreground placeholder:text-neutral-400 transition-colors [color-scheme:light] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark/25 focus-visible:ring-offset-2 focus-visible:bg-white [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10 [&::-webkit-calendar-picker-indicator]:h-10 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
 
 interface QuoteSidebarProps {
   quoteReference: string

@@ -108,7 +108,7 @@ export function CreateAccountModal({
           </Button>
           <CardHeader className="text-center">
             <div
-              className="mx-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
+              className="mx-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-dark text-white"
               aria-hidden
             >
               <Zap className="h-5 w-5" />
@@ -169,7 +169,7 @@ export function CreateAccountModal({
                         {!isSubmitting && (
                           <>
                             <span
-                              className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-[#1a1a1a] transition-opacity group-hover:opacity-0"
+                              className="pointer-events-none absolute right-3 top-1/2 z-10 flex -translate-y-1/2 text-brand-dark transition-opacity group-hover:opacity-0"
                               aria-hidden
                             >
                               <Check className="h-4 w-4" strokeWidth={2.5} />

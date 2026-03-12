@@ -66,7 +66,7 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div
-              className="mx-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1a1a1a] to-[#0f0f0f] text-white"
+              className="mx-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-dark text-white"
               aria-hidden
             >
               <Shield className="h-5 w-5" />
