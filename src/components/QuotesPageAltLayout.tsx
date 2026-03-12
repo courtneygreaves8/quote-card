@@ -319,12 +319,14 @@ export function QuotesPageAltLayout({
                     </p>
                   </div>
                   <div className="flex w-full min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
-                    <div className="flex h-10 w-full max-w-[260px] items-center gap-0.5 rounded-lg border border-input bg-muted/30 p-0.5">
+                    <div className="flex h-fit w-full max-w-[260px] items-center gap-0.5 rounded-lg border border-input bg-muted/30 p-0.5">
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className={viewMode === "all" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS}
+                        className={`${
+                          viewMode === "all" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
+                        } rounded-[8px]`}
                         onClick={() => setViewMode("all")}
                       >
                         View all quotes
@@ -333,7 +335,9 @@ export function QuotesPageAltLayout({
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className={viewMode === "compare" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS}
+                        className={`${
+                          viewMode === "compare" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
+                        } rounded-[8px]`}
                         onClick={() => setViewMode("compare")}
                       >
                         Compare quotes

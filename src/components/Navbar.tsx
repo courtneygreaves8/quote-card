@@ -42,6 +42,16 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
         <div className="flex shrink-0 items-center gap-2">
           {/* Desktop / tablet buttons */}
           <div className="hidden md:flex items-center gap-2">
+          <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs font-medium"
+              onClick={() =>
+                onSelectLayout?.(activeLayout === "default" ? "alt" : "default")
+              }
+            >
+              {activeLayout === "default" ? "View alt layout" : "View default layout"}
+            </Button>
             <Button variant="outline" size="sm" className="gap-1.5 border-border">
               <LogIn className="h-4 w-4" />
               Login
@@ -66,6 +76,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
                 Contact support
               </Button>
             )}
+           
           </div>
           {/* Mobile hamburger when we show a single card */}
           <Button
@@ -130,6 +141,16 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
               }}
             >
               Contact support
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-10 w-full justify-center text-xs font-medium"
+              onClick={() => {
+                setNavOpen(false)
+                onSelectLayout?.(activeLayout === "default" ? "alt" : "default")
+              }}
+            >
+              {activeLayout === "default" ? "View alt layout" : "View default layout"}
             </Button>
           </div>
         </SheetContent>
