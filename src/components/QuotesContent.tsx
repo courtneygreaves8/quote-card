@@ -73,37 +73,49 @@ export function QuotesContent({
               Find the cover right for you.
             </p>
           </div>
-          <div className="flex w-full flex-row gap-3 lg:w-auto lg:flex-none lg:items-center lg:justify-end">
-            <div className="flex-1 lg:w-60 lg:flex-none">
-              <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
-                <SelectTrigger className="w-full" aria-label="Sort">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="price-asc">Price: low to high</SelectItem>
-                  <SelectItem value="price-desc">Price: high to low</SelectItem>
-                  <SelectItem value="provider-az">Provider A–Z</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex-1 lg:w-60 lg:flex-none">
-              <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
-                <SelectTrigger className="w-full" aria-label="Filter">
-                  <SelectValue placeholder="Filter" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All quotes</SelectItem>
-                  <SelectItem value="under-20">Under £20/mo</SelectItem>
-                  <SelectItem value="under-25">Under £25/mo</SelectItem>
-                  <SelectItem value="under-30">Under £30/mo</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="flex w-full flex-col gap-3 lg:w-auto lg:flex-none lg:flex-row lg:items-center lg:justify-end">
+            {onOpenOptions && (
+              <Button
+                type="button"
+                variant="outline"
+                className="h-9 w-full justify-center gap-1.5 border-border max-[767px]:flex min-[768px]:hidden"
+                onClick={onOpenOptions}
+              >
+                Refine results
+              </Button>
+            )}
+            <div className="flex w-full flex-col gap-2 min-[768px]:flex-row">
+              <div className="w-full min-[768px]:flex-1 lg:w-60 lg:flex-none">
+                <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
+                  <SelectTrigger className="w-full" aria-label="Sort">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="price-asc">Price: low to high</SelectItem>
+                    <SelectItem value="price-desc">Price: high to low</SelectItem>
+                    <SelectItem value="provider-az">Provider A–Z</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-full min-[768px]:flex-1 lg:w-60 lg:flex-none">
+                <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
+                  <SelectTrigger className="w-full" aria-label="Filter">
+                    <SelectValue placeholder="Filter" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All quotes</SelectItem>
+                    <SelectItem value="under-20">Under £20/mo</SelectItem>
+                    <SelectItem value="under-25">Under £25/mo</SelectItem>
+                    <SelectItem value="under-30">Under £30/mo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             {onOpenOptions && (
               <Button
                 type="button"
                 variant="outline"
-                className="flex-1 min-[1340px]:hidden"
+                className="h-9 w-full justify-center gap-1.5 border-border min-[768px]:flex min-[1340px]:hidden max-[767px]:hidden"
                 onClick={onOpenOptions}
               >
                 Refine results
