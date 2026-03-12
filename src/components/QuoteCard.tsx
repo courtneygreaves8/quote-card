@@ -223,24 +223,6 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Home Insurance
                     </span>
-                    <ResponsiveTooltip
-                      side="right"
-                      className="max-w-xs"
-                      content={
-                        <p className="text-sm">
-                          Home Insurance: Covers the structure of your property and contents. This is
-                          included in your quote and provided by {quote.providerName}.
-                        </p>
-                      }
-                    >
-                      <button
-                        type="button"
-                        className={TOOLTIP_TRIGGER_CLASS_DF}
-                        aria-label="What is standard cover?"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </ResponsiveTooltip>
                   </div>
                   {/* Mobile / tablet: price and excess on one line */}
                   <div className="flex items-baseline justify-between gap-2 lg:hidden">
@@ -254,17 +236,37 @@ export function QuoteCard({
                       </span>
                     </span>
                   </div>
-                  {/* Desktop (lg+): price with excess badge below on the left */}
-                  <div className="hidden flex-col items-start gap-3 lg:flex">
+                  {/* Desktop (lg+): price on first line, excess badge + tooltip on second line (right) */}
+                  <div className="hidden flex-col gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(adjustedStandardPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                      Excess{" "}
-                      <span className="ml-1 font-semibold text-[#1E1E1E]">
-                        {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                        Excess{" "}
+                        <span className="ml-1 font-semibold text-[#1E1E1E]">
+                          {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                        </span>
                       </span>
-                    </span>
+                      <ResponsiveTooltip
+                        side="right"
+                        className="max-w-xs"
+                        content={
+                          <p className="text-sm">
+                            Home Insurance: Covers the structure of your property and contents. This is
+                            included in your quote and provided by {quote.providerName}.
+                          </p>
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={TOOLTIP_TRIGGER_CLASS_DF}
+                          aria-label="What is standard cover?"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </ResponsiveTooltip>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -284,24 +286,6 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Host Insurance
                     </span>
-                    <ResponsiveTooltip
-                      side="right"
-                      className="max-w-xs"
-                      content={
-                        <p className="text-sm">
-                          Host Insurance: Covers short-term letting and home sharing. This is included in
-                          your quote and provided by Pikl.
-                        </p>
-                      }
-                    >
-                      <button
-                        type="button"
-                        className={TOOLTIP_TRIGGER_CLASS_DF}
-                        aria-label="What is Pikl cover?"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </ResponsiveTooltip>
                   </div>
                   {/* Mobile / tablet: price and excess on one line */}
                   <div className="flex items-baseline justify-between gap-2 lg:hidden">
@@ -312,14 +296,34 @@ export function QuoteCard({
                       Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£50</span>
                     </span>
                   </div>
-                  {/* Desktop (lg+): price with excess badge below on the left */}
-                  <div className="hidden flex-col items-start gap-3 lg:flex">
+                  {/* Desktop (lg+): price on first line, excess badge + tooltip on second line (right) */}
+                  <div className="hidden flex-col gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.piklPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£50</span>
-                    </span>
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                        Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£50</span>
+                      </span>
+                      <ResponsiveTooltip
+                        side="right"
+                        className="max-w-xs"
+                        content={
+                          <p className="text-sm">
+                            Host Insurance: Covers short-term letting and home sharing. This is included in
+                            your quote and provided by Pikl.
+                          </p>
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={TOOLTIP_TRIGGER_CLASS_DF}
+                          aria-label="What is Pikl cover?"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </ResponsiveTooltip>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -345,24 +349,6 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Legal Cover
                     </span>
-                    <ResponsiveTooltip
-                      side="right"
-                      className="max-w-xs"
-                      content={
-                        <p className="text-sm">
-                          Legal cover is an optional add-on providing legal protection for you and your
-                          household.
-                        </p>
-                      }
-                    >
-                      <button
-                        type="button"
-                        className={TOOLTIP_TRIGGER_CLASS_DF}
-                        aria-label="Family legal protection"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </ResponsiveTooltip>
                   </div>
                   {/* Mobile / tablet: toggle switch */}
                   <div className="flex items-center justify-between gap-2 lg:hidden">
@@ -375,14 +361,34 @@ export function QuoteCard({
                       aria-label="Family legal protection"
                     />
                   </div>
-                  {/* Desktop (lg+): price and excess badge on one line */}
-                  <div className="hidden flex-col items-start gap-3 lg:flex">
+                  {/* Desktop (lg+): price on first line, excess badge + tooltip on second line (right) */}
+                  <div className="hidden flex-col gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.familyLegalAddOnPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
-                    </span>
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                        Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
+                      </span>
+                      <ResponsiveTooltip
+                        side="right"
+                        className="max-w-xs"
+                        content={
+                          <p className="text-sm">
+                            Legal cover is an optional add-on providing legal protection for you and your
+                            household.
+                          </p>
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={TOOLTIP_TRIGGER_CLASS_DF}
+                          aria-label="Family legal protection"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </ResponsiveTooltip>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -408,23 +414,6 @@ export function QuoteCard({
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Emergency Cover
                     </span>
-                    <ResponsiveTooltip
-                      side="right"
-                      className="max-w-xs"
-                      content={
-                        <p className="text-sm">
-                          Emergency cover is an optional add-on for home emergency cover.
-                        </p>
-                      }
-                    >
-                      <button
-                        type="button"
-                        className={TOOLTIP_TRIGGER_CLASS_DF}
-                        aria-label="What is home emergency cover?"
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </button>
-                    </ResponsiveTooltip>
                   </div>
                   {/* Mobile / tablet: toggle switch */}
                   <div className="flex items-center justify-between gap-2 lg:hidden">
@@ -437,14 +426,33 @@ export function QuoteCard({
                       aria-label="Home emergency cover"
                     />
                   </div>
-                  {/* Desktop (lg+): price and excess badge on one line */}
-                  <div className="hidden flex-col items-start gap-3 lg:flex">
+                  {/* Desktop (lg+): price on first line, excess badge + tooltip on second line (right) */}
+                  <div className="hidden flex-col gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.homeEmergencyAddOnPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
-                    </span>
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                        Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
+                      </span>
+                      <ResponsiveTooltip
+                        side="right"
+                        className="max-w-xs"
+                        content={
+                          <p className="text-sm">
+                            Emergency cover is an optional add-on for home emergency cover.
+                          </p>
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={TOOLTIP_TRIGGER_CLASS_DF}
+                          aria-label="What is home emergency cover?"
+                        >
+                          <HelpCircle className="h-4 w-4" />
+                        </button>
+                      </ResponsiveTooltip>
+                    </div>
                   </div>
                 </div>
               </div>
