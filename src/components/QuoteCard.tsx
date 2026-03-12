@@ -218,7 +218,7 @@ export function QuoteCard({
                     Included
                   </span>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Home Insurance
@@ -247,19 +247,19 @@ export function QuoteCard({
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(adjustedStandardPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                       Excess{" "}
                       <span className="ml-1 font-semibold text-[#1E1E1E]">
                         {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
                       </span>
                     </span>
                   </div>
-                  {/* Desktop (lg+): price and excess badge on one line */}
-                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
+                  {/* Desktop (lg+): price with excess badge below on the left */}
+                  <div className="hidden flex-col items-start gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(adjustedStandardPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                       Excess{" "}
                       <span className="ml-1 font-semibold text-[#1E1E1E]">
                         {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
@@ -279,7 +279,7 @@ export function QuoteCard({
                     Included
                   </span>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Host Insurance
@@ -308,16 +308,16 @@ export function QuoteCard({
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.piklPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                       Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£50</span>
                     </span>
                   </div>
-                  {/* Desktop (lg+): price and excess badge on one line */}
-                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
+                  {/* Desktop (lg+): price with excess badge below on the left */}
+                  <div className="hidden flex-col items-start gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.piklPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                       Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£50</span>
                     </span>
                   </div>
@@ -330,11 +330,17 @@ export function QuoteCard({
                   <div className={COLUMN_ICON_CLASS}>
                     <Scale className="h-4 w-4" />
                   </div>
-                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  <span
+                    className={
+                      legalCover
+                        ? "rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
+                        : "rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground"
+                    }
+                  >
                     {legalCover ? "Selected" : "Optional"}
                   </span>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Legal Cover
@@ -370,11 +376,11 @@ export function QuoteCard({
                     />
                   </div>
                   {/* Desktop (lg+): price and excess badge on one line */}
-                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
+                  <div className="hidden flex-col items-start gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.familyLegalAddOnPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                       Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
                     </span>
                   </div>
@@ -387,11 +393,17 @@ export function QuoteCard({
                   <div className={COLUMN_ICON_CLASS}>
                     <Wrench className="h-4 w-4" />
                   </div>
-                  <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  <span
+                    className={
+                      homeEmergency
+                        ? "rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
+                        : "rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground"
+                    }
+                  >
                     {homeEmergency ? "Selected" : "Optional"}
                   </span>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-sm font-medium text-[#1E1E1E]">
                       Emergency Cover
@@ -426,11 +438,11 @@ export function QuoteCard({
                     />
                   </div>
                   {/* Desktop (lg+): price and excess badge on one line */}
-                  <div className="hidden items-baseline justify-between gap-2 lg:flex">
+                  <div className="hidden flex-col items-start gap-3 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.homeEmergencyAddOnPrice)}
                     </span>
-                    <span className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                       Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
                     </span>
                   </div>
