@@ -350,16 +350,14 @@ export function QuoteCard({
                       Legal Cover
                     </span>
                   </div>
-                  {/* Mobile / tablet: toggle switch */}
-                  <div className="flex items-center justify-between gap-2 lg:hidden">
-                    <span className="text-lg font-semibold text-[#1E1E1E]">
+                  {/* Mobile / tablet: price and excess badge (no toggle) */}
+                  <div className="flex items-baseline justify-between gap-2 lg:hidden">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.familyLegalAddOnPrice)}
                     </span>
-                    <Switch
-                      checked={legalCover}
-                      onCheckedChange={onLegalCoverChange}
-                      aria-label="Family legal protection"
-                    />
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
+                    </span>
                   </div>
                   {/* Desktop (lg+): price on first line, excess badge + tooltip on second line (right) */}
                   <div className="hidden flex-col gap-3 lg:flex">
@@ -415,16 +413,14 @@ export function QuoteCard({
                       Emergency Cover
                     </span>
                   </div>
-                  {/* Mobile / tablet: toggle switch */}
-                  <div className="flex items-center justify-between gap-2 lg:hidden">
-                    <span className="text-lg font-semibold text-[#1E1E1E]">
+                  {/* Mobile / tablet: price and excess badge (no toggle) */}
+                  <div className="flex items-baseline justify-between gap-2 lg:hidden">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.homeEmergencyAddOnPrice)}
                     </span>
-                    <Switch
-                      checked={homeEmergency}
-                      onCheckedChange={onHomeEmergencyChange}
-                      aria-label="Home emergency cover"
-                    />
+                    <span className="inline-flex items-center rounded-[8px] border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      Excess <span className="ml-1 font-semibold text-[#1E1E1E]">£25</span>
+                    </span>
                   </div>
                   {/* Desktop (lg+): price on first line, excess badge + tooltip on second line (right) */}
                   <div className="hidden flex-col gap-3 lg:flex">

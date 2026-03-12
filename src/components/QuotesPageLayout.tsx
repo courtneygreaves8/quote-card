@@ -1,5 +1,4 @@
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
-import { LoadingModal } from "@/components/LoadingModal"
 import { Navbar } from "@/components/Navbar"
 import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
@@ -97,7 +96,6 @@ export function QuotesPageLayout({
         onOpenChange={setSheetOpen}
         onPurchase={handlePurchase}
       />
-      <LoadingModal open={showLoadingModal} onClose={handleLoadingComplete} />
       <HelpFloatingButton />
     </div>
   )
