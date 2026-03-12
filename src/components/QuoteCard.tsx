@@ -90,16 +90,8 @@ export function QuoteCard({
           {/* Header */}
           <div className="flex w-full flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[18px] bg-[#F5F5F5]">
-                {quote.logo ? (
-                  <img
-                    src={quote.logo}
-                    alt=""
-                    className="h-full w-full object-contain object-center"
-                  />
-                ) : (
-                  <span className="text-xs font-semibold text-slate-600">LOGO</span>
-                )}
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100">
+                <span className="text-xs font-semibold text-slate-600">LOGO</span>
               </div>
               <div className="flex min-w-0 flex-col gap-1">
                 <div className="inline-flex w-fit items-center gap-1 rounded-sm border border-neutral-200 bg-white px-1.5 py-0.5 text-xs text-muted-foreground">
@@ -122,7 +114,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 gap-1.5 px-2 py-2 text-xs`}
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 flex-1 gap-1.5 px-2 py-2 text-xs`}
                   onClick={() => onPaymentOptionChange("annual")}
                 >
                   <span className="inline-flex items-center gap-0.5">
@@ -135,7 +127,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 px-2 py-2 text-xs`}
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 flex-1 px-2 py-2 text-xs`}
                   onClick={() => onPaymentOptionChange("monthly")}
                 >
                   Monthly
