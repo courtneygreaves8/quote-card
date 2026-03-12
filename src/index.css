@@ -27,13 +27,16 @@
     /* Purchase / CTA – black (matches primary) */
     --purchase: 0 0% 9%;
     --purchase-foreground: 0 0% 100%;
-    /* Brand dark – black text/buttons (matches primary) */
+    /* Brand dark – black text (matches primary) */
     --brand-dark: 0 0% 9%;
+    /* Slightly lighter black for buttons */
+    --button: 0 0% 16%;
   }
 
   .dark {
     --background: 0 0% 9%;
     --foreground: 0 0% 98%;
+    --button: 0 0% 22%;
     --purchase: 0 0% 15%;
     --purchase-foreground: 0 0% 100%;
     --card: 0 0% 9%;

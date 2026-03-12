@@ -455,7 +455,7 @@ export function PolicySheet({
                 </span>
               </div>
               <Button
-                className="h-9 shrink-0 whitespace-nowrap bg-purchase text-purchase-foreground px-3 hover:opacity-90"
+                className="h-9 shrink-0 whitespace-nowrap bg-button text-white px-3 hover:opacity-90"
                 onClick={handlePrimaryAction}
               >
                 <span className="w-full text-center leading-none">Continue</span>
@@ -466,10 +466,10 @@ export function PolicySheet({
         {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
           <div className="flex w-full shrink-0 flex-col border-b border-border bg-white px-7 py-6 max-[767px]:px-5 max-[767px]:py-4 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
             <div className="flex flex-col items-center text-center">
-              <span className="-mb-1 inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-muted-foreground">
-                <Shield className="h-6 w-6" aria-hidden />
+              <span className="-mb-1 inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-muted-foreground">
+                <Shield className="h-4 w-4" aria-hidden />
               </span>
-              <span className="mt-2 text-md font-semibold text-muted-foreground">
+              <span className="mt-4 text-md font-semibold text-muted-foreground">
                 {providerName} &amp; Pikl
               </span>
             </div>
@@ -510,7 +510,7 @@ export function PolicySheet({
             </div>
 
             <Button
-              className="mt-[22px] w-full bg-purchase text-purchase-foreground max-[767px]:mt-[14px] hover:opacity-90"
+              className="mt-[22px] w-full bg-button text-white max-[767px]:mt-[14px] hover:opacity-90"
               onClick={handlePrimaryAction}
             >
               Continue

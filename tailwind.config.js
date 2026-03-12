@@ -61,6 +61,7 @@ export default {
           foreground: 'hsl(var(--purchase-foreground))',
         },
         'brand-dark': 'hsl(var(--brand-dark))',
+        button: 'hsl(var(--button))',
       },
     },
   },

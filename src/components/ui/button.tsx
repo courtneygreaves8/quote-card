@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-brand-dark text-white shadow hover:opacity-90 transition-opacity focus-visible:ring-brand-dark",
+          "bg-button text-white shadow hover:opacity-90 transition-opacity focus-visible:ring-button",
         purchase:
           "bg-purchase text-purchase-foreground shadow hover:opacity-90 transition-opacity focus-visible:ring-purchase",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
