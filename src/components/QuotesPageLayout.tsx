@@ -64,6 +64,8 @@ export function QuotesPageLayout({
             onHomeEmergencyChange={(checked) =>
               setFilters((f) => ({ ...f, homeEmergency: checked }))
             }
+            buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
+            contentsAccidentalDamage={filters.contentsAccidentalDamage}
             onMoreDetails={handleMoreDetails}
             onPurchase={handlePurchase}
             onOpenOptions={() => setOptionsOpen(true)}

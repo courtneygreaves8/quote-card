@@ -169,7 +169,12 @@ export function QuotesPageAltLayout({
                       >
                         <button
                           type="button"
-                          onClick={() => handleQuoteListClick(quote)}
+                          onClick={() => {
+                            if (viewMode === "compare") {
+                              handleToggleCompare(quote.id)
+                            }
+                            handleQuoteListClick(quote)
+                          }}
                           className={[
                             "flex w-full items-stretch gap-2 rounded-xl border px-3 py-2 max-[767px]:py-3 text-left text-sm transition-colors",
                             isActive
@@ -506,6 +511,8 @@ export function QuotesPageAltLayout({
                           }
                           legalCover={filters.legalCover}
                           homeEmergency={filters.homeEmergency}
+                          buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
+                          contentsAccidentalDamage={filters.contentsAccidentalDamage}
                           onLegalCoverChange={(checked) =>
                             setFilters((prev) => ({ ...prev, legalCover: checked }))
                           }
@@ -519,6 +526,15 @@ export function QuotesPageAltLayout({
                       </div>
                     ))}
                   </div>
+                ) : viewMode === "compare" && compareIds.length === 0 ? (
+                  // Compare mode with nothing selected yet: show placeholder instead of cards
+                  <div className="mb-4 flex w-full px-0">
+                    <div className="w-full rounded-xl border border-dashed border-neutral-300 bg-[#FAFAFA] px-4 py-6 text-center">
+                      <p className="text-sm font-medium text-[#1E1E1E]">
+                        Select a quote in the right panel to view it here.
+                      </p>
+                    </div>
+                  </div>
                 ) : primaryQuote ? (
                   <div className="mb-0 flex flex-col gap-1">
                     <div className="w-full max-w-full min-[1024px]:max-w-[968px]">
@@ -531,6 +547,8 @@ export function QuotesPageAltLayout({
                         }
                         legalCover={filters.legalCover}
                         homeEmergency={filters.homeEmergency}
+                        buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
+                        contentsAccidentalDamage={filters.contentsAccidentalDamage}
                         onLegalCoverChange={(checked) =>
                           setFilters((prev) => ({ ...prev, legalCover: checked }))
                         }
@@ -543,15 +561,7 @@ export function QuotesPageAltLayout({
                       />
                     </div>
                   </div>
-                ) : (
-                  <div className="flex h-full items-center justify-center px-4">
-                    <div className="w-full max-w-md rounded-xl border border-dashed border-neutral-300 bg-[#FAFAFA] px-4 py-6 text-center">
-                      <p className="text-sm font-medium text-[#1E1E1E]">
-                        Please select a quote to view.
-                      </p>
-                    </div>
-                  </div>
-                )}
+                ) : null}
 
                 {/* Secondary selected card when comparing multiple */}
                 {viewMode === "compare" && secondaryQuote && (
@@ -567,6 +577,8 @@ export function QuotesPageAltLayout({
                         }
                         legalCover={filters.legalCover}
                         homeEmergency={filters.homeEmergency}
+                        buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
+                        contentsAccidentalDamage={filters.contentsAccidentalDamage}
                         onLegalCoverChange={(checked) =>
                           setFilters((prev) => ({ ...prev, legalCover: checked }))
                         }
@@ -595,6 +607,8 @@ export function QuotesPageAltLayout({
                         }
                         legalCover={filters.legalCover}
                         homeEmergency={filters.homeEmergency}
+                        buildingsAccidentalDamage={filters.buildingsAccidentalDamage}
+                        contentsAccidentalDamage={filters.contentsAccidentalDamage}
                         onLegalCoverChange={(checked) =>
                           setFilters((prev) => ({ ...prev, legalCover: checked }))
                         }

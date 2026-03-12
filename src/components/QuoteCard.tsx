@@ -24,6 +24,9 @@ interface QuoteCardProps {
   onPaymentOptionChange: (option: PaymentOption) => void
   legalCover: boolean
   homeEmergency: boolean
+  /** Sidebar toggles that affect base buildings/contents pricing */
+  buildingsAccidentalDamage: boolean
+  contentsAccidentalDamage: boolean
   onLegalCoverChange: (checked: boolean) => void
   onHomeEmergencyChange: (checked: boolean) => void
   onMoreDetails: (quote: Quote) => void
@@ -47,6 +50,8 @@ export function QuoteCard({
   onPaymentOptionChange,
   legalCover,
   homeEmergency,
+  buildingsAccidentalDamage,
+  contentsAccidentalDamage,
   onLegalCoverChange,
   onHomeEmergencyChange,
   onMoreDetails,
@@ -55,8 +60,14 @@ export function QuoteCard({
 }: QuoteCardProps) {
   const pricingMode = paymentOption
 
-  const totalPriceRaw =
+  // Base standard price adjusted for buildings / contents accidental damage
+  const adjustedStandardPrice =
     quote.standardPrice +
+    (buildingsAccidentalDamage ? 3 : 0) +
+    (contentsAccidentalDamage ? 2 : 0)
+
+  const totalPriceRaw =
+    adjustedStandardPrice +
     quote.piklPrice +
     (legalCover ? quote.familyLegalAddOnPrice : 0) +
     (homeEmergency ? quote.homeEmergencyAddOnPrice : 0)
@@ -231,9 +242,22 @@ export function QuoteCard({
                       </button>
                     </ResponsiveTooltip>
                   </div>
-                  <div className="flex items-baseline justify-between gap-2">
+                  {/* Mobile / tablet: price and excess on one line */}
+                  <div className="flex items-baseline justify-between gap-2 lg:hidden">
                     <span className="text-base font-semibold text-[#1E1E1E]">
-                      {toDisplay(quote.standardPrice)}
+                      {toDisplay(adjustedStandardPrice)}
+                    </span>
+                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
+                      Excess:{" "}
+                      <span className="font-semibold">
+                        {(quote.policyDetails.excess ?? "£0").replace(/\.00$/, "")}
+                      </span>
+                    </span>
+                  </div>
+                  {/* Desktop (lg+): excess stacked under price on the left */}
+                  <div className="hidden flex-col items-start gap-1 lg:flex">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
+                      {toDisplay(adjustedStandardPrice)}
                     </span>
                     <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
                       Excess:{" "}
@@ -279,7 +303,17 @@ export function QuoteCard({
                       </button>
                     </ResponsiveTooltip>
                   </div>
-                  <div className="flex items-baseline justify-between gap-2">
+                  {/* Mobile / tablet: price and excess on one line */}
+                  <div className="flex items-baseline justify-between gap-2 lg:hidden">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
+                      {toDisplay(quote.piklPrice)}
+                    </span>
+                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
+                      Excess: <span className="font-semibold">£50</span>
+                    </span>
+                  </div>
+                  {/* Desktop (lg+): excess stacked under price on the left */}
+                  <div className="hidden flex-col items-start gap-1 lg:flex">
                     <span className="text-base font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.piklPrice)}
                     </span>
@@ -297,7 +331,7 @@ export function QuoteCard({
                     <Scale className="h-4 w-4" />
                   </div>
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    Optional
+                    {legalCover ? "Selected" : "Optional"}
                   </span>
                 </div>
                 <div className="flex flex-col gap-3">
@@ -324,7 +358,8 @@ export function QuoteCard({
                       </button>
                     </ResponsiveTooltip>
                   </div>
-                  <div className="flex items-center justify-between gap-2">
+                  {/* Mobile / tablet: toggle switch */}
+                  <div className="flex items-center justify-between gap-2 lg:hidden">
                     <span className="text-lg font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.familyLegalAddOnPrice)}
                     </span>
@@ -333,6 +368,15 @@ export function QuoteCard({
                       onCheckedChange={onLegalCoverChange}
                       aria-label="Family legal protection"
                     />
+                  </div>
+                  {/* Desktop (lg+): price with excess stacked underneath on the left */}
+                  <div className="hidden flex-col items-start gap-1 lg:flex">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
+                      {toDisplay(quote.familyLegalAddOnPrice)}
+                    </span>
+                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
+                      Excess: <span className="font-semibold">£25</span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -344,7 +388,7 @@ export function QuoteCard({
                     <Wrench className="h-4 w-4" />
                   </div>
                   <span className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    Optional
+                    {homeEmergency ? "Selected" : "Optional"}
                   </span>
                 </div>
                 <div className="flex flex-col gap-3">
@@ -370,7 +414,8 @@ export function QuoteCard({
                       </button>
                     </ResponsiveTooltip>
                   </div>
-                  <div className="flex items-center justify-between gap-2">
+                  {/* Mobile / tablet: toggle switch */}
+                  <div className="flex items-center justify-between gap-2 lg:hidden">
                     <span className="text-lg font-semibold text-[#1E1E1E]">
                       {toDisplay(quote.homeEmergencyAddOnPrice)}
                     </span>
@@ -379,6 +424,15 @@ export function QuoteCard({
                       onCheckedChange={onHomeEmergencyChange}
                       aria-label="Home emergency cover"
                     />
+                  </div>
+                  {/* Desktop (lg+): price with excess stacked underneath on the left */}
+                  <div className="hidden flex-col items-start gap-1 lg:flex">
+                    <span className="text-base font-semibold text-[#1E1E1E]">
+                      {toDisplay(quote.homeEmergencyAddOnPrice)}
+                    </span>
+                    <span className="whitespace-nowrap text-xs font-medium text-[#1E1E1E]">
+                      Excess: <span className="font-semibold">£25</span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -430,8 +484,8 @@ export function QuoteCard({
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-32 lg:min-w-32 lg:flex-none"
-                  : "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:flex-1 lg:min-w-0"
+                  ? "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[150px] lg:min-w-[150px] lg:flex-none"
+                  : "order-3 flex w-full flex-col items-center justify-center gap-1 self-stretch rounded-xl border border-neutral-200 bg-[#FAFAFA] p-3 text-center lg:order-3 lg:w-[150px] lg:min-w-[150px] lg:flex-none"
               }
             >
               <div className="flex flex-col">
