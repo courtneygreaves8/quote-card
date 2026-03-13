@@ -373,8 +373,9 @@ export function PolicySheetRight({
         </Card>
       </SheetSection>
 
-      {/* Mobile only: show payment & security block at the very end of the dropdown list */}
-      <div className="mt-4 px-1 pb-4 md:hidden">
+      {/* Mobile only: show payment & security block at the very end of the dropdown list.
+          Extra bottom padding ensures it can scroll fully above the sticky CTA bar. */}
+      <div className="mt-4 px-1 pb-32 md:hidden">
         <PaymentSecurityBlock />
       </div>
     </div>
@@ -461,7 +462,7 @@ export function PolicySheet({
 
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-0 max-[767px]:gap-0 max-[767px]:pb-28 md:flex-row md:overflow-auto md:gap-0 md:pb-0"
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-0 max-[767px]:gap-0 max-[767px]:pb-40 md:flex-row md:overflow-auto md:gap-0 md:pb-0"
         >
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
