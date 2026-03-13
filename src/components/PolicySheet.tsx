@@ -372,6 +372,11 @@ export function PolicySheetRight({
           </CardContent>
         </Card>
       </SheetSection>
+
+      {/* Mobile only: payment & security block after last dropdown */}
+      <div className="mt-4 px-1 pb-32 md:hidden">
+        <PaymentSecurityBlock />
+      </div>
     </div>
   )
 }
