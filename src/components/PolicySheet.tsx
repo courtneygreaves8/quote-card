@@ -151,6 +151,47 @@ function ExcessTable({
   )
 }
 
+function PaymentSecurityBlock() {
+  return (
+    <div className="flex flex-col gap-2 rounded-md border border-border bg-neutral-50 p-3">
+      <div className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-3 py-2 text-xs font-semibold tracking-wide text-neutral-900 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+        <Lock className="h-3 w-3 text-neutral-800" aria-hidden />
+        <span>256-bit SSL</span>
+      </div>
+      <div className="mt-2 flex w-full flex-nowrap items-center gap-1.5">
+        <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+          <img
+            src="assets/mastercard.png"
+            alt="Mastercard"
+            className="h-4 w-auto max-w-full object-contain"
+          />
+        </span>
+        <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+          <img src="assets/visa.png" alt="Visa" className="h-4 w-auto max-w-full object-contain" />
+        </span>
+        <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+          <img
+            src="assets/applepay.png"
+            alt="Apple Pay"
+            className="h-4 w-auto max-w-full object-contain"
+          />
+        </span>
+        <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+          <img
+            src="assets/googlepay.png"
+            alt="Google Pay"
+            className="h-4 w-auto max-w-full object-contain"
+          />
+        </span>
+      </div>
+      <div className="mt-1 flex w-full items-center justify-between text-xs text-muted-foreground">
+        <span>Powered by:</span>
+        <img src="assets/stripe.png" alt="Stripe" className="h-4 w-auto object-contain" />
+      </div>
+    </div>
+  )
+}
+
 export function PolicySheetRight({
   policyDetails,
   propertyAddress,
@@ -331,6 +372,11 @@ export function PolicySheetRight({
           </CardContent>
         </Card>
       </SheetSection>
+
+      {/* Mobile only: show payment & security block at the very end of the dropdown list */}
+      <div className="mt-4 px-1 pb-4 md:hidden">
+        <PaymentSecurityBlock />
+      </div>
     </div>
   )
 }
@@ -558,29 +604,8 @@ export function PolicySheet({
               </ResponsiveTooltip>
             </div>
 
-            <div className="mt-8 md:mt-auto flex flex-col gap-2 rounded-md border border-border bg-neutral-50 p-3">
-              <div className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-3 py-2 text-xs font-semibold tracking-wide text-neutral-900 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                <Lock className="h-3 w-3 text-neutral-800" aria-hidden />
-                <span>256-bit SSL</span>
-              </div>
-              <div className="mt-2 flex w-full flex-nowrap items-center gap-1.5">
-                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="assets/mastercard.png" alt="Mastercard" className="h-4 w-auto max-w-full object-contain" />
-                </span>
-                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="assets/visa.png" alt="Visa" className="h-4 w-auto max-w-full object-contain" />
-                </span>
-                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="assets/applepay.png" alt="Apple Pay" className="h-4 w-auto max-w-full object-contain" />
-                </span>
-                <span className="inline-flex min-h-[28px] min-w-0 flex-1 items-center justify-center overflow-hidden rounded-md bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  <img src="assets/googlepay.png" alt="Google Pay" className="h-4 w-auto max-w-full object-contain" />
-                </span>
-              </div>
-              <div className="mt-1 flex w-full items-center justify-between text-xs text-muted-foreground">
-                <span>Powered by:</span>
-                <img src="assets/stripe.png" alt="Stripe" className="h-4 w-auto object-contain" />
-              </div>
+            <div className="mt-8 md:mt-auto hidden md:block">
+              <PaymentSecurityBlock />
             </div>
           </div>
 

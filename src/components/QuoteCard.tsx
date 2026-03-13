@@ -196,8 +196,8 @@ export function QuoteCard({
             <div
               className={
                 monthlyBreakdownInDropdown
-                  ? "order-1 grid w-full flex-1 min-w-0 grid-cols-2 gap-2 lg:grid-cols-4"
-                  : "order-1 grid w-full grid-cols-2 gap-2 lg:grid-cols-4 lg:w-max lg:flex-shrink-0"
+                  ? "order-1 grid w-full flex-1 min-w-0 grid-cols-2 gap-2 md:grid-cols-4"
+                  : "order-1 grid w-full grid-cols-2 gap-2 md:grid-cols-4 lg:w-max lg:flex-shrink-0"
               }
             >
               {/* Home column */}
