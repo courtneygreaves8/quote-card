@@ -10,14 +10,6 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
 import { ResponsiveTooltip } from "@/components/ResponsiveTooltip"
 import {
   COVER_TYPES,
