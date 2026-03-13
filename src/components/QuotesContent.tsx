@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
 
 export type { SortOption, FilterOption }
 
@@ -115,7 +116,7 @@ export function QuotesContent({
     <div className="w-full overflow-x-hidden py-8 px-4 sm:px-6">
       {/* Centre stage: compact up to lg; single horizontal card at ≥1340px */}
       <div className="mx-auto flex w-full max-w-full flex-col min-[1024px]:max-w-[968px] min-[1340px]:w-fit min-[1340px]:max-w-none min-[1340px]:items-center">
-        <div className="mb-8 w-full flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="mb-4 w-full flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
               {displayedQuotes.length === 0
@@ -137,8 +138,8 @@ export function QuotesContent({
                 Refine results
               </Button>
             )}
-            <div className="flex w-full flex-col gap-2 min-[768px]:flex-row">
-              <div className="w-full min-[768px]:flex-1 lg:w-60 lg:flex-none">
+            <div className="flex w-full flex-row gap-2">
+              <div className="w-full flex-1 lg:w-60 lg:flex-none">
                 <Select value={sort} onValueChange={(v) => onSortChange(v as SortOption)}>
                   <SelectTrigger className="w-full" aria-label="Sort">
                     <SelectValue placeholder="Sort by" />
@@ -150,7 +151,7 @@ export function QuotesContent({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="w-full min-[768px]:flex-1 lg:w-60 lg:flex-none">
+              <div className="w-full flex-1 lg:w-60 lg:flex-none">
                 <Select value={filter} onValueChange={(v) => onFilterChange(v as FilterOption)}>
                   <SelectTrigger className="w-full" aria-label="Filter">
                     <SelectValue placeholder="Filter" />
@@ -176,6 +177,7 @@ export function QuotesContent({
             )}
           </div>
         </div>
+        <div className="mt-0 mb-4 block border-t border-border max-[767px]:block min-[768px]:hidden" />
 
         {/* Compact quote list under heading on small/medium screens */}
         {displayedQuotes.length > 0 && (
