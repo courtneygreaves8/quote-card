@@ -1,6 +1,7 @@
 import { Check, Star } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Navbar } from "@/components/Navbar"
+import { LoadingModal } from "@/components/LoadingModal"
 import { PolicySheet } from "@/components/PolicySheet"
 import { QuoteSidebar } from "@/components/QuoteSidebar"
 import { QuoteCard } from "@/components/QuoteCard"
@@ -36,6 +37,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
   } = props
 
   const [useDefaultLayout, setUseDefaultLayout] = useState(false)
+  const [loadingModalOpen, setLoadingModalOpen] = useState(true)
   const {
     primaryQuote,
     secondaryQuote,
@@ -56,6 +58,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
     onMoreDetails: handleMoreDetails,
     onSelectQuote: handleSelectQuote,
   })
+
 
   // #region agent log
   useEffect(() => {
@@ -162,6 +165,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-[#F1F1F1]">
       <Navbar activeLayout="alt" onSelectLayout={onLayoutChange} />
+      <LoadingModal open={loadingModalOpen} onClose={() => setLoadingModalOpen(false)} />
       {useDefaultLayout ? (
         <QuotesPageLayout {...props} showNavbar={false} />
       ) : (
@@ -698,7 +702,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
 
                 {/* Primary / list view when at least one quote is available */}
                 {viewMode === "all" ? (
-                  <div className="mb-0 flex flex-col gap-3">
+                  <div className="mb-0 flex flex-col gap-6">
                     {displayedQuotes.map((quote) => (
                       <div key={quote.id} className="w-full max-w-full min-[1024px]:max-w-[960px]">
                         <QuoteCard
@@ -723,9 +727,15 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   // Compare mode with nothing selected yet: show placeholder instead of cards
                   <div className="mb-4 flex w-full px-0">
                     <div className="w-full rounded-xl border border-dashed border-neutral-300 bg-[#FAFAFA] px-4 py-6 text-center">
-                      <p className="text-sm font-medium text-[#1E1E1E]">
-                        Select a quote in the right panel to view it here.
-                      </p>
+                      {hasCompletedInitialPoll ? (
+                        <p className="text-sm font-medium text-[#1E1E1E]">
+                          Select a quote or multiple quotes in the right panel to view or compare.
+                        </p>
+                      ) : (
+                        <p className="text-sm font-medium text-[#1E1E1E]">
+                          Your quotes are loading, they'll appear in the right panel shortly.
+                        </p>
+                      )}
                     </div>
                   </div>
                 ) : primaryQuote ? (
