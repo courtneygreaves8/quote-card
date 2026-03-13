@@ -241,7 +241,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 </div>
               </div>
               {/* Compare heading + sort control on one line (desktop and larger) */}
-              <div className="mb-2 hidden items-center gap-2 min-[1296px]:flex">
+              <div className="mb-4 mt-1 hidden items-center gap-2 min-[1296px]:flex">
                 <span className="flex-1 text-sm font-semibold tracking-wide text-[#1E1E1E]">
                   Select &amp; compare
                 </span>
@@ -257,7 +257,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 </Button>
               </div>
 
-                <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
+                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
                   {sortedQuotes.map((quote, index) => {
                     const isCompared = compareIds.includes(quote.id)
                     const isCompareLimitReached = compareIds.length >= 3 && !isCompared
