@@ -2,15 +2,7 @@ import type { FilterOption, PaymentOption, Quote, SortOption } from "@/types/quo
 import { useEffect, useState } from "react"
 import { QuoteCard } from "@/components/QuoteCard"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { PAYMENT_ACTIVE_CLASS, PAYMENT_INACTIVE_CLASS } from "@/lib/constants"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export type { SortOption, FilterOption }
 
@@ -179,42 +171,6 @@ export function QuotesContent({
           </div>
         </div>
         <div className="mt-0 mb-4 block border-t border-border max-[767px]:block min-[768px]:hidden" />
-
-        {/* Mobile payment & trust section (0–767px) */}
-        <div className="mb-3 w-full space-y-2 max-[767px]:block min-[768px]:hidden">
-          <Label className="text-sm font-semibold tracking-wide text-[#1E1E1E]">
-            Payment
-          </Label>
-          <div className="flex w-full items-center rounded-full border border-input bg-muted/30 gap-1 px-1 py-1">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className={
-                paymentOption === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-              }
-              onClick={() => onPaymentOptionChange("annual")}
-            >
-              Annual
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className={
-                paymentOption === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS
-              }
-              onClick={() => onPaymentOptionChange("monthly")}
-            >
-              Monthly
-            </Button>
-          </div>
-          {paymentOption === "monthly" && (
-            <p className="text-xs text-neutral-700">
-              Paying monthly is usually a little more expensive as you'll pay interest.
-            </p>
-          )}
-        </div>
 
         {/* Compact quote list under heading on small/medium screens */}
         {displayedQuotes.length > 0 && (

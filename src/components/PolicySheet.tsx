@@ -372,12 +372,6 @@ export function PolicySheetRight({
           </CardContent>
         </Card>
       </SheetSection>
-
-      {/* Mobile only: show payment & security block at the very end of the dropdown list.
-          Extra bottom padding ensures it can scroll fully above the sticky CTA bar. */}
-      <div className="mt-4 px-1 pb-32 md:hidden">
-        <PaymentSecurityBlock />
-      </div>
     </div>
   )
 }
