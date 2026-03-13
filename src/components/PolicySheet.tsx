@@ -461,7 +461,7 @@ export function PolicySheet({
 
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto max-[767px]:gap-0 md:flex-row md:overflow-auto md:gap-0"
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-0 max-[767px]:gap-0 max-[767px]:pb-28 md:flex-row md:overflow-auto md:gap-0 md:pb-0"
         >
           {/* Mobile sticky price + primary CTA + close button when scrolling */}
           <div
@@ -555,33 +555,36 @@ export function PolicySheet({
               </p>
             </div>
 
-            <Button
-              className="mt-[22px] w-full bg-button text-white max-[767px]:mt-[14px] hover:opacity-90"
-              onClick={handlePrimaryAction}
-            >
-              Continue
-            </Button>
+            {/* Desktop / tablet: primary & secondary actions inline in pricing column */}
+            <div className="hidden md:block">
+              <Button
+                className="mt-[22px] w-full bg-button text-white hover:opacity-90"
+                onClick={handlePrimaryAction}
+              >
+                Continue
+              </Button>
 
-            <Separator className="my-[22px] max-[767px]:my-[14px]" />
+              <Separator className="my-[22px]" />
 
-            <div className="flex flex-col gap-2">
-              <ResponsiveTooltip side="right" content="Send this quote by email">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full gap-1.5"
-                  onClick={handleEmailQuote}
-                >
-                  <Mail className="h-4 w-4" />
-                  Email quote
-                </Button>
-              </ResponsiveTooltip>
-              <ResponsiveTooltip side="right" content="Save this quote for later">
-                <Button variant="outline" size="sm" className="w-full gap-1.5">
-                  <Save className="h-4 w-4" />
-                  Save quote
-                </Button>
-              </ResponsiveTooltip>
+              <div className="flex flex-col gap-2">
+                <ResponsiveTooltip side="right" content="Send this quote by email">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-1.5"
+                    onClick={handleEmailQuote}
+                  >
+                    <Mail className="h-4 w-4" />
+                    Email quote
+                  </Button>
+                </ResponsiveTooltip>
+                <ResponsiveTooltip side="right" content="Save this quote for later">
+                  <Button variant="outline" size="sm" className="w-full gap-1.5">
+                    <Save className="h-4 w-4" />
+                    Save quote
+                  </Button>
+                </ResponsiveTooltip>
+              </div>
             </div>
 
             <div className="mt-[22px] flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 max-[767px]:mt-[14px]">
@@ -617,6 +620,37 @@ export function PolicySheet({
               proposerName={MOCK_PROPOSER_NAME}
               providerName={providerName}
             />
+          </div>
+        </div>
+
+        {/* Mobile sticky bottom action bar: Continue + Email quote + Save quote */}
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-30 border-t border-border bg-white px-4 py-3">
+          <div className="flex w-full gap-2">
+            <Button
+              className="flex-1 justify-center gap-1.5 bg-button text-white hover:opacity-90"
+              onClick={handlePrimaryAction}
+            >
+              <span className="text-sm font-medium">Continue</span>
+            </Button>
+          </div>
+          <div className="mt-2 flex w-full gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 justify-center gap-1.5"
+              onClick={handleEmailQuote}
+            >
+              <Mail className="h-4 w-4" />
+              <span className="text-xs font-medium">Email quote</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 justify-center gap-1.5"
+            >
+              <Save className="h-4 w-4" />
+              <span className="text-xs font-medium">Save quote</span>
+            </Button>
           </div>
         </div>
       </SheetContent>
