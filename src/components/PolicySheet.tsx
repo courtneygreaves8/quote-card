@@ -492,16 +492,22 @@ export function PolicySheet({
                 <p className="text-xs text-muted-foreground">{policyDetails.policyType}</p>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-1 rounded-sm border border-border px-2.5 py-1.5">
-              <span className="font-mono text-xs text-foreground">{quoteReference}</span>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5"
-                onClick={handleCopyRef}
-                aria-label="Copy quote reference"
-              >
-                <Copy className="h-3 w-3" />
+            <div className="flex flex-col items-end gap-2">
+              <div className="flex w-full shrink-0 items-center gap-1 rounded-sm border border-border px-2.5 py-1.5">
+                <span className="flex-1 font-mono text-xs text-foreground">{quoteReference}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5"
+                  onClick={handleCopyRef}
+                  aria-label="Copy quote reference"
+                >
+                  <Copy className="h-3 w-3" />
+                </Button>
+              </div>
+              <Button variant="outline" size="sm" className="w-full justify-center gap-1.5" onClick={handleEmailQuote}>
+                <Mail className="h-3.5 w-3.5" />
+                Email quote
               </Button>
             </div>
           </div>
