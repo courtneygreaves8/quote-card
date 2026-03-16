@@ -298,11 +298,11 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                             }
                             handleQuoteListClick(quote)
                           }}
-                          className="flex w-full flex-col gap-2 rounded-xl border border-border bg-white px-3 py-2 max-[767px]:py-3 text-left text-sm transition-colors hover:bg-muted/60"
+                          className="flex w-full flex-col gap-2 rounded-xl border border-border bg-white px-2 py-2 max-[767px]:py-3 text-left text-sm transition-colors hover:bg-muted/60"
                         >
                           <div className="flex w-full items-start gap-2">
                             {/* Logo block on the left (responsive size), matching compact/list cards */}
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100 max-[767px]:h-20 max-[767px]:w-20">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-neutral-100 max-[767px]:h-20 max-[767px]:w-20">
                               <span className="text-[10px] font-semibold text-slate-600">
                                 LOGO
                               </span>
@@ -523,12 +523,12 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                     </p>
                   </div>
                   <div className="flex w-full min-[960px]:w-auto min-[960px]:flex-none min-[960px]:items-center min-[960px]:justify-end">
-                    <div className="flex h-fit w-full max-w-[260px] items-center gap-0.5 rounded-lg border border-input bg-muted/30 p-0.5">
+                    <div className="flex h-fit w-full max-w-[260px] items-center gap-1 rounded-full border border-input bg-muted/30 p-1">
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className={`flex-1 rounded-[8px] ${
+                        className={`flex-1 rounded-full ${
                           viewMode === "all"
                             ? "bg-button text-white hover:bg-button hover:text-white"
                             : "hover:bg-neutral-200"
@@ -541,7 +541,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className={`flex-1 rounded-[8px] ${
+                        className={`flex-1 rounded-full ${
                           viewMode === "compare"
                             ? "bg-button text-white hover:bg-button hover:text-white"
                             : "hover:bg-neutral-200"

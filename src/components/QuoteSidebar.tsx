@@ -20,7 +20,7 @@ import {
   PAYMENT_INACTIVE_CLASS,
 } from "@/lib/constants"
 import { QuoteFilters as QuoteFiltersType } from "@/types/quote"
-import { Calendar, Copy, Mail, Minus, Pencil, Plus, X } from "lucide-react"
+import { Calendar, Copy, Mail, Minus, Pencil, Plus, Tag, X } from "lucide-react"
 import { useCallback, useRef } from "react"
 
 const SIDEBAR_ICON_BTN_CLASS = "h-8 w-8 shrink-0"
@@ -369,9 +369,10 @@ export function QuoteSidebar({
           </Button>
         </div>
         {filters.paymentOption === "monthly" && (
-          <div className="mt-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-700">
+          <div className="mt-2 flex items-start gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-xs text-neutral-700">
+            <Tag className="mt-0.5 size-3.5 shrink-0" />
             <p>
-              Paying monthly is usually a little more expensive as you'll pay interest.
+              Paying monthly is usually a little more expensive as you'll pay interest. You can save up to 10% by purchasing an annual policy.
             </p>
           </div>
         )}
