@@ -518,8 +518,8 @@ export function QuoteCard({
               </div>
               <span className="text-base font-semibold text-[#1E1E1E]">
                 {pricingMode === "annual"
-                  ? formatPounds(displayedAnnualTotal)
-                  : `${formatPounds(monthlyAmount)}/mo.`}
+                  ? `${formatPounds(displayedAnnualTotal)} per year`
+                  : `${formatPounds(monthlyAmount)} per month`}
               </span>
             </div>
           </div>

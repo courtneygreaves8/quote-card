@@ -151,9 +151,9 @@ export function QuotesContent({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All quotes</SelectItem>
-                    <SelectItem value="under-20">Under £20/mo</SelectItem>
-                    <SelectItem value="under-25">Under £25/mo</SelectItem>
-                    <SelectItem value="under-30">Under £30/mo</SelectItem>
+                    <SelectItem value="under-20">Under £20 per month</SelectItem>
+                    <SelectItem value="under-25">Under £25 per month</SelectItem>
+                    <SelectItem value="under-30">Under £30 per month</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -213,7 +213,7 @@ export function QuotesContent({
                           data-debug-id="default-compact-price-label"
                           className="shrink-0 text-[11px] font-normal text-muted-foreground"
                         >
-                          {isMonthlyPrimary ? "/mo." : "annual"}
+                          {isMonthlyPrimary ? "per month" : "per year"}
                         </span>
                       </span>
 
@@ -237,7 +237,7 @@ export function QuotesContent({
                           data-debug-id="default-compact-price-label"
                           className="shrink-0 text-[11px] font-normal text-muted-foreground"
                         >
-                          {isMonthlyPrimary ? "/mo." : "annual"}
+                          {isMonthlyPrimary ? "per month" : "per year"}
                         </span>
                       </span>
                     </span>

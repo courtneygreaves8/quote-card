@@ -272,9 +272,9 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         {(
                           [
                             { value: "all", label: "All prices" },
-                            { value: "under200", label: "Under £200/pa." },
-                            { value: "200to400", label: "£200 – £400/pa." },
-                            { value: "over400", label: "Over £400/pa." },
+                            { value: "under200", label: "Under £200 per year" },
+                            { value: "200to400", label: "£200 – £400 per year" },
+                            { value: "over400", label: "Over £400 per year" },
                           ] as const
                         ).map((opt) => (
                           <button
@@ -364,7 +364,6 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                                 </div>
                                 {/* Compare checkbox hidden on <=1295px */}
                                 <div className="max-[1295px]:hidden flex items-center gap-1.5">
-                                  <span className="text-xs text-muted-foreground">Compare</span>
                                   {isCompareLimitReached && !isCompared ? (
                                     <ResponsiveTooltip
                                       side="right"
@@ -409,12 +408,12 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                                 {isMonthlyPrimary ? (
                                   <>
                                     <span className="text-sm font-semibold tabular-nums text-foreground">
-                                      £{monthlyPrice.toFixed(2)}/mo.
+                                      £{monthlyPrice.toFixed(2)} per month
                                     </span>
                                   </>
                                 ) : (
                                   <span className="text-sm font-semibold tabular-nums text-foreground">
-                                    £{annualPrice.toFixed(2)}/pa.
+                                    £{annualPrice.toFixed(2)} per year
                                   </span>
                                 )}
                               </div>
@@ -500,7 +499,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                               data-debug-id="compact-price-label"
                               className="ml-auto text-[11px] font-normal text-muted-foreground"
                             >
-                              {isMonthlyPrimary ? "/mo." : "annual"}
+                              {isMonthlyPrimary ? "per month" : "per year"}
                             </span>
                           </span>
                         </span>
@@ -667,8 +666,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                                 primaryQuote.homeEmergencyAddOnPrice
                               )
                                 .toFixed(2)
-                                .replace(".00", "")}
-                              /mo.
+                                .replace(".00", "")} per month
                             </td>
                             <td className="py-2 font-medium text-[#1E1E1E]">
                               £
@@ -679,8 +677,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                                 secondaryQuote.homeEmergencyAddOnPrice
                               )
                                 .toFixed(2)
-                                .replace(".00", "")}
-                              /mo.
+                                .replace(".00", "")} per month
                             </td>
                             {tertiaryQuote && (
                               <td className="py-2 font-medium text-[#1E1E1E]">
@@ -690,10 +687,9 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                                   tertiaryQuote.piklPrice +
                                   tertiaryQuote.familyLegalAddOnPrice +
                                   tertiaryQuote.homeEmergencyAddOnPrice
-                                )
-                                  .toFixed(2)
-                                  .replace(".00", "")}
-                                /mo.
+                              )
+                                .toFixed(2)
+                                .replace(".00", "")} per month
                               </td>
                             )}
                           </tr>

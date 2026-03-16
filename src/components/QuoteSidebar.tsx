@@ -23,7 +23,7 @@ import { QuoteFilters as QuoteFiltersType } from "@/types/quote"
 import { Calendar, Copy, Mail, Minus, Pencil, Plus, Tag, X } from "lucide-react"
 import { useCallback, useRef } from "react"
 
-const SIDEBAR_ICON_BTN_CLASS = "shrink-0"
+const SIDEBAR_ICON_BTN_CLASS = "shrink-0 h-8 w-8"
 const ADDON_ROW_CLASS = "flex items-center justify-between gap-4"
 const ADDON_LABEL_CLASS = "font-normal text-muted-foreground"
 const COVER_DATE_INPUT_CLASS =
@@ -92,7 +92,7 @@ export function QuoteSidebar({
       )}
       <Button
         variant="outline"
-        className="w-full justify-center gap-2"
+        className="h-9 min-h-[36px] max-[767px]:h-11 max-[767px]:min-h-[44px] w-full justify-center gap-2"
         onClick={onEditAnswers}
       >
         <Pencil className="h-4 w-4" />

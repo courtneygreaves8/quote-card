@@ -466,7 +466,7 @@ export function PolicySheet({
               <span className="text-xs text-muted-foreground">annual</span>
               <span className="text-xs text-muted-foreground">or</span>
               <span className="font-semibold tabular-nums text-foreground">£{monthlyPrice.toFixed(2)}</span>
-              <span className="text-xs text-muted-foreground">/mo.</span>
+              <span className="text-xs font-normal text-muted-foreground">per month</span>
             </div>
             <Button
               className="shrink-0 bg-button px-4 text-sm text-white hover:opacity-90"
@@ -611,7 +611,7 @@ export function PolicySheet({
                 <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs">
                   <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
                   <span className="font-semibold tabular-nums text-foreground">£{monthlyPrice.toFixed(2)}</span>
-                  <span className="text-xs font-medium text-muted-foreground">/mo.</span>
+                  <span className="text-xs font-normal text-muted-foreground">per month</span>
                 </span>
               </div>
               <Button
