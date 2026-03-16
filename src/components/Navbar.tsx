@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CreateAccountModal } from "@/components/CreateAccountModal"
+import { LoginModal } from "@/components/LoginModal"
 import { HelpModal } from "@/components/HelpModal"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { LAYOUT_PADDING_X } from "@/lib/constants"
@@ -13,6 +14,7 @@ interface NavbarProps {
 
 export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps) {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
 
@@ -52,7 +54,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
                 View alt layout
               </Button>
             )}
-            <Button variant="outline" size="sm" className="gap-1.5 border-border">
+            <Button variant="outline" size="sm" className="gap-1.5 border-border" onClick={() => setLoginOpen(true)}>
               <LogIn className="h-4 w-4" />
               Login
             </Button>
@@ -90,6 +92,11 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
           </Button>
         </div>
     </header>
+      <LoginModal
+        open={loginOpen}
+        onOpenChange={setLoginOpen}
+        onCreateAccount={() => setCreateAccountOpen(true)}
+      />
       <CreateAccountModal
         open={createAccountOpen}
         onOpenChange={setCreateAccountOpen}
@@ -117,6 +124,10 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
             <Button
               variant="outline"
               className="h-10 w-full justify-center gap-1.5 border-border"
+              onClick={() => {
+                setNavOpen(false)
+                setLoginOpen(true)
+              }}
             >
               <LogIn className="h-4 w-4" />
               Login

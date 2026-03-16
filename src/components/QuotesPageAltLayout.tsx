@@ -38,6 +38,8 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
 
   const [useDefaultLayout, setUseDefaultLayout] = useState(false)
   const [loadingModalOpen, setLoadingModalOpen] = useState(true)
+  const [filterOpen, setFilterOpen] = useState(false)
+  const [priceFilter, setPriceFilter] = useState<"all" | "under200" | "200to400" | "over400">("all")
   const {
     primaryQuote,
     secondaryQuote,
@@ -59,6 +61,13 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
     onSelectQuote: handleSelectQuote,
   })
 
+  const filteredQuotes = sortedQuotes.filter((q) => {
+    const annual = q.piklPrice * 12
+    if (priceFilter === "under200") return annual < 200
+    if (priceFilter === "200to400") return annual >= 200 && annual <= 400
+    if (priceFilter === "over400") return annual > 400
+    return true
+  })
 
   // #region agent log
   useEffect(() => {
@@ -240,25 +249,54 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   </Button>
                 </div>
               </div>
-              {/* Compare heading + sort control on one line (desktop and larger) */}
-              <div className="mb-4 mt-1 hidden items-center gap-2 min-[1296px]:flex">
-                <span className="flex-1 text-sm font-semibold tracking-wide text-[#1E1E1E]">
-                  Select &amp; compare
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 px-2 text-xs font-medium border-neutral-200"
-                  onClick={() =>
-                    setSortMode((prev) => (prev === "price" ? "rating" : "price"))
-                  }
-                >
-                  {sortMode === "price" ? "Sort: Lowest price" : "Sort: Highest rating"}
-                </Button>
+              {/* Sort + Filter controls */}
+              <div className="mb-4 hidden min-[1296px]:block">
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="h-10 flex-1 justify-center gap-2 px-4 py-2"
+                    onClick={() => setSortMode((prev) => (prev === "price" ? "rating" : "price"))}
+                  >
+                    {sortMode === "price" ? "Sort: Price" : "Sort: Rating"}
+                  </Button>
+                  <div className="relative flex-1">
+                    <Button
+                      variant="outline"
+                      className="h-10 w-full justify-center gap-2 px-4 py-2"
+                      onClick={() => setFilterOpen((v) => !v)}
+                    >
+                      Filter{priceFilter !== "all" && " •"}
+                    </Button>
+                    {filterOpen && (
+                      <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-20 rounded-lg border border-border bg-white py-1 shadow-md">
+                        {(
+                          [
+                            { value: "all", label: "All prices" },
+                            { value: "under200", label: "Under £200/pa." },
+                            { value: "200to400", label: "£200 – £400/pa." },
+                            { value: "over400", label: "Over £400/pa." },
+                          ] as const
+                        ).map((opt) => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            className={`flex w-full items-center px-3 py-2 text-left text-sm transition-colors hover:bg-muted/60 ${priceFilter === opt.value ? "font-medium text-foreground" : "text-muted-foreground"}`}
+                            onClick={() => {
+                              setPriceFilter(opt.value)
+                              setFilterOpen(false)
+                            }}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
                 <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
-                  {sortedQuotes.map((quote, index) => {
+                  {filteredQuotes.map((quote, index) => {
                     const isCompared = compareIds.includes(quote.id)
                     const isCompareLimitReached = compareIds.length >= 3 && !isCompared
                     const compareTooltipLabel =
@@ -302,7 +340,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                         >
                           <div className="flex w-full items-start gap-2">
                             {/* Logo block on the left (responsive size), matching compact/list cards */}
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-neutral-100 max-[767px]:h-20 max-[767px]:w-20">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-neutral-100 max-[767px]:h-20 max-[767px]:w-20 min-[1296px]:h-16 min-[1296px]:w-16">
                               <span className="text-[10px] font-semibold text-slate-600">
                                 LOGO
                               </span>
@@ -325,7 +363,8 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                                   </span>
                                 </div>
                                 {/* Compare checkbox hidden on <=1295px */}
-                                <div className="max-[1295px]:hidden">
+                                <div className="max-[1295px]:hidden flex items-center gap-1.5">
+                                  <span className="text-xs text-muted-foreground">Compare</span>
                                   {isCompareLimitReached && !isCompared ? (
                                     <ResponsiveTooltip
                                       side="right"
@@ -366,30 +405,20 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                               <span className="truncate text-xs text-muted-foreground max-[1295px]:hidden">
                                 {filters.policyType}
                               </span>
+                              <div className="flex items-baseline justify-start gap-2">
+                                {isMonthlyPrimary ? (
+                                  <>
+                                    <span className="text-sm font-semibold tabular-nums text-foreground">
+                                      £{monthlyPrice.toFixed(2)}/mo.
+                                    </span>
+                                  </>
+                                ) : (
+                                  <span className="text-sm font-semibold tabular-nums text-foreground">
+                                    £{annualPrice.toFixed(2)}/pa.
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex w-full items-baseline justify-start gap-2">
-                            {isMonthlyPrimary ? (
-                              <>
-                                <span className="text-sm font-semibold tabular-nums text-foreground">
-                                  £{monthlyPrice.toFixed(2)}/mo.
-                                </span>
-                                <span className="text-xs text-muted-foreground">or</span>
-                                <span className="text-sm tabular-nums text-muted-foreground">
-                                  £{annualPrice.toFixed(2)} <span>annual</span>
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <span className="text-sm font-semibold tabular-nums text-foreground">
-                                  £{annualPrice.toFixed(2)} <span>annual</span>
-                                </span>
-                                <span className="text-xs text-muted-foreground">or</span>
-                                <span className="text-sm tabular-nums text-muted-foreground">
-                                  £{monthlyPrice.toFixed(2)}/mo.
-                                </span>
-                              </>
-                            )}
                           </div>
                           {/* Mobile-only view button at bottom of card */}
                           <div className="mt-2 max-[767px]:flex min-[768px]:hidden">
@@ -434,7 +463,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 </div>
                 {/* Compact quote list row under heading */}
                 <div className="mb-4 flex w-full gap-2 overflow-x-auto pb-1">
-                  {sortedQuotes.map((quote) => {
+                  {filteredQuotes.map((quote) => {
                     const monthlyPrice = quote.piklPrice
                     const annualPrice = monthlyPrice * 12
                     const isMonthlyPrimary = filters.paymentOption === "monthly"

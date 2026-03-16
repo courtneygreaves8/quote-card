@@ -1,4 +1,6 @@
 import { Building2, Check, ChevronDown, Copy, Download, Lock, Mail, Save, Shield, X } from "lucide-react"
+import { LoginModal } from "@/components/LoginModal"
+import { CreateAccountModal } from "@/components/CreateAccountModal"
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
 import { COMPULSORY_EXCESS } from "@/lib/constants"
 import { cn, parseExcessNum } from "@/lib/utils"
@@ -390,6 +392,8 @@ export function PolicySheet({
   onPurchase,
 }: PolicySheetProps) {
   const [showStickyBar, setShowStickyBar] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showCreateAccountModal, setShowCreateAccountModal] = useState(false)
   const scrollRef = useRef<HTMLDivElement | null>(null)
 
   const handleCopyRef = useCallback(() => {
@@ -442,6 +446,7 @@ export function PolicySheet({
   }
 
   return (
+    <>
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
@@ -454,17 +459,8 @@ export function PolicySheet({
         {/* ── MOBILE LAYOUT (< 768px) ─────────────────────────────────── */}
         <div className="flex h-full flex-col overflow-y-auto md:hidden">
 
-          {/* 1. Header: close + prices + continue */}
-          <div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3">
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-9 w-9 shrink-0 border-border"
-              onClick={() => onOpenChange(false)}
-              aria-label="Close"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+          {/* 1. Header: prices + continue + close — sticky on scroll */}
+          <div className="sticky top-0 z-10 flex shrink-0 items-center gap-2 border-b border-border bg-white px-4 py-3">
             <div className="flex flex-1 items-baseline gap-1.5 px-1 text-sm">
               <span className="font-semibold tabular-nums text-foreground">£{annualPrice.toFixed(2)}</span>
               <span className="text-xs text-muted-foreground">annual</span>
@@ -477,6 +473,15 @@ export function PolicySheet({
               onClick={handlePrimaryAction}
             >
               Continue
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-9 w-9 shrink-0 border-border"
+              onClick={() => onOpenChange(false)}
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
             </Button>
           </div>
 
@@ -694,7 +699,7 @@ export function PolicySheet({
                 </Button>
               </ResponsiveTooltip>
               <ResponsiveTooltip side="right" content="Save this quote for later">
-                <Button variant="outline" size="sm" className="w-full gap-1.5">
+                <Button variant="outline" size="sm" className="w-full gap-1.5" onClick={() => setShowLoginModal(true)}>
                   <Save className="h-4 w-4" />
                   Save quote
                 </Button>
@@ -733,5 +738,16 @@ export function PolicySheet({
         </div>
       </SheetContent>
     </Sheet>
+
+    <LoginModal
+      open={showLoginModal}
+      onOpenChange={setShowLoginModal}
+      onCreateAccount={() => setShowCreateAccountModal(true)}
+    />
+    <CreateAccountModal
+      open={showCreateAccountModal}
+      onOpenChange={setShowCreateAccountModal}
+    />
+    </>
   )
 }
