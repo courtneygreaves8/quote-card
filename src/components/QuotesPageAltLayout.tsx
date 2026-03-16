@@ -211,7 +211,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-8 flex-1 px-3 text-xs font-medium border-neutral-200"
+                    className="flex-1 px-3 text-xs font-medium border-neutral-200"
                     onClick={() =>
                       setSortMode((prev) => (prev === "price" ? "rating" : "price"))
                     }
@@ -221,7 +221,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-8 flex-1 px-3 text-xs font-medium border-border"
+                    className="flex-1 px-3 text-xs font-medium border-border"
                     onClick={() => setOptionsOpen(true)}
                   >
                     Refine results
@@ -232,7 +232,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-8 flex-1 px-3 text-xs font-medium border-neutral-200"
+                    className="flex-1 px-3 text-xs font-medium border-neutral-200"
                     onClick={() =>
                       setSortMode((prev) => (prev === "price" ? "rating" : "price"))
                     }
@@ -242,7 +242,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-8 flex-1 px-3 text-xs font-medium border-border"
+                    className="flex-1 px-3 text-xs font-medium border-border"
                     onClick={() => setOptionsOpen(true)}
                   >
                     Refine results
@@ -254,7 +254,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    className="h-10 flex-1 justify-center gap-2 px-4 py-2"
+                    className="flex-1 justify-center gap-2"
                     onClick={() => setSortMode((prev) => (prev === "price" ? "rating" : "price"))}
                   >
                     {sortMode === "price" ? "Sort: Price" : "Sort: Rating"}
@@ -262,7 +262,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   <div className="relative flex-1">
                     <Button
                       variant="outline"
-                      className="h-10 w-full justify-center gap-2 px-4 py-2"
+                      className="w-full justify-center gap-2"
                       onClick={() => setFilterOpen((v) => !v)}
                     >
                       Filter{priceFilter !== "all" && " •"}
@@ -424,7 +424,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                           <div className="mt-2 max-[767px]:flex min-[768px]:hidden">
                             <Button
                               size="sm"
-                              className="h-9 w-full justify-center rounded text-xs font-medium"
+                              className="w-full justify-center rounded text-xs font-medium"
                               onClick={(e) => {
                                 e.stopPropagation()
                                 handleMoreDetails(quote)
@@ -442,7 +442,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-9 w-full justify-center gap-1.5 border-border text-xs min-[1513px]:hidden max-[1295px]:hidden"
+                    className="w-full justify-center gap-1.5 border-border text-xs min-[1513px]:hidden max-[1295px]:hidden"
                     onClick={() => setOptionsOpen(true)}
                   >
                     Refine results

@@ -125,7 +125,7 @@ export function QuotesContent({
               <Button
                 type="button"
                 variant="outline"
-                className="h-9 w-full justify-center gap-1.5 border-border max-[767px]:flex min-[768px]:hidden"
+                className="w-full justify-center gap-1.5 border-border max-[767px]:flex min-[768px]:hidden"
                 onClick={onOpenOptions}
               >
                 Refine results
@@ -162,7 +162,7 @@ export function QuotesContent({
               <Button
                 type="button"
                 variant="outline"
-                className="h-9 w-full justify-center gap-1.5 border-border min-[768px]:flex min-[1340px]:hidden max-[767px]:hidden"
+                className="w-full justify-center gap-1.5 border-border min-[768px]:flex min-[1340px]:hidden max-[767px]:hidden"
                 onClick={onOpenOptions}
               >
                 Refine results

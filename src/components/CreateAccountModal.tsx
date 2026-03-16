@@ -48,7 +48,7 @@ const FIELDS = [
 ]
 
 const inputBaseClassName =
-  "flex h-10 w-full rounded-md border-2 bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground transition-colors hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-background"
+"flex h-9 md:h-9 max-[767px]:h-11 w-full rounded-md border-2 bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground transition-colors hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-background"
 
 export function CreateAccountModal({
   open,
@@ -100,7 +100,7 @@ export function CreateAccountModal({
             type="button"
             variant="outline"
             size="icon"
-            className="absolute right-2 top-2 h-8 w-8 border-border"
+            className="absolute right-2 top-2 border-border"
             onClick={() => onOpenChange(false)}
             aria-label="Close"
           >

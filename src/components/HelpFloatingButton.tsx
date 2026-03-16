@@ -10,7 +10,7 @@ export function HelpFloatingButton() {
     <>
       <Button
         variant="outline"
-        className="fixed bottom-6 right-6 z-50 h-10 gap-2 rounded-full border-border px-4 shadow-md"
+        className="fixed bottom-6 right-6 z-50 gap-2 rounded-full border-border px-4 shadow-md"
         aria-label="Contact us"
         onClick={() => setOpen(true)}
       >

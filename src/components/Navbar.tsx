@@ -123,7 +123,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
           <div className="flex flex-col gap-3">
             <Button
               variant="outline"
-              className="h-10 w-full justify-center gap-1.5 border-border"
+              className="w-full justify-center gap-1.5 border-border"
               onClick={() => {
                 setNavOpen(false)
                 setLoginOpen(true)
@@ -134,7 +134,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
             </Button>
             <Button
               variant="outline"
-              className="h-10 w-full justify-center gap-1.5 border-border"
+              className="w-full justify-center gap-1.5 border-border"
               onClick={() => {
                 setNavOpen(false)
                 setCreateAccountOpen(true)
@@ -145,7 +145,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
             </Button>
             <Button
               variant="outline"
-              className="h-10 w-full justify-center gap-1.5 border-border"
+              className="w-full justify-center gap-1.5 border-border"
               onClick={() => {
                 setNavOpen(false)
                 setHelpOpen(true)
@@ -156,7 +156,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
             {activeLayout === "default" && (
               <Button
                 variant="ghost"
-                className="h-10 w-full justify-center text-xs font-medium"
+                className="w-full justify-center text-xs font-medium"
                 onClick={() => {
                   setNavOpen(false)
                   onSelectLayout?.("alt")

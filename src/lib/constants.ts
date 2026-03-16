@@ -31,7 +31,7 @@ export const PAYMENT_INACTIVE_CLASS =
 
 /** Sidebar excess +/- button (square, soft border) */
 export const EXCESS_BTN_CLASS =
-  "h-8 w-8 shrink-0 rounded-md border-neutral-200 p-0"
+  "h-9 w-9 shrink-0 rounded-md border-neutral-200 p-0"
 
 export const MIN_QUOTES = 3
 export const MAX_QUOTES = 4

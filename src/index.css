@@ -68,6 +68,16 @@
   }
 }
 
+@layer base {
+  @media (max-width: 767px) {
+    /* Default mobile heights: 44px (h-11). Components can override with explicit h-9 when needed. */
+    input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+    select {
+      @apply h-11;
+    }
+  }
+}
+
 @keyframes loading-ripple {
   0% {
     transform: translate(-50%, -50%) scale(0.8);

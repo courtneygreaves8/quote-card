@@ -469,7 +469,7 @@ export function PolicySheet({
               <span className="text-xs text-muted-foreground">/mo.</span>
             </div>
             <Button
-              className="h-9 shrink-0 bg-button px-4 text-sm text-white hover:opacity-90"
+              className="shrink-0 bg-button px-4 text-sm text-white hover:opacity-90"
               onClick={handlePrimaryAction}
             >
               Continue
@@ -477,7 +477,7 @@ export function PolicySheet({
             <Button
               variant="outline"
               size="icon"
-              className="h-9 w-9 shrink-0 border-border"
+              className="shrink-0 border-border p-0"
               onClick={() => onOpenChange(false)}
               aria-label="Close"
             >
@@ -492,13 +492,13 @@ export function PolicySheet({
                 <Shield className="h-5 w-5" aria-hidden />
               </span>
               <div>
-                <p className="text-xs text-muted-foreground">4.7 ⭐</p>
+                <p className="text-xs text-muted-foreground border rounded-sm p-1 w-fit">4.7 ⭐</p>
                 <p className="text-md font-semibold text-foreground">{providerName} &amp; Pikl</p>
                 <p className="text-xs text-muted-foreground">{policyDetails.policyType}</p>
               </div>
             </div>
             <div className="flex flex-col items-end gap-2">
-              <div className="flex w-full shrink-0 items-center gap-1 rounded-sm border border-border px-2.5 py-1.5">
+              <div className="flex h-9 w-full shrink-0 items-center gap-1 rounded-sm border border-border px-2.5">
                 <span className="flex-1 font-mono text-xs text-foreground">{quoteReference}</span>
                 <Button
                   variant="ghost"
@@ -615,7 +615,7 @@ export function PolicySheet({
                 </span>
               </div>
               <Button
-                className="h-9 shrink-0 whitespace-nowrap bg-button px-3 text-white hover:opacity-90"
+                className="shrink-0 whitespace-nowrap bg-button px-3 text-white hover:opacity-90"
                 onClick={handlePrimaryAction}
               >
                 Continue
@@ -628,7 +628,7 @@ export function PolicySheet({
             <Button
               variant="outline"
               size="icon"
-              className="absolute right-4 top-4 z-10 border-border"
+              className="absolute right-4 top-4 z-10 border-border p-0"
               onClick={() => onOpenChange(false)}
               aria-label="Close"
             >
@@ -712,7 +712,7 @@ export function PolicySheet({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 shrink-0"
+                  className="shrink-0"
                   onClick={handleCopyRef}
                   aria-label="Copy quote reference"
                 >

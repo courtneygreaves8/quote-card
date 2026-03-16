@@ -23,11 +23,11 @@ import { QuoteFilters as QuoteFiltersType } from "@/types/quote"
 import { Calendar, Copy, Mail, Minus, Pencil, Plus, Tag, X } from "lucide-react"
 import { useCallback, useRef } from "react"
 
-const SIDEBAR_ICON_BTN_CLASS = "h-8 w-8 shrink-0"
+const SIDEBAR_ICON_BTN_CLASS = "shrink-0"
 const ADDON_ROW_CLASS = "flex items-center justify-between gap-4"
 const ADDON_LABEL_CLASS = "font-normal text-muted-foreground"
 const COVER_DATE_INPUT_CLASS =
-  "flex h-full flex-1 rounded-md border-0 bg-transparent py-2.5 pl-3.5 pr-2 text-sm text-foreground placeholder:text-neutral-400 transition-colors [color-scheme:light] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark/25 focus-visible:ring-offset-2 focus-visible:bg-white [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10 [&::-webkit-calendar-picker-indicator]:h-10 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+"flex h-9 md:h-9 max-[767px]:h-11 flex-1 rounded-md border-0 bg-transparent py-2.5 pl-3.5 pr-2 text-sm text-foreground placeholder:text-neutral-400 transition-colors [color-scheme:light] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark/25 focus-visible:ring-offset-2 focus-visible:bg-white [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-9 [&::-webkit-calendar-picker-indicator]:h-9 max-[767px]:[&::-webkit-calendar-picker-indicator]:h-11 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
 
 interface QuoteSidebarProps {
   quoteReference: string
@@ -82,7 +82,7 @@ export function QuoteSidebar({
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 border-border"
+            className="border-border"
             onClick={onCloseSheet}
             aria-label="Close options"
           >
@@ -92,7 +92,7 @@ export function QuoteSidebar({
       )}
       <Button
         variant="outline"
-        className="h-10 w-full justify-center gap-2 px-4 py-2"
+        className="w-full justify-center gap-2"
         onClick={onEditAnswers}
       >
         <Pencil className="h-4 w-4" />
@@ -106,7 +106,7 @@ export function QuoteSidebar({
           Quote reference
         </Label>
         <div className="flex items-center gap-2">
-          <div className="flex h-10 min-w-0 flex-1 items-center rounded-lg border border-input bg-muted/30 pl-3.5 pr-3.5">
+          <div className="flex h-9 md:h-9 max-[767px]:h-11 min-w-0 flex-1 items-center rounded-lg border border-input bg-muted/30 pl-3.5 pr-3.5">
             <span className="truncate font-mono text-sm font-medium">
               {quoteReference}
             </span>
@@ -153,7 +153,7 @@ export function QuoteSidebar({
         >
           Cover start date
         </Label>
-        <div className="relative flex h-10 w-full items-center rounded-lg border border-neutral-200 bg-neutral-50/80 pr-1">
+        <div className="relative flex h-9 w-full items-center overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50/80 pr-1">
           <input
             ref={dateInputRef}
             id="cover-start-date"
@@ -381,7 +381,7 @@ export function QuoteSidebar({
       {isSheet && (
         <div className="mt-4 mb-3 block card3:hidden">
           <Button
-            className="h-10 w-full justify-center gap-2"
+            className="w-full justify-center gap-2"
             onClick={onCloseSheet}
           >
             Apply changes

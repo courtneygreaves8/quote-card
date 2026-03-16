@@ -120,7 +120,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 flex-1 gap-1.5 px-2 py-2 text-xs`}
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} flex-1 gap-1.5 px-2 py-2 text-xs`}
                   onClick={() => onPaymentOptionChange("annual")}
                 >
                   <span className="inline-flex items-center gap-0.5">
@@ -133,7 +133,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} h-8 flex-1 px-2 py-2 text-xs`}
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} flex-1 px-2 py-2 text-xs`}
                   onClick={() => onPaymentOptionChange("monthly")}
                 >
                   Monthly
@@ -147,7 +147,7 @@ export function QuoteCard({
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 gap-1.5 px-2 py-2 text-xs`}
+                    className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial gap-1.5 px-2 py-2 text-xs`}
                     onClick={() => onPaymentOptionChange("annual")}
                   >
                     <span className="inline-flex items-center gap-0.5">
@@ -160,7 +160,7 @@ export function QuoteCard({
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-8 px-2 py-2 text-xs`}
+                    className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial px-2 py-2 text-xs`}
                     onClick={() => onPaymentOptionChange("monthly")}
                   >
                     Monthly
@@ -170,7 +170,7 @@ export function QuoteCard({
                   <Button
                     type="button"
                     variant="outline"
-                    className="h-9 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
+                    className="justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
                     onClick={() => onMoreDetails(quote)}
                   >
                     <Info className="h-4 w-4 shrink-0" />
@@ -179,7 +179,7 @@ export function QuoteCard({
                   <Button
                     type="button"
                     variant="default"
-                    className="h-9 justify-center gap-1.5 px-4 text-xs font-medium"
+                    className="justify-center gap-1.5 px-4 text-xs font-medium"
                     onClick={() => onPurchase?.(quote)}
                   >
                     <ShieldCheck className="h-4 w-4 shrink-0" />
@@ -579,7 +579,7 @@ export function QuoteCard({
             <Button
               type="button"
               variant="outline"
-              className="h-9 flex-1 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900"
+              className="flex-1 justify-center gap-1.5 border-[#E2E8F0] bg-white px-4 text-xs font-medium text-slate-900 h-9 max-[767px]:h-11 max-[767px]:min-h-[44px]"
               onClick={() => onMoreDetails(quote)}
             >
               <Info className="h-4 w-4 shrink-0" />
@@ -588,7 +588,7 @@ export function QuoteCard({
             <Button
               type="button"
               variant="default"
-              className="h-9 flex-1 justify-center gap-1.5 px-4 text-xs font-medium"
+              className="flex-1 justify-center gap-1.5 px-4 text-xs font-medium h-9 max-[767px]:h-11 max-[767px]:min-h-[44px]"
               onClick={() => onPurchase?.(quote)}
             >
               <ShieldCheck className="h-4 w-4 shrink-0" />
