@@ -197,11 +197,13 @@ export function PolicySheetRight({
   propertyAddress,
   proposerName,
   providerName,
+  mobileMode = false,
 }: {
   policyDetails: PolicyDetailsType
   propertyAddress: string
   proposerName: string
   providerName: string
+  mobileMode?: boolean
 }) {
   const [openOverview, setOpenOverview] = useState(false)
   const [openIncluded, setOpenIncluded] = useState(false)
@@ -213,7 +215,10 @@ export function PolicySheetRight({
   const [openAboutInsurer, setOpenAboutInsurer] = useState(false)
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto p-6 pt-[6.5rem] max-[767px]:pt-5">
+    <div className={cn(
+      "flex w-full flex-col p-6",
+      mobileMode ? "pt-4" : "min-h-0 flex-1 overflow-y-auto pt-[6.5rem]"
+    )}>
       <SheetSection
         title="Overview"
         open={openOverview}
@@ -373,10 +378,6 @@ export function PolicySheetRight({
         </Card>
       </SheetSection>
 
-      {/* Mobile only: payment & security block after last dropdown */}
-      <div className="mt-4 px-1 pb-32 md:hidden">
-        <PaymentSecurityBlock />
-      </div>
     </div>
   )
 }
@@ -449,24 +450,139 @@ export function PolicySheet({
         <SheetHeader className="sr-only">
           <SheetTitle>{providerName} – Policy details</SheetTitle>
         </SheetHeader>
-        <Button
-          variant="outline"
-          size="icon"
-          className="absolute right-4 top-4 z-10 border-border"
-          onClick={() => onOpenChange(false)}
-          aria-label="Close"
-        >
-          <X className="h-4 w-4" />
-        </Button>
 
+        {/* ── MOBILE LAYOUT (< 768px) ─────────────────────────────────── */}
+        <div className="flex h-full flex-col overflow-y-auto md:hidden">
+
+          {/* 1. Header: close + prices + continue */}
+          <div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-9 w-9 shrink-0 border-border"
+              onClick={() => onOpenChange(false)}
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            <div className="flex flex-1 items-baseline gap-1.5 px-1 text-sm">
+              <span className="font-semibold tabular-nums text-foreground">£{annualPrice.toFixed(2)}</span>
+              <span className="text-xs text-muted-foreground">annual</span>
+              <span className="text-xs text-muted-foreground">or</span>
+              <span className="font-semibold tabular-nums text-foreground">£{monthlyPrice.toFixed(2)}</span>
+              <span className="text-xs text-muted-foreground">/mo.</span>
+            </div>
+            <Button
+              className="h-9 shrink-0 bg-button px-4 text-sm text-white hover:opacity-90"
+              onClick={handlePrimaryAction}
+            >
+              Continue
+            </Button>
+          </div>
+
+          {/* 2. Insurer info: logo + name/rating/cover on left, quote ref on right */}
+          <div className="flex shrink-0 items-start justify-between gap-3 mt-2 border-border px-4 py-4">
+            <div className="flex items-end gap-3">
+              <span className="inline-flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground">
+                <Shield className="h-5 w-5" aria-hidden />
+              </span>
+              <div>
+                <p className="text-xs text-muted-foreground">4.7 ⭐</p>
+                <p className="text-md font-semibold text-foreground">{providerName} &amp; Pikl</p>
+                <p className="text-xs text-muted-foreground">{policyDetails.policyType}</p>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-1 rounded-sm border border-border px-2.5 py-1.5">
+              <span className="font-mono text-xs text-foreground">{quoteReference}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-5 w-5"
+                onClick={handleCopyRef}
+                aria-label="Copy quote reference"
+              >
+                <Copy className="h-3 w-3" />
+              </Button>
+            </div>
+          </div>
+
+          {/* 2. Dropdowns: Overview → About the insurer */}
+          <PolicySheetRight
+            policyDetails={policyDetails}
+            propertyAddress={MOCK_PROPERTY_ADDRESS}
+            proposerName={MOCK_PROPOSER_NAME}
+            providerName={providerName}
+            mobileMode
+          />
+
+          {/* 3. Your cover is ready: pricing + CTA */}
+          <div className="shrink-0 pb-8">
+            <div className="rounded-t-2xl bg-white px-5 py-5 shadow-[0_-6px_24px_rgba(0,0,0,0.08)]">
+              <div className="flex flex-col items-center text-center">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground">
+                  <Shield className="h-4 w-4" aria-hidden />
+                </span>
+                <p className="mt-3 text-lg font-bold text-foreground">Your cover is ready</p>
+                <p className="text-sm text-muted-foreground">{policyDetails.policyType}</p>
+                <div className="my-3 w-8 border-t border-border" />
+              </div>
+
+              <div className="flex flex-col items-center">
+                <p className="text-sm text-muted-foreground">Pay annually</p>
+                <p className="mt-1 text-3xl font-bold tabular-nums text-foreground">
+                  £{annualPrice.toFixed(2)}
+                </p>
+              </div>
+
+              <div className="mt-5">
+                <p className="mb-2 text-sm text-muted-foreground">Or pay monthly</p>
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between text-sm text-muted-foreground">
+                    <span>Deposit</span>
+                    <span className="tabular-nums">£{deposit.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-muted-foreground">
+                    <span>11 x</span>
+                    <span className="tabular-nums">£{instalment.toFixed(2)}</span>
+                  </div>
+                  <div className="my-1 border-t border-border" />
+                  <div className="flex justify-between text-sm font-semibold text-foreground">
+                    <span>Total</span>
+                    <span className="tabular-nums">£{annualPrice.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-lg border border-amber-400 bg-amber-50 px-3 py-2">
+                <p className="text-xs italic text-amber-900">
+                  Your quote will be saved for the next 24 hours. After that, you&apos;ll need to
+                  refresh your results to get the latest price.
+                </p>
+              </div>
+
+              <Button
+                className="mt-4 w-full bg-button text-white hover:opacity-90"
+                onClick={handlePrimaryAction}
+              >
+                Continue
+              </Button>
+
+              <div className="mt-3">
+                <PaymentSecurityBlock />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── DESKTOP LAYOUT (≥ 768px) ─────────────────────────────────── */}
         <div
           ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-0 max-[767px]:gap-0 max-[767px]:pb-40 md:flex-row md:overflow-auto md:gap-0 md:pb-0"
+          className="hidden min-h-0 flex-1 md:flex md:flex-row md:overflow-hidden"
         >
-          {/* Mobile sticky price + primary CTA + close button when scrolling */}
+          {/* Sticky price bar – appears on scroll */}
           <div
             className={cn(
-              "sticky top-0 z-20 -mt-px border-b border-border bg-white/95 px-4 py-2 max-[767px]:py-[10px] backdrop-blur md:hidden",
+              "absolute inset-x-0 top-0 z-20 border-b border-border bg-white/95 px-4 py-2 backdrop-blur",
               "transition-[transform,opacity] duration-200 ease-out",
               showStickyBar
                 ? "translate-y-0 opacity-100"
@@ -474,43 +590,40 @@ export function PolicySheet({
             )}
           >
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 shrink-0 border-border"
-                onClick={() => onOpenChange(false)}
-                aria-label="Close policy details"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-              <div className="flex flex-1 flex-wrap items-center justify-start gap-1.5 pl-1 text-sm max-[767px]:text-base max-[767px]:gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs max-[767px]:border-0 max-[767px]:bg-transparent max-[767px]:p-0 max-[767px]:text-base">
-                  <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground max-[767px]:hidden" aria-hidden />
-                  <span className="font-semibold tabular-nums text-foreground">
-                    £{annualPrice.toFixed(2)}
-                  </span>
-                  <span className="text-xs font-medium text-muted-foreground max-[767px]:text-base max-[767px]:text-muted-foreground">Annual</span>
+              <div className="flex flex-1 flex-wrap items-center justify-start gap-1.5 pl-1 text-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs">
+                  <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <span className="font-semibold tabular-nums text-foreground">£{annualPrice.toFixed(2)}</span>
+                  <span className="text-xs font-medium text-muted-foreground">Annual</span>
                 </span>
-                <span className="text-muted-foreground max-[767px]:text-base">or</span>
-                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs max-[767px]:border-0 max-[767px]:bg-transparent max-[767px]:p-0 max-[767px]:text-base">
-                  <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground max-[767px]:hidden" aria-hidden />
-                  <span className="font-semibold tabular-nums text-foreground">
-                    £{monthlyPrice.toFixed(2)}
-                  </span>
-                  <span className="text-xs font-medium text-muted-foreground max-[767px]:text-base max-[767px]:text-muted-foreground">/mo.</span>
+                <span className="text-muted-foreground">or</span>
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-muted px-2 py-1.5 text-xs">
+                  <Shield className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <span className="font-semibold tabular-nums text-foreground">£{monthlyPrice.toFixed(2)}</span>
+                  <span className="text-xs font-medium text-muted-foreground">/mo.</span>
                 </span>
               </div>
               <Button
-                className="h-9 shrink-0 whitespace-nowrap bg-button text-white px-3 hover:opacity-90"
+                className="h-9 shrink-0 whitespace-nowrap bg-button px-3 text-white hover:opacity-90"
                 onClick={handlePrimaryAction}
               >
-                <span className="w-full text-center leading-none">Continue</span>
+                Continue
               </Button>
             </div>
           </div>
 
-        {/* Left: pricing column – stacks on top for small screens, fixed 1/3 width on md+ */}
-          <div className="flex w-full shrink-0 flex-col border-b border-border bg-white px-7 py-6 max-[767px]:px-5 max-[767px]:py-4 max-[767px]:border-b-0 md:w-1/3 md:border-b-0 md:border-r md:pb-6">
+          {/* Left: pricing column */}
+          <div className="flex w-1/3 shrink-0 flex-col overflow-y-auto border-r border-border bg-white px-7 py-6">
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute right-4 top-4 z-10 border-border"
+              onClick={() => onOpenChange(false)}
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+
             <div className="flex flex-col items-center text-center">
               <span className="-mb-1 inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-muted-foreground">
                 <Shield className="h-4 w-4" aria-hidden />
@@ -520,17 +633,15 @@ export function PolicySheet({
               </span>
             </div>
 
-            <div className="mt-[22px] flex flex-col items-center max-[767px]:mt-[18px]">
+            <div className="mt-[22px] flex flex-col items-center">
               <p className="text-sm text-muted-foreground">Pay annually</p>
-              <p className="mt-1 text-3xl font-bold tabular-nums text-foreground">
+              <p className="mt-1 text-[20px] font-bold tabular-nums text-foreground">
                 £{annualPrice.toFixed(2)}
               </p>
             </div>
 
-            <div className="mt-[22px] flex flex-col max-[767px]:mt-[14px]">
-              <p className="mb-[10px] text-sm text-muted-foreground">
-                Or pay monthly
-              </p>
+            <div className="mt-[22px] flex flex-col">
+              <p className="mb-[10px] text-sm text-muted-foreground">Or pay monthly</p>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Deposit</span>
@@ -548,53 +659,45 @@ export function PolicySheet({
               </div>
             </div>
 
-            <div className="mt-[18px] flex flex-col gap-1 rounded-lg border border-amber-400 bg-amber-50 px-2 py-2 max-[767px]:mt-[10px]">
-              <p className="text-xs text-amber-900 italic">
+            <div className="mt-[18px] flex flex-col gap-1 rounded-lg border border-amber-400 bg-amber-50 px-2 py-2">
+              <p className="text-xs italic text-amber-900">
                 Your quote will be saved for the next 1 day. After that, you&apos;ll
                 need to refresh your results to get the latest price.
               </p>
             </div>
 
-            {/* Desktop / tablet: primary & secondary actions inline in pricing column */}
-            <div className="hidden md:block">
-              <Button
-                className="mt-[22px] w-full bg-button text-white hover:opacity-90"
-                onClick={handlePrimaryAction}
-              >
-                Continue
-              </Button>
+            <Button
+              className="mt-[22px] w-full bg-button text-white hover:opacity-90"
+              onClick={handlePrimaryAction}
+            >
+              Continue
+            </Button>
 
-              <Separator className="my-[22px]" />
+            <Separator className="my-[22px]" />
 
-              <div className="flex flex-col gap-2">
-                <ResponsiveTooltip side="right" content="Send this quote by email">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full gap-1.5"
-                    onClick={handleEmailQuote}
-                  >
-                    <Mail className="h-4 w-4" />
-                    Email quote
-                  </Button>
-                </ResponsiveTooltip>
-                <ResponsiveTooltip side="right" content="Save this quote for later">
-                  <Button variant="outline" size="sm" className="w-full gap-1.5">
-                    <Save className="h-4 w-4" />
-                    Save quote
-                  </Button>
-                </ResponsiveTooltip>
-              </div>
+            <div className="flex flex-col gap-2">
+              <ResponsiveTooltip side="right" content="Send this quote by email">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={handleEmailQuote}
+                >
+                  <Mail className="h-4 w-4" />
+                  Email quote
+                </Button>
+              </ResponsiveTooltip>
+              <ResponsiveTooltip side="right" content="Save this quote for later">
+                <Button variant="outline" size="sm" className="w-full gap-1.5">
+                  <Save className="h-4 w-4" />
+                  Save quote
+                </Button>
+              </ResponsiveTooltip>
             </div>
 
-            <div className="mt-[22px] flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 max-[767px]:mt-[14px]">
-              <span className="flex-1 truncate font-mono text-sm">
-                {quoteReference}
-              </span>
-              <ResponsiveTooltip
-                side="right"
-                content="Copy quote reference to clipboard"
-              >
+            <div className="mt-[22px] flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2">
+              <span className="flex-1 truncate font-mono text-sm">{quoteReference}</span>
+              <ResponsiveTooltip side="right" content="Copy quote reference to clipboard">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -607,50 +710,19 @@ export function PolicySheet({
               </ResponsiveTooltip>
             </div>
 
-            <div className="mt-8 md:mt-auto hidden md:block">
+            <div className="mt-auto pt-8">
               <PaymentSecurityBlock />
             </div>
           </div>
 
-          {/* Right: details – full width on small screens, 2/3 on md+; scrolls only on md+ */}
-          <div className="w-full min-h-0 md:flex-1 md:overflow-y-auto md:w-2/3">
+          {/* Right: accordion details */}
+          <div className="min-h-0 w-2/3 flex-1 overflow-y-auto">
             <PolicySheetRight
               policyDetails={policyDetails}
               propertyAddress={MOCK_PROPERTY_ADDRESS}
               proposerName={MOCK_PROPOSER_NAME}
               providerName={providerName}
             />
-          </div>
-        </div>
-
-        {/* Mobile sticky bottom action bar: Continue + Email quote + Save quote */}
-        <div className="md:hidden fixed inset-x-0 bottom-0 z-30 border-t border-border bg-white px-4 py-3">
-          <div className="flex w-full gap-2">
-            <Button
-              className="flex-1 justify-center gap-1.5 bg-button text-white hover:opacity-90"
-              onClick={handlePrimaryAction}
-            >
-              <span className="text-sm font-medium">Continue</span>
-            </Button>
-          </div>
-          <div className="mt-2 flex w-full gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1 justify-center gap-1.5"
-              onClick={handleEmailQuote}
-            >
-              <Mail className="h-4 w-4" />
-              <span className="text-xs font-medium">Email quote</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1 justify-center gap-1.5"
-            >
-              <Save className="h-4 w-4" />
-              <span className="text-xs font-medium">Save quote</span>
-            </Button>
           </div>
         </div>
       </SheetContent>
