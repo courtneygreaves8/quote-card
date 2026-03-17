@@ -534,13 +534,13 @@ export function PolicySheet({
                   <Shield className="h-4 w-4" aria-hidden />
                 </span>
                 <p className="mt-3 text-lg font-bold text-foreground">Your cover is ready</p>
-                <p className="text-sm text-muted-foreground border rounded-full px-2 py-0.5">{policyDetails.policyType}</p>
+                <p className="text-sm mt-2 text-muted-foreground border rounded-full px-2 py-0.5">{policyDetails.policyType}</p>
                 <div className="my-3 w-8 border-t border-border" />
               </div>
 
               <div className="flex flex-col items-center">
                 <p className="text-sm text-muted-foreground">Pay annually</p>
-                <p className="mt-1 text-3xl font-bold tabular-nums text-foreground">
+                <p className="mt-1 text-2xl font-bold tabular-nums text-foreground">
                   £{annualPrice.toFixed(2)}
                 </p>
               </div>

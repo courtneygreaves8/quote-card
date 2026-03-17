@@ -22,7 +22,8 @@ const buttonVariants = cva(
         default: "h-9 md:h-9 max-[767px]:h-11 px-4",
         sm: "h-9 md:h-9 max-[767px]:h-11 rounded-md px-3",
         lg: "h-9 md:h-9 max-[767px]:h-11 rounded-md px-8",
-        icon: "h-9 w-9 md:h-9 md:w-9 max-[767px]:h-11 max-[767px]:w-11",
+        // Icon-only buttons: fixed 32×32px across breakpoints
+        icon: "h-8 w-8",
       },
     },
     defaultVariants: {
