@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react"
+import { CheckCircle2, Home, PiggyBank } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const POLL_INTERVAL_MS = 70
@@ -12,24 +12,42 @@ interface LoadingModalProps {
 
 export function LoadingModal({ open, onClose }: LoadingModalProps) {
   const [progress, setProgress] = useState(0)
-  const FACTS = [
-    "People who Pikl'd their property last year saved on average £7,000 in guest-related claims.",
-    "Last year we made hosting safer for 27,407 landlords.",
-    "We also offer B2B solutions for some of the major hosting companies like Business name, Business name and Business name.",
-  ]
-  const [factIndex, setFactIndex] = useState(0)
+  const FACT_CARDS = [
+    {
+      label: "Average guest-related savings",
+      icon: PiggyBank,
+      prefix: "£",
+      target: 7000,
+      suffix: "",
+      description:
+        "The average amount our customers saved on guest-related claims when they Pikl'd their property.",
+    },
+    {
+      label: "Landlords protected last year",
+      icon: Home,
+      prefix: "",
+      target: 27407,
+      suffix: "",
+      description: "The number of landlords we helped make hosting safer in the last year.",
+    },
+    {
+      label: "Major partners",
+      icon: CheckCircle2,
+      prefix: "",
+      target: 98,
+      suffix: "%",
+      description: "Of claims accepted for our customers, helping to keep them protected when it matters most.",
+    },
+  ] as const
 
-  const handlePrevFact = () => {
-    setFactIndex((prev) => (prev - 1 + FACTS.length) % FACTS.length)
-  }
-
-  const handleNextFact = () => {
-    setFactIndex((prev) => (prev + 1) % FACTS.length)
-  }
+  const [factValues, setFactValues] = useState(() =>
+    FACT_CARDS.map(() => 0)
+  )
 
   useEffect(() => {
     if (!open) return
     setProgress(0)
+    setFactValues(FACT_CARDS.map(() => 0))
     const id = setInterval(() => {
       setProgress((p) => {
         const next = p + PROGRESS_STEP
@@ -40,7 +58,30 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
         return next
       })
     }, POLL_INTERVAL_MS)
-    return () => clearInterval(id)
+    const progressId = id
+
+    const duration = 1200
+    const start = performance.now()
+
+    const animateFacts = (now: number) => {
+      const elapsed = now - start
+      const t = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - t, 3)
+
+      setFactValues(
+        FACT_CARDS.map((card) => Math.round(card.target * eased))
+      )
+
+      if (t < 1) {
+        requestAnimationFrame(animateFacts)
+      }
+    }
+
+    requestAnimationFrame(animateFacts)
+
+    return () => {
+      clearInterval(progressId)
+    }
   }, [open])
 
   if (!open) return null
@@ -52,7 +93,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
       aria-modal="true"
       aria-label="Loading quotes"
     >
-      <div className="flex w-full max-w-md flex-col items-center gap-8 px-6 py-10">
+      <div className="flex w-full max-w-3xl flex-col items-center gap-8 rounded-2xl border border-neutral-200 bg-white px-6 py-10">
         <div className="relative h-32 w-32">
           {/* Ripple / pulsing rings – same center as logo */}
           {[0, 1, 2].map((i) => (
@@ -71,7 +112,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
           </div>
         </div>
 
-        <div className="w-full max-w-md space-y-4">
+        <div className="w-full max-w-3xl space-y-5">
           <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
             <div
               className="h-full rounded-full bg-purchase transition-[width] duration-300 ease-out"
@@ -81,42 +122,45 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
           <p className="mt-1 text-center text-sm text-muted-foreground">
             {progress < 100 ? "Finding your best quotes…" : "Ready"}
           </p>
-          <Button
-            className="w-full"
-            size="lg"
-            disabled={progress < 100}
-            onClick={onClose}
-          >
-            View quotes
-          </Button>
-          <div className="space-y-3 text-center">
-            <div className="mx-auto flex w-full max-w-sm items-center gap-2">
-              <button
-                type="button"
-                onClick={handlePrevFact}
-                className="inline-flex shrink-0 items-center justify-center px-1 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors"
-                aria-label="Previous fact"
-              >
-                <ChevronLeft className="h-4 w-4" aria-hidden />
-              </button>
+          <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {FACT_CARDS.map((card, index) => (
               <div
-                key={factIndex}
-                className="min-w-0 flex flex-1 flex-col items-center gap-1.5 rounded-xl border border-neutral-200 bg-neutral-50 px-3 py-2 text-center animate-fact-card-slide"
+                key={card.label}
+                className="flex h-[216px] w-full max-w-[216px] flex-1 flex-col items-start gap-2 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-4"
               >
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-500">
-                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-500">
+                  {(() => {
+                    const Icon = card.icon
+                    return <Icon className="h-4 w-4" aria-hidden />
+                  })()}
                 </span>
-                <p className="text-xs text-muted-foreground">{FACTS[factIndex]}</p>
+                <div className="text-base font-semibold tracking-tight text-foreground">
+                  {card.prefix}
+                  {factValues[index].toLocaleString("en-GB")}
+                  {card.suffix}
+                </div>
+                <p className="text-[11px] leading-snug text-muted-foreground">
+                  {card.description}
+                </p>
               </div>
-              <button
-                type="button"
-                onClick={handleNextFact}
-                className="inline-flex shrink-0 items-center justify-center px-1 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors"
-                aria-label="Next fact"
-              >
-                <ChevronRight className="h-4 w-4" aria-hidden />
-              </button>
-            </div>
+            ))}
+          </div>
+          <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={onClose}
+            >
+              Back to answers
+            </Button>
+            <Button
+              className="w-full"
+              size="lg"
+              disabled={progress < 100}
+              onClick={onClose}
+            >
+              View quotes
+            </Button>
           </div>
         </div>
 
