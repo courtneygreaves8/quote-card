@@ -134,7 +134,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
                     return <Icon className="h-4 w-4" aria-hidden />
                   })()}
                 </span>
-                <div className="text-base font-semibold tracking-tight text-foreground">
+                <div className="text-base font-size-lg font-semibold tracking-tight text-foreground">
                   {card.prefix}
                   {factValues[index].toLocaleString("en-GB")}
                   {card.suffix}

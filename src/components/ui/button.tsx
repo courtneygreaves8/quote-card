@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -20,10 +20,12 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-9 md:h-9 max-[767px]:h-11 px-4",
-        sm: "h-9 md:h-9 max-[767px]:h-11 rounded-md px-3",
-        lg: "h-9 md:h-9 max-[767px]:h-11 rounded-md px-8",
-        // Icon-only buttons: fixed 32×32px across breakpoints
-        icon: "h-8 w-8 min-h-[32px] min-w-[32px]",
+        sm: "h-9 md:h-9 max-[767px]:h-11 rounded-lg px-3",
+        lg: "h-9 md:h-9 max-[767px]:h-11 rounded-lg px-8",
+        // Icon-only buttons: 44px on mobile, 36px on md+
+        icon: "h-11 w-11 md:h-9 md:w-9 rounded-lg",
+        // Pill buttons: let parent control height
+        pill: "h-auto md:h-auto max-[767px]:h-auto px-0",
       },
     },
     defaultVariants: {

@@ -23,7 +23,7 @@ import { QuoteFilters as QuoteFiltersType } from "@/types/quote"
 import { Calendar, Copy, Mail, Minus, Pencil, Plus, Tag, X } from "lucide-react"
 import { useCallback, useRef } from "react"
 
-const SIDEBAR_ICON_BTN_CLASS = "shrink-0 h-8 w-8"
+const SIDEBAR_ICON_BTN_CLASS = "shrink-0 h-11 w-11 md:h-9 md:w-9 rounded-lg"
 const ADDON_ROW_CLASS = "flex items-center justify-between gap-4"
 const ADDON_LABEL_CLASS = "font-normal text-muted-foreground"
 const COVER_DATE_INPUT_CLASS =
