@@ -93,7 +93,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
       aria-modal="true"
       aria-label="Loading quotes"
     >
-      <div className="flex w-full max-w-3xl flex-col items-center gap-8 rounded-2xl border border-neutral-200 bg-white px-6 py-10">
+      <div className="mx-4 flex w-full max-w-3xl flex-col items-center gap-8 rounded-2xl border border-neutral-200 bg-white px-6 py-10 sm:mx-0">
         <div className="relative h-32 w-32">
           {/* Ripple / pulsing rings – same center as logo */}
           {[0, 1, 2].map((i) => (
@@ -122,7 +122,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
           <p className="mt-1 text-center text-sm text-muted-foreground">
             {progress < 100 ? "Finding your best quotes…" : "Ready"}
           </p>
-          <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="mt-3 hidden grid-cols-1 gap-4 sm:grid-cols-3 md:grid">
             {FACT_CARDS.map((card, index) => (
               <div
                 key={card.label}
