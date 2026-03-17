@@ -58,8 +58,8 @@ export const MONTHLY_DEPOSIT_EXTRA = 20
 /** Extra amount added to base instalment for ×1 (admin fee) */
 export const MONTHLY_X1_EXTRA = 5
 
-/** Alt layout: duration over which quote list items animate in (ms) */
-export const QUOTE_LIST_POLL_DURATION_MS = 7000
+/** Alt layout: duration over which quote list items animate in after skeleton (ms) */
+export const QUOTE_LIST_POLL_DURATION_MS = 4000
 
 /** Viewport width below which quote list item click opens policy sheet instead of preview (px) */
 export const VIEWPORT_SHEET_BREAKPOINT_PX = 1119

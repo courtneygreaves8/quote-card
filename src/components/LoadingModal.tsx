@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 
-const POLL_INTERVAL_MS = 40
-const PROGRESS_STEP = 4
+const POLL_INTERVAL_MS = 70
+const PROGRESS_STEP = 1
 
 interface LoadingModalProps {
   open: boolean
@@ -47,12 +47,12 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-neutral-50"
       role="dialog"
       aria-modal="true"
       aria-label="Loading quotes"
     >
-      <div className="flex w-full max-w-sm flex-col items-center gap-8 rounded-2xl bg-white p-8 shadow-xl">
+      <div className="flex w-full max-w-md flex-col items-center gap-8 px-6 py-10">
         <div className="relative h-32 w-32">
           {/* Ripple / pulsing rings – same center as logo */}
           {[0, 1, 2].map((i) => (
@@ -71,17 +71,25 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
           </div>
         </div>
 
-        <div className="w-full space-y-2">
+        <div className="w-full max-w-md space-y-4">
           <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
             <div
               className="h-full rounded-full bg-purchase transition-[width] duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="space-y-2 text-center">
-            <p className="text-sm text-muted-foreground">
-              {progress < 100 ? "Finding your best quotes…" : "Ready"}
-            </p>
+          <p className="mt-1 text-center text-sm text-muted-foreground">
+            {progress < 100 ? "Finding your best quotes…" : "Ready"}
+          </p>
+          <Button
+            className="w-full"
+            size="lg"
+            disabled={progress < 100}
+            onClick={onClose}
+          >
+            View quotes
+          </Button>
+          <div className="space-y-3 text-center">
             <div className="mx-auto flex w-full max-w-sm items-center gap-2">
               <button
                 type="button"
@@ -112,14 +120,6 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
           </div>
         </div>
 
-        <Button
-          className="w-full"
-          size="lg"
-          disabled={progress < 100}
-          onClick={onClose}
-        >
-          See your quotes
-        </Button>
       </div>
     </div>
   )

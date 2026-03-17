@@ -38,6 +38,8 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
 
   const [useDefaultLayout, setUseDefaultLayout] = useState(false)
   const [loadingModalOpen, setLoadingModalOpen] = useState(true)
+  const [showSidebarSkeleton, setShowSidebarSkeleton] = useState(false)
+  const [visibleSidebarQuoteCount, setVisibleSidebarQuoteCount] = useState(0)
   const [filterOpen, setFilterOpen] = useState(false)
   const [priceFilter, setPriceFilter] = useState<"all" | "under200" | "200to400" | "over400">("all")
   const {
@@ -171,6 +173,44 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
   }, [visibleQuoteCount, filters.paymentOption])
   // #endregion agent log
 
+  // Right sidebar skeleton + staged population after initial loading screen
+  useEffect(() => {
+    if (loadingModalOpen || filteredQuotes.length === 0) return
+
+    // 3s skeleton state, then 4s staged reveal of sidebar quotes
+    setShowSidebarSkeleton(true)
+    setVisibleSidebarQuoteCount(0)
+
+    const SKELETON_DURATION_MS = 3000
+    const TOTAL_ANIMATION_MS = SKELETON_DURATION_MS + QUOTE_LIST_POLL_DURATION_MS
+    const stepInterval =
+      filteredQuotes.length > 0 ? QUOTE_LIST_POLL_DURATION_MS / filteredQuotes.length : 0
+
+    const timeouts: number[] = []
+
+    const skeletonTimeout = window.setTimeout(() => {
+      setShowSidebarSkeleton(false)
+    }, SKELETON_DURATION_MS)
+    timeouts.push(skeletonTimeout)
+
+    filteredQuotes.forEach((_, index) => {
+      const timeoutId = window.setTimeout(() => {
+        setVisibleSidebarQuoteCount((prev) => Math.max(prev, index + 1))
+      }, SKELETON_DURATION_MS + index * stepInterval)
+      timeouts.push(timeoutId)
+    })
+
+    // Safety timeout to ensure all quotes are visible by the end of the sequence
+    const finalTimeout = window.setTimeout(() => {
+      setVisibleSidebarQuoteCount(filteredQuotes.length)
+    }, TOTAL_ANIMATION_MS + 50)
+    timeouts.push(finalTimeout)
+
+    return () => {
+      timeouts.forEach((id) => window.clearTimeout(id))
+    }
+  }, [loadingModalOpen, filteredQuotes.length])
+
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-[#F1F1F1]">
       <Navbar activeLayout="alt" onSelectLayout={onLayoutChange} />
@@ -296,7 +336,37 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
               </div>
 
                 <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
-                  {filteredQuotes.map((quote, index) => {
+                  {showSidebarSkeleton && (
+                    <div className="space-y-3">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <div
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={i}
+                          className="flex w-full items-stretch gap-2 animate-pulse"
+                        >
+                          <div className="flex w-full flex-col gap-2 rounded-xl border border-border bg-muted/60 px-2 py-2">
+                            <div className="flex items-start gap-2">
+                              <div className="h-10 w-10 rounded-md bg-neutral-200" />
+                              <div className="flex flex-1 flex-col gap-2">
+                                <div className="h-3 w-2/3 rounded-full bg-neutral-200" />
+                                <div className="h-3 w-1/2 rounded-full bg-neutral-200" />
+                              </div>
+                            </div>
+                            <div className="h-3 w-1/3 rounded-full bg-neutral-200" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {!showSidebarSkeleton &&
+                    filteredQuotes
+                      .slice(
+                        0,
+                        hasCompletedInitialPoll
+                          ? filteredQuotes.length
+                          : Math.max(visibleSidebarQuoteCount, 0)
+                      )
+                      .map((quote, index) => {
                     const isCompared = compareIds.includes(quote.id)
                     const isCompareLimitReached = compareIds.length >= 3 && !isCompared
                     const compareTooltipLabel =
