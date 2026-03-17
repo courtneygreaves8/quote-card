@@ -48,63 +48,6 @@ export function QuotesContent({
       ? displayedQuotes.find((q) => q.id === selectedQuoteId) ?? null
       : null
 
-  // #region agent log
-  useEffect(() => {
-    if (typeof window === "undefined") return
-
-    const chip = document.querySelector<HTMLElement>("[data-debug-id='default-compact-chip']")
-    if (!chip) return
-
-    const price = chip.querySelector<HTMLElement>("[data-debug-id='default-compact-price']")
-    const label = chip.querySelector<HTMLElement>("[data-debug-id='default-compact-price-label']")
-
-    const chipRect = chip.getBoundingClientRect()
-    const styles = window.getComputedStyle(chip)
-    const priceRect = price?.getBoundingClientRect()
-    const labelRect = label?.getBoundingClientRect()
-
-    fetch("http://127.0.0.1:7243/ingest/11a05263-57d5-49cd-ac30-6dc80d1d7b44", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Debug-Session-Id": "493dbf",
-      },
-      body: JSON.stringify({
-        sessionId: "493dbf",
-        runId: "pre-fix",
-        hypothesisId: "H-default-compact-chip-spacing",
-        location: "QuotesContent.tsx:default-compact-chip-metrics",
-        message: "Default compact quote chip layout metrics",
-        data: {
-          chip: {
-            width: chipRect.width,
-            height: chipRect.height,
-            paddingLeft: styles.paddingLeft,
-            paddingRight: styles.paddingRight,
-            marginLeft: styles.marginLeft,
-            marginRight: styles.marginRight,
-          },
-          price: priceRect
-            ? {
-                width: priceRect.width,
-                right: priceRect.right,
-                gapToChipRight: chipRect.right - priceRect.right,
-              }
-            : null,
-          label: labelRect
-            ? {
-                width: labelRect.width,
-                right: labelRect.right,
-                gapToChipRight: chipRect.right - labelRect.right,
-              }
-            : null,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {})
-  }, [displayedQuotes.length, paymentOption])
-  // #endregion agent log
-
   return (
     <div className="w-full overflow-x-hidden py-8 px-4 sm:px-6">
       {/* Centre stage: compact up to lg; single horizontal card at ≥1340px */}

@@ -29,9 +29,9 @@ export const PAYMENT_ACTIVE_CLASS =
 export const PAYMENT_INACTIVE_CLASS =
   "flex-1 rounded-full hover:bg-neutral-100"
 
-/** Sidebar excess +/- button (square, soft border) */
+/** Sidebar excess +/- button (uses standard control heights) */
 export const EXCESS_BTN_CLASS =
-  "h-8 w-8 shrink-0 rounded-md border-neutral-200 p-0"
+  "h-11 w-11 md:h-9 md:w-9 shrink-0 rounded-lg border-neutral-200 p-0"
 
 export const MIN_QUOTES = 3
 export const MAX_QUOTES = 4
