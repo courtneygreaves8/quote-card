@@ -1,5 +1,5 @@
 import type { FilterOption, PaymentOption, Quote, SortOption } from "@/types/quote"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { QuoteCard } from "@/components/QuoteCard"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"

@@ -126,7 +126,7 @@ export function LoadingModal({ open, onClose }: LoadingModalProps) {
             {FACT_CARDS.map((card, index) => (
               <div
                 key={card.label}
-                className="flex h-[216px] w-full max-w-[216px] flex-1 flex-col items-start gap-2 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-4"
+                className="flex w-full max-w-[216px] flex-1 flex-col items-start gap-2 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-4"
               >
                 <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-500">
                   {(() => {
