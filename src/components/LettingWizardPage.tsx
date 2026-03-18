@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Check, Info, Mail, ShieldCheck, ShieldPlus } from "lucide-react"
+import { ArrowLeft, Check, Info, Mail, ShieldCheck, ShieldPlus } from "lucide-react"
 
 import { Navbar } from "@/components/Navbar"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
@@ -178,12 +178,12 @@ function TrueFalseToggle({
   const isTrue = value === true || (defaultToTrue && value === undefined)
 
   return (
-    <div className="flex h-9 min-w-[120px] w-[120px] flex-none shrink-0 items-stretch gap-1 overflow-hidden rounded-lg border border-border bg-white">
+    <div className="flex h-9 min-w-[120px] w-[120px] flex-none shrink-0 items-stretch gap-1 overflow-hidden rounded-lg border border-border bg-white px-[2px] py-[2px]">
       <button
         type="button"
         onClick={() => onChange(true)}
         className={cn(
-          "flex flex-1 items-center justify-center rounded-lg px-2 py-0 text-xs font-semibold transition-colors",
+          "flex flex-1 items-center justify-center rounded-md px-2 py-0 text-sm font-semibold transition-colors",
           isTrue ? "bg-button text-white hover:bg-button" : "bg-white text-foreground hover:bg-muted/40"
         )}
         aria-pressed={isTrue}
@@ -194,7 +194,7 @@ function TrueFalseToggle({
         type="button"
         onClick={() => onChange(false)}
         className={cn(
-          "flex flex-1 items-center justify-center rounded-lg px-2 py-0 text-xs font-semibold transition-colors",
+          "flex flex-1 items-center justify-center rounded-lg px-2 py-0 text-sm font-semibold transition-colors",
           isFalse ? "bg-button text-white hover:bg-button" : "bg-white text-foreground hover:bg-muted/40"
         )}
         aria-pressed={isFalse}
@@ -449,36 +449,6 @@ export function LettingWizardPage() {
     [values.claimsLast5Years]
   )
 
-  const activeAboutSection = useMemo<
-    | "personal"
-    | "marketing"
-    | "address"
-    | "employment"
-    | "guests"
-    | "claims"
-    | "additional"
-    | null
-  >(() => {
-    if (stepIndex !== 1) return null
-    if (!personalSectionComplete) return "personal"
-    if (!marketingSectionComplete) return "marketing"
-    if (!addressSectionComplete) return "address"
-    if (!employmentSectionComplete) return "employment"
-    if (!guestsSectionComplete) return "guests"
-    if (!claimsSectionComplete) return "claims"
-    if (!values.additionalPolicyholders) return "additional"
-    return null
-  }, [
-    addressSectionComplete,
-    claimsSectionComplete,
-    employmentSectionComplete,
-    guestsSectionComplete,
-    marketingSectionComplete,
-    personalSectionComplete,
-    stepIndex,
-    values.additionalPolicyholders,
-  ])
-
   const completedSteps = useMemo(() => {
     return (
       (step1Complete ? 1 : 0) +
@@ -725,6 +695,21 @@ export function LettingWizardPage() {
                 )
               })}
             </nav>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-auto w-full justify-center gap-2 border-border"
+              onClick={() => {
+                setHelpOpen(false)
+                setStepIndex(0)
+                window.location.hash = "#letting"
+                mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+              }}
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden />
+              Back to Pikl
+            </Button>
           </div>
         </aside>
 
@@ -749,11 +734,7 @@ export function LettingWizardPage() {
               <CardHeader>
                 <CardTitle
                   className={cn(
-                    "text-xl",
-                    (stepIndex === 1 && !step2Complete) || (stepIndex === 2 && !step3Complete)
-                      || (stepIndex === 3 && !step4Complete)
-                      ? "font-semibold"
-                      : "font-medium"
+                    "text-xl font-semibold"
                   )}
                 >
                   {stepIndex === 0
@@ -789,7 +770,7 @@ export function LettingWizardPage() {
                       if (stepIndex === 2 && step3Complete) setStepIndex(3)
                       if (stepIndex === 3 && step4Complete) setStepIndex(4)
                     })}
-                    className="space-y-6"
+                    className="space-y-6 text-[14px]"
                   >
                     {stepIndex === 0 && (
                       <>
@@ -1000,12 +981,7 @@ export function LettingWizardPage() {
                       <div className="space-y-6">
                         <div className="rounded-xl border border-border bg-white p-4">
                           <div
-                            className={cn(
-                              "text-sm text-foreground",
-                              activeAboutSection === "personal"
-                                ? "font-semibold"
-                                : "font-medium"
-                            )}
+                            className="text-sm font-semibold text-foreground"
                           >
                             Personal details
                           </div>
@@ -1291,12 +1267,7 @@ export function LettingWizardPage() {
                               <div className="flex items-center gap-2">
                                 <Mail className="h-4 w-4 text-foreground" aria-hidden />
                                 <div
-                                  className={cn(
-                                    "text-sm text-foreground",
-                                    activeAboutSection === "marketing"
-                                      ? "font-semibold"
-                                      : "font-medium"
-                                  )}
+                                  className="text-sm font-semibold text-foreground"
                                 >
                                   Stay in touch with Pikl
                                 </div>
@@ -1346,12 +1317,7 @@ export function LettingWizardPage() {
                         {marketingSectionComplete && (
                           <div className="rounded-xl border border-border bg-white p-4">
                             <div
-                              className={cn(
-                                "text-sm text-foreground",
-                                activeAboutSection === "address"
-                                  ? "font-semibold"
-                                  : "font-medium"
-                              )}
+                              className="text-sm font-semibold text-foreground"
                             >
                               Correspondence address
                             </div>
@@ -1388,12 +1354,7 @@ export function LettingWizardPage() {
                         {addressSectionComplete && (
                           <div className="rounded-xl border border-border bg-white p-4">
                             <div
-                              className={cn(
-                                "text-sm text-foreground",
-                                activeAboutSection === "employment"
-                                  ? "font-semibold"
-                                  : "font-medium"
-                              )}
+                              className="text-sm font-semibold text-foreground"
                             >
                               Employment information
                             </div>
@@ -1510,12 +1471,7 @@ export function LettingWizardPage() {
                         {employmentSectionComplete && (
                           <div className="rounded-xl border border-border bg-white p-4">
                             <div
-                              className={cn(
-                                "text-sm text-foreground",
-                                activeAboutSection === "guests"
-                                  ? "font-semibold"
-                                  : "font-medium"
-                              )}
+                              className="text-sm font-semibold text-foreground"
                             >
                               Guests
                             </div>
@@ -1545,12 +1501,7 @@ export function LettingWizardPage() {
                         {guestsSectionComplete && (
                           <div className="rounded-xl border border-border bg-white p-4">
                             <div
-                              className={cn(
-                                "text-sm text-foreground",
-                                activeAboutSection === "claims"
-                                  ? "font-semibold"
-                                  : "font-medium"
-                              )}
+                              className="text-sm font-semibold text-foreground"
                             >
                               Claims
                             </div>
@@ -1599,12 +1550,7 @@ export function LettingWizardPage() {
                         {claimsSectionComplete && (
                           <div className="rounded-xl border border-border bg-white p-4">
                             <div
-                              className={cn(
-                                "text-sm text-foreground",
-                                activeAboutSection === "additional"
-                                  ? "font-semibold"
-                                  : "font-medium"
-                              )}
+                              className="text-sm font-semibold text-foreground"
                             >
                               Additional policyholders
                             </div>
@@ -1686,11 +1632,11 @@ export function LettingWizardPage() {
                                     <div className="w-full text-sm font-semibold text-foreground">
                                       All-in-one
                                     </div>
-                                    <div className="mt-1 w-full text-xs text-muted-foreground">
+                                    <div className="mt-1 w-full text-sm text-muted-foreground">
                                       All-in-one is home and host insurance that cover your building
                                       and/or contents, plus guest-related incidents.
                                     </div>
-                                    <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-xs text-muted-foreground">
+                                    <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
                                       <li>Build your full home insurance package your way</li>
                                       <li>All the great benefits of our top-up cover</li>
                                       <li>Includes additional cover for damage and theft</li>
@@ -1732,11 +1678,11 @@ export function LettingWizardPage() {
                                     <div className="w-full text-sm font-semibold text-foreground">
                                       Top Up
                                     </div>
-                                    <div className="mt-1 w-full text-xs text-muted-foreground">
+                                    <div className="mt-1 w-full text-sm text-muted-foreground">
                                       Top-up is host insurance that supplies alongside your existing
                                       home insurance to cover guest-related incidents.
                                     </div>
-                                    <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-xs text-muted-foreground">
+                                    <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
                                       <li>Flexible cover to fit your sharing needs</li>
                                       <li>Bespoke cover for damage and theft caused by guests</li>
                                       <li>Trusted by our customers and on hand to help</li>
@@ -1840,7 +1786,7 @@ export function LettingWizardPage() {
                                 key={q.key}
                                 className="flex items-center justify-between gap-4 rounded-lg border border-border bg-white px-4 py-3"
                               >
-                                <p className="text-xs text-muted-foreground">{q.text}</p>
+                                <p className="text-sm text-muted-foreground">{q.text}</p>
                                 <TrueFalseToggle
                                   value={(values as any)[q.key] as boolean | undefined}
                                   onChange={(v) => form.setValue(q.key as any, v)}
@@ -1879,7 +1825,7 @@ export function LettingWizardPage() {
                                 key={q.key}
                                 className="flex items-center justify-between gap-4 rounded-lg border border-border bg-white px-4 py-3"
                               >
-                                <p className="text-xs text-muted-foreground">{q.text}</p>
+                                <p className="text-sm text-muted-foreground">{q.text}</p>
                                 <TrueFalseToggle
                                   value={(values as any)[q.key] as boolean | undefined}
                                   onChange={(v) => form.setValue(q.key as any, v)}
@@ -1914,7 +1860,7 @@ export function LettingWizardPage() {
                                 key={q.key}
                                 className="flex items-center justify-between gap-4 rounded-lg border border-border bg-white px-4 py-3"
                               >
-                                <p className="text-xs text-muted-foreground">{q.text}</p>
+                                <p className="text-sm text-muted-foreground">{q.text}</p>
                                 <TrueFalseToggle
                                   value={(values as any)[q.key] as boolean | undefined}
                                   onChange={(v) => form.setValue(q.key as any, v)}
@@ -1939,7 +1885,7 @@ export function LettingWizardPage() {
                                 aria-label="Tick to confirm there are no false statements"
                                 style={{ accentColor: "hsl(var(--purchase))" }}
                               />
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-sm text-muted-foreground">
                                 Tick here to confirm there are no false statements
                               </span>
                             </div>
