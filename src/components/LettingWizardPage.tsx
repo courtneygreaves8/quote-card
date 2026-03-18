@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { ArrowLeft, Check, Info, Mail, ShieldCheck, ShieldPlus } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Info, Mail, ShieldCheck, ShieldPlus } from "lucide-react"
 
 import { Navbar } from "@/components/Navbar"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
@@ -719,6 +719,62 @@ export function LettingWizardPage() {
         >
           <div className="sticky top-0 z-10 border-b border-border bg-white/95">
             <div className="mx-auto w-full max-w-[968px] px-4 py-2 sm:px-6">
+              {/* Step title with prev/next arrows */}
+              <div className="flex items-center gap-2 pb-1">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  disabled={stepIndex === 0}
+                  aria-label="Previous step"
+                  onClick={() => {
+                    if (stepIndex === 0) return
+                    setStepIndex((stepIndex - 1) as 0 | 1 | 2 | 3)
+                    mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+                  }}
+                >
+                  <ArrowLeft className="h-4 w-4" aria-hidden />
+                </Button>
+
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="inline-flex items-center gap-2 bg-white">
+                    <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-border text-xs font-semibold text-foreground">
+                      {stepIndex + 1}
+                    </span>
+                    <span className="text-sm font-semibold text-foreground">
+                      {stepIndex === 0
+                        ? "Your letting"
+                        : stepIndex === 1
+                          ? "About you"
+                          : stepIndex === 2
+                            ? "Our products"
+                            : stepIndex === 3
+                              ? "Assumptions"
+                              : stepIndex === 4
+                                ? "Property details"
+                                : ""}
+                    </span>
+                  </div>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  disabled={stepIndex === 4}
+                  aria-label="Next step"
+                  onClick={() => {
+                    if (stepIndex >= 4) return
+                    setStepIndex((stepIndex + 1) as 1 | 2 | 3 | 4)
+                    mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+                  }}
+                >
+                  <ArrowRight className="h-4 w-4" aria-hidden />
+                </Button>
+              </div>
+
               <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
                 <div
                   className="h-full rounded-full bg-purchase transition-[width] duration-300 ease-out"
@@ -1616,33 +1672,81 @@ export function LettingWizardPage() {
                                   values.selectedProduct === "all-in-one" &&
                                     "border-foreground bg-muted/40"
                                 )}
+                                onClick={() => form.setValue("selectedProduct", "all-in-one")}
                               >
-                                {/* Checkbox (top-left) */}
-                                <div className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded border border-border bg-white">
-                                  {values.selectedProduct === "all-in-one" && (
-                                    <Check className="h-4 w-4 text-foreground" aria-hidden />
-                                  )}
+                                {/* Ensure selecting the whole card updates RHF value */}
+                                <div className="flex items-start justify-between gap-3">
+                                  <div className="flex items-start gap-3">
+                                    <div
+                                      className={cn(
+                                        "flex h-10 w-10 items-center justify-center rounded-lg border border-border",
+                                        values.selectedProduct === "all-in-one"
+                                          ? "bg-[#FFFFFF]"
+                                          : "bg-[#FCFCFC]"
+                                      )}
+                                    >
+                                      <ShieldCheck className="h-5 w-5 text-foreground" aria-hidden />
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <div className="text-sm font-medium text-muted-foreground">
+                                        All-in-one
+                                      </div>
+                                      <div
+                                        className="text-sm font-semibold text-foreground"
+                                      >
+                                        Home & Host Cover
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    className={cn(
+                                      "rounded-full border bg-white px-3 py-1 text-xs font-medium",
+                                      values.selectedProduct === "all-in-one"
+                                        ? "border-border text-foreground"
+                                        : "border-border text-muted-foreground"
+                                    )}
+                                  >
+                                    Full cover
+                                  </div>
                                 </div>
 
-                                <div className="w-full pr-6">
-                                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
-                                    <ShieldCheck className="h-5 w-5 text-foreground" aria-hidden />
-                                  </div>
-                                  <div className="mt-2">
-                                    <div className="w-full text-sm font-semibold text-foreground">
-                                      All-in-one
-                                    </div>
-                                    <div className="mt-1 w-full text-sm text-muted-foreground">
-                                      All-in-one is home and host insurance that cover your building
-                                      and/or contents, plus guest-related incidents.
-                                    </div>
-                                    <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
-                                      <li>Build your full home insurance package your way</li>
-                                      <li>All the great benefits of our top-up cover</li>
-                                      <li>Includes additional cover for damage and theft</li>
-                                    </ul>
-                                  </div>
+                                <div
+                                  className={cn(
+                                    "rounded-2xl border border-border px-4 py-3",
+                                    values.selectedProduct === "all-in-one"
+                                      ? "bg-[#FFFFFF]"
+                                      : "bg-[#FCFCFC]"
+                                  )}
+                                >
+                                  <p className="text-sm text-muted-foreground">
+                                    All-in-one is home and host insurance that cover your building and/or
+                                    contents, plus guest-related incidents.
+                                  </p>
+
+                                  <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+                                    <li>Tailor your full home insurance package your way</li>
+                                    <li>All the great benefits of our top-up cover</li>
+                                    <li>Includes additional cover for damage and theft</li>
+                                  </ul>
                                 </div>
+
+                                <button
+                                  type="button"
+                                  className={cn(
+                                    "mt-3 flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium",
+                                    values.selectedProduct === "all-in-one"
+                                      ? "border-foreground bg-foreground text-background hover:bg-foreground"
+                                      : "border-border bg-white text-foreground hover:bg-muted/40"
+                                  )}
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    form.setValue("selectedProduct", "all-in-one")
+                                  }}
+                                >
+                                  {values.selectedProduct === "all-in-one" ? "Selected" : "Select"}
+                                </button>
 
                                 {/* Hidden radio for accessibility */}
                                 <input
@@ -1662,33 +1766,80 @@ export function LettingWizardPage() {
                                   values.selectedProduct === "top-up" &&
                                     "border-foreground bg-muted/40"
                                 )}
+                                onClick={() => form.setValue("selectedProduct", "top-up")}
                               >
-                                {/* Checkbox (top-left) */}
-                                <div className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded border border-border bg-white">
-                                  {values.selectedProduct === "top-up" && (
-                                    <Check className="h-4 w-4 text-foreground" aria-hidden />
-                                  )}
+                                <div className="flex items-start justify-between gap-3">
+                                  <div className="flex items-start gap-3">
+                                    <div
+                                      className={cn(
+                                        "flex h-10 w-10 items-center justify-center rounded-lg border border-border",
+                                        values.selectedProduct === "top-up"
+                                          ? "bg-[#FFFFFF]"
+                                          : "bg-[#FCFCFC]"
+                                      )}
+                                    >
+                                      <ShieldPlus className="h-5 w-5 text-foreground" aria-hidden />
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <div className="text-sm font-medium text-muted-foreground">
+                                        Top-up
+                                      </div>
+                                      <div
+                                        className="text-sm font-semibold text-foreground"
+                                      >
+                                        Host Cover
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    className={cn(
+                                      "rounded-full border bg-white px-3 py-1 text-xs font-medium",
+                                      values.selectedProduct === "top-up"
+                                        ? "border-border text-foreground"
+                                        : "border-border text-muted-foreground"
+                                    )}
+                                  >
+                                    Top-up cover
+                                  </div>
                                 </div>
 
-                                <div className="w-full pr-6">
-                                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50">
-                                    <ShieldPlus className="h-5 w-5 text-foreground" aria-hidden />
-                                  </div>
-                                  <div className="mt-2">
-                                    <div className="w-full text-sm font-semibold text-foreground">
-                                      Top Up
-                                    </div>
-                                    <div className="mt-1 w-full text-sm text-muted-foreground">
-                                      Top-up is host insurance that supplies alongside your existing
-                                      home insurance to cover guest-related incidents.
-                                    </div>
-                                    <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
-                                      <li>Flexible cover to fit your sharing needs</li>
-                                      <li>Bespoke cover for damage and theft caused by guests</li>
-                                      <li>Trusted by our customers and on hand to help</li>
-                                    </ul>
-                                  </div>
+                                <div
+                                  className={cn(
+                                    "rounded-2xl border border-border px-4 py-3",
+                                    values.selectedProduct === "top-up"
+                                      ? "bg-[#FFFFFF]"
+                                      : "bg-[#FCFCFC]"
+                                  )}
+                                >
+                                  <p className="text-sm text-muted-foreground">
+                                    Top-up is host insurance that supplies alongside your existing home
+                                    insurance to cover guest-related incidents.
+                                  </p>
+
+                                  <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+                                    <li>Flexible cover to fit your sharing needs</li>
+                                    <li>Bespoke cover for guest damage and theft</li>
+                                    <li>Trusted by our customers and on hand to help</li>
+                                  </ul>
                                 </div>
+
+                                <button
+                                  type="button"
+                                  className={cn(
+                                    "mt-3 flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium",
+                                    values.selectedProduct === "top-up"
+                                      ? "border-foreground bg-foreground text-background hover:bg-foreground"
+                                      : "border-border bg-white text-foreground hover:bg-muted/40"
+                                  )}
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    form.setValue("selectedProduct", "top-up")
+                                  }}
+                                >
+                                  {values.selectedProduct === "top-up" ? "Selected" : "Select"}
+                                </button>
 
                                 <input
                                   className="sr-only"
