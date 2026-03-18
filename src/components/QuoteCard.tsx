@@ -115,12 +115,12 @@ export function QuoteCard({
 
             <div className="flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-start lg:justify-end lg:gap-1.5">
               {/* Mobile payment toggle – top-right on <=1023px */}
-              <div className="flex h-9 w-full items-center overflow-hidden rounded-full border border-input bg-muted/30 gap-0.5 px-0.5 py-0.5 lg:hidden">
+              <div className="flex h-9 w-full items-stretch overflow-hidden rounded-full border border-input bg-muted/30 gap-0.5 px-[3px] py-[3px] lg:hidden">
                 <Button
                   type="button"
                   variant="ghost"
                   size="pill"
-                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} flex-1 h-full px-2 gap-1.5 text-xs`}
+                  className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} flex-1 h-full px-2 py-0 gap-1.5 text-xs`}
                   onClick={() => onPaymentOptionChange("annual")}
                 >
                   <span className="inline-flex items-center gap-0.5">
@@ -133,7 +133,7 @@ export function QuoteCard({
                   type="button"
                   variant="ghost"
                   size="pill"
-                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} flex-1 h-full px-2 text-xs`}
+                  className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} flex-1 h-full px-2 py-0 text-xs`}
                   onClick={() => onPaymentOptionChange("monthly")}
                 >
                   Monthly
@@ -142,12 +142,12 @@ export function QuoteCard({
 
               {/* Desktop (lg+): annual/monthly toggle next to More info + Continue column */}
               <div className="hidden w-full flex-row items-start gap-2 lg:flex lg:w-auto">
-                <div className="flex h-9 w-fit items-center overflow-hidden rounded-full border border-input bg-muted/30 gap-0.5 px-0.5 py-0.5">
+                <div className="flex h-9 w-fit items-stretch overflow-hidden rounded-full border border-input bg-muted/30 gap-0.5 px-[3px] py-[3px]">
                   <Button
                     type="button"
                     variant="ghost"
                     size="pill"
-                    className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-full px-2 gap-1.5 text-xs`}
+                    className={`${pricingMode === "annual" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-full px-2 py-0 gap-1.5 text-xs`}
                     onClick={() => onPaymentOptionChange("annual")}
                   >
                     <span className="inline-flex items-center gap-0.5">
@@ -160,7 +160,7 @@ export function QuoteCard({
                     type="button"
                     variant="ghost"
                     size="pill"
-                    className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-full px-2 text-xs`}
+                    className={`${pricingMode === "monthly" ? PAYMENT_ACTIVE_CLASS : PAYMENT_INACTIVE_CLASS} !flex-initial h-full px-2 py-0 text-xs`}
                     onClick={() => onPaymentOptionChange("monthly")}
                   >
                     Monthly
