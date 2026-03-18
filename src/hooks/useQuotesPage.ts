@@ -125,6 +125,8 @@ export function useQuotesPage() {
   ])
 
   const handleEditAnswers = () => {
+    // Jump back into the letting wizard so users can edit answers.
+    window.location.hash = "#letting"
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
   }
 

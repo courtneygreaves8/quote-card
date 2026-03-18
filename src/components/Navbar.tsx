@@ -5,14 +5,19 @@ import { LoginModal } from "@/components/LoginModal"
 import { HelpModal } from "@/components/HelpModal"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { LAYOUT_PADDING_X } from "@/lib/constants"
-import { Headset, LogIn, Menu, Rocket, UserPlus } from "lucide-react"
+import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 
 interface NavbarProps {
   activeLayout?: "default" | "alt"
   onSelectLayout?: (variant: "default" | "alt") => void
+  onBrandClick?: () => void
 }
 
-export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps) {
+export function Navbar({
+  activeLayout = "default",
+  onSelectLayout,
+  onBrandClick,
+}: NavbarProps) {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
@@ -21,7 +26,12 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
   return (
     <>
       <header className={`flex h-14 shrink-0 items-center justify-between border-b border-border bg-white ${LAYOUT_PADDING_X}`}>
-        <div className="flex items-center gap-1">
+        <button
+          type="button"
+          onClick={onBrandClick}
+          className="flex items-center gap-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          aria-label="PIKL Prototype"
+        >
           <span
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200"
             aria-hidden
@@ -40,7 +50,7 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
             <span className="font-semibold">PIKL</span>{" "}
             <span className="font-light">Prototype</span>
           </span>
-        </div>
+        </button>
         <div className="flex shrink-0 items-center gap-2">
           {/* Desktop / tablet buttons */}
           <div className="hidden md:flex items-center gap-2">
@@ -67,17 +77,6 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
               <UserPlus className="h-4 w-4" />
               Create account
             </Button>
-            {activeLayout === "alt" && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5 border-border"
-                onClick={() => setHelpOpen(true)}
-              >
-                <Headset className="h-4 w-4" />
-                Contact support
-              </Button>
-            )}
            
           </div>
           {/* Mobile hamburger when we show a single card */}
@@ -143,16 +142,18 @@ export function Navbar({ activeLayout = "default", onSelectLayout }: NavbarProps
               <UserPlus className="h-4 w-4" />
               Create account
             </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-center gap-1.5 border-border"
-              onClick={() => {
-                setNavOpen(false)
-                setHelpOpen(true)
-              }}
-            >
-              Contact support
-            </Button>
+            {activeLayout === "default" && (
+              <Button
+                variant="outline"
+                className="w-full justify-center gap-1.5 border-border"
+                onClick={() => {
+                  setNavOpen(false)
+                  setHelpOpen(true)
+                }}
+              >
+                Contact support
+              </Button>
+            )}
             {activeLayout === "default" && (
               <Button
                 variant="ghost"

@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator"
 import { QUOTE_LIST_POLL_DURATION_MS } from "@/lib/constants"
 import type { useQuotesPage } from "@/hooks/useQuotesPage"
 import { useQuotesAltLayout } from "@/hooks/useQuotesAltLayout"
+import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 
 export type QuotesPageAltLayoutProps = ReturnType<typeof useQuotesPage> & {
   onLayoutChange: (variant: "default" | "alt") => void
@@ -121,7 +122,13 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
 
   return (
     <div className="flex h-screen flex-col bg-neutral-50 max-[767px]:bg-[#F1F1F1]">
-      <Navbar activeLayout="alt" onSelectLayout={onLayoutChange} />
+      <Navbar
+        activeLayout="alt"
+        onSelectLayout={onLayoutChange}
+        onBrandClick={() => {
+          window.location.hash = "#letting"
+        }}
+      />
       <LoadingModal open={loadingModalOpen} onClose={() => setLoadingModalOpen(false)} />
       {useDefaultLayout ? (
         <QuotesPageLayout {...props} showNavbar={false} />
@@ -851,6 +858,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
         onOpenChange={setSheetOpen}
         onPurchase={handlePurchase}
       />
+      <HelpFloatingButton />
     </div>
   )
 }
