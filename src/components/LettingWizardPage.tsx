@@ -1416,6 +1416,24 @@ export function LettingWizardPage() {
           </div>
 
           <div className="mx-auto w-full max-w-[968px] px-4 pb-8 pt-4 sm:px-6 sm:pt-6">
+            {stepIndex === 0 && (
+              <div className="mb-4">
+                <div className="flex items-center justify-between gap-4 rounded-xl border border-border bg-white p-4">
+                  <p className="text-sm font-medium text-foreground">Quoted with us before?</p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-9"
+                    onClick={() => {
+                      window.location.hash = ""
+                      window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+                    }}
+                  >
+                    Retrieve my quote
+                  </Button>
+                </div>
+              </div>
+            )}
             <Card className="border-border shadow-sm">
               <CardHeader>
                 <CardTitle
@@ -3949,7 +3967,7 @@ export function LettingWizardPage() {
                       </div>
                     )}
 
-                    {stepIndex === 0 && (
+                    {stepIndex === 0 && step1Complete && (
                       <div className="space-y-3 rounded-xl border border-border bg-white p-4">
                         <p className="text-sm leading-relaxed text-muted-foreground">
                           Pikl Insurance Services may use or share your information or any named person on the quote
@@ -3971,8 +3989,28 @@ export function LettingWizardPage() {
                           Reference Agency Information Notice
                         </p>
                         <p className="text-sm leading-relaxed text-muted-foreground">
-                          By pressing next you confirm that you agree with Pikl&apos;s Terms of Business, Website Terms of
-                          Use and that you have read our Privacy Policy.
+                          By pressing next you confirm that you agree with Pikl&apos;s{" "}
+                          <a
+                            href="/terms-of-business"
+                            className="text-blue-600 hover:underline underline-offset-4"
+                          >
+                            Terms of Business
+                          </a>
+                          ,{" "}
+                          <a
+                            href="/website-terms-of-use"
+                            className="text-blue-600 hover:underline underline-offset-4"
+                          >
+                            Website Terms of Use
+                          </a>{" "}
+                          and that you have read our{" "}
+                          <a
+                            href="/privacy-policy"
+                            className="text-blue-600 hover:underline underline-offset-4"
+                          >
+                            Privacy Policy
+                          </a>
+                          .
                         </p>
                       </div>
                     )}
