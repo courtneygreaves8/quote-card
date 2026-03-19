@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { ArrowLeft, ArrowRight, Check, Image as ImageIcon, Info, LogIn, Mailbox, Menu, ShieldCheck, ShieldPlus, UserPlus } from "lucide-react"
+import { ArrowLeft, ArrowRight, CalendarDays, Check, Image as ImageIcon, Info, LogIn, Mailbox, Menu, ShieldCheck, ShieldPlus, UserPlus } from "lucide-react"
 
 import { CreateAccountModal } from "@/components/CreateAccountModal"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
@@ -64,6 +64,7 @@ type LettingFormValues = {
   // Step 4: assumptions
   assumptionUkResident?: boolean
   assumptionPropertyOwnerResponsibility?: boolean
+  assumptionSixMonthAst?: boolean
   assumptionNoCancelledInsurance?: boolean
   assumptionNoBankruptcy?: boolean
   assumptionNoExcessClaims?: boolean
@@ -117,6 +118,31 @@ type LettingFormValues = {
     | "100"
   propertyWallMaterial?: "brick" | "stone" | "concrete" | "other"
   propertyOccupiedNightHours?: "yes" | "no"
+
+  // Step 6: cover
+  coverStartDate?: string
+  coverType?: "buildings" | "contents" | "buildings-contents"
+  buildingsRebuildBand?: "163000" | "292000" | "500000" | "custom"
+  buildingsCustomAmount?: string
+  buildingsAccidentalDamage?: "yes-add" | "decide-later"
+  buildingsYearsInsured?: string
+  buildingsNoClaimsDiscount?: string
+  contentsItemsOver1500?: "yes" | "no"
+  contentsItemCategory?: string
+  contentsItemDescription?: string
+  contentsItemValue?: string
+  contentsItemCoverType?: "inside-home-only" | "inside-and-outside-home"
+  contentsBicyclesOver300?: "yes" | "no"
+  bicycleValue?: string
+  bicycleMake?: string
+  bicycleModel?: string
+  bicycleRidingArea?: "uk-only" | "worldwide"
+  contentsOtherValue?: string
+  contentsAccidentalDamage?: "yes-add" | "decide-later"
+  contentsYearsInsured?: string
+  contentsNoClaimsDiscount?: string
+  contentsAwayFromHome?: "yes" | "no"
+  addonFamilyLegalProtection?: "yes-add" | "decide-later"
 }
 
 type HelpTopic =
@@ -291,7 +317,7 @@ export function LettingWizardPage() {
     email?: string
     mobile?: string
   }>({})
-  const [stepIndex, setStepIndex] = useState<0 | 1 | 2 | 3 | 4>(() => {
+  const [stepIndex, setStepIndex] = useState<0 | 1 | 2 | 3 | 4 | 5>(() => {
     if (typeof window === "undefined") return 0
     return window.location.hash === "#letting-about" ? 1 : 0
   })
@@ -319,12 +345,14 @@ export function LettingWizardPage() {
   const dobDayRef = useRef<HTMLInputElement | null>(null)
   const dobMonthRef = useRef<HTMLInputElement | null>(null)
   const dobYearRef = useRef<HTMLInputElement | null>(null)
+  const coverDateInputRef = useRef<HTMLInputElement | null>(null)
 
   const form = useForm<LettingFormValues>({
     defaultValues: {
       // Step 4: assumptions default to "True" active (user can flip any to "False")
       assumptionUkResident: true,
       assumptionPropertyOwnerResponsibility: true,
+      assumptionSixMonthAst: true,
       assumptionNoCancelledInsurance: true,
       assumptionNoBankruptcy: true,
       assumptionNoExcessClaims: true,
@@ -398,6 +426,65 @@ export function LettingWizardPage() {
   const showStep5Unoccupied =
     showStep5OccupiedNightHours && values.propertyOccupiedNightHours != null
 
+  const showStep6CoverType = stepIndex === 5 && (values.coverStartDate?.trim()?.length ?? 0) > 0
+  const showStep6BuildingsSection =
+    showStep6CoverType && (values.coverType === "buildings" || values.coverType === "buildings-contents")
+  const showStep6BuildingsAccidentalDamage =
+    showStep6BuildingsSection &&
+    values.buildingsRebuildBand != null &&
+    (values.buildingsRebuildBand !== "custom" ||
+      (values.buildingsCustomAmount?.trim()?.length ?? 0) > 0)
+  const showStep6BuildingsYearsInsured =
+    showStep6BuildingsAccidentalDamage && values.buildingsAccidentalDamage != null
+  const showStep6BuildingsNoClaims =
+    showStep6BuildingsYearsInsured && (values.buildingsYearsInsured?.trim()?.length ?? 0) > 0
+
+  const showStep6ContentsSection =
+    showStep6CoverType &&
+    (values.coverType === "contents" ||
+      (values.coverType === "buildings-contents" &&
+        showStep6BuildingsNoClaims &&
+        (values.buildingsNoClaimsDiscount?.trim()?.length ?? 0) > 0))
+  const isStep6ContentsItemDetailsComplete =
+    values.contentsItemsOver1500 === "no" ||
+    (values.contentsItemsOver1500 === "yes" &&
+      (values.contentsItemCategory?.trim()?.length ?? 0) > 0 &&
+      (values.contentsItemDescription?.trim()?.length ?? 0) > 0 &&
+      (values.contentsItemValue?.trim()?.length ?? 0) > 0 &&
+      values.contentsItemCoverType != null)
+  const showStep6ContentsBicycles =
+    showStep6ContentsSection &&
+    values.contentsItemsOver1500 != null &&
+    isStep6ContentsItemDetailsComplete
+  const isStep6BicycleDetailsComplete =
+    values.contentsBicyclesOver300 === "no" ||
+    (values.contentsBicyclesOver300 === "yes" &&
+      (values.bicycleValue?.trim()?.length ?? 0) > 0 &&
+      (values.bicycleMake?.trim()?.length ?? 0) > 0 &&
+      (values.bicycleModel?.trim()?.length ?? 0) > 0 &&
+      values.bicycleRidingArea != null)
+  const showStep6ContentsOtherValue =
+    showStep6ContentsBicycles &&
+    values.contentsBicyclesOver300 != null &&
+    isStep6BicycleDetailsComplete
+  const showStep6ContentsAccidentalDamage =
+    showStep6ContentsOtherValue && (values.contentsOtherValue?.trim()?.length ?? 0) > 0
+  const showStep6ContentsYearsInsured =
+    showStep6ContentsAccidentalDamage && values.contentsAccidentalDamage != null
+  const showStep6ContentsNoClaims =
+    showStep6ContentsYearsInsured && (values.contentsYearsInsured?.trim()?.length ?? 0) > 0
+  const showStep6ContentsAwayFromHome =
+    showStep6ContentsNoClaims && (values.contentsNoClaimsDiscount?.trim()?.length ?? 0) > 0
+
+  const showStep6Addons =
+    showStep6CoverType &&
+    ((values.coverType === "buildings" &&
+      showStep6BuildingsNoClaims &&
+      (values.buildingsNoClaimsDiscount?.trim()?.length ?? 0) > 0) ||
+      ((values.coverType === "contents" || values.coverType === "buildings-contents") &&
+        showStep6ContentsAwayFromHome &&
+        values.contentsAwayFromHome != null))
+
   const propertyTypeDescriptionSuffix =
     values.propertyType === "house"
       ? "house"
@@ -438,6 +525,57 @@ export function LettingWizardPage() {
     }
   }, [form, values.propertyHasIntruderAlarm])
 
+  useEffect(() => {
+    if (values.buildingsRebuildBand !== "custom") {
+      form.setValue("buildingsCustomAmount", "", { shouldDirty: false, shouldTouch: false })
+    }
+  }, [form, values.buildingsRebuildBand])
+
+  useEffect(() => {
+    if (values.coverType === "buildings") {
+      form.setValue("contentsItemsOver1500", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsItemCategory", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsItemDescription", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsItemValue", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsItemCoverType", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsBicyclesOver300", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("bicycleValue", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("bicycleMake", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("bicycleModel", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("bicycleRidingArea", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsOtherValue", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsAccidentalDamage", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsYearsInsured", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsNoClaimsDiscount", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsAwayFromHome", undefined, { shouldDirty: false, shouldTouch: false })
+    }
+    if (values.coverType === "contents") {
+      form.setValue("buildingsRebuildBand", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("buildingsCustomAmount", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("buildingsAccidentalDamage", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("buildingsYearsInsured", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("buildingsNoClaimsDiscount", "", { shouldDirty: false, shouldTouch: false })
+    }
+  }, [form, values.coverType])
+
+  useEffect(() => {
+    if (values.contentsItemsOver1500 !== "yes") {
+      form.setValue("contentsItemCategory", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsItemDescription", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsItemValue", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("contentsItemCoverType", undefined, { shouldDirty: false, shouldTouch: false })
+    }
+  }, [form, values.contentsItemsOver1500])
+
+  useEffect(() => {
+    if (values.contentsBicyclesOver300 !== "yes") {
+      form.setValue("bicycleValue", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("bicycleMake", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("bicycleModel", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("bicycleRidingArea", undefined, { shouldDirty: false, shouldTouch: false })
+    }
+  }, [form, values.contentsBicyclesOver300])
+
   // Ensure Step 4 statements are defaulted to "True" as soon as the UI appears.
   useEffect(() => {
     if (stepIndex !== 3) return
@@ -445,6 +583,7 @@ export function LettingWizardPage() {
     const statementKeys: Array<
       | "assumptionUkResident"
       | "assumptionPropertyOwnerResponsibility"
+      | "assumptionSixMonthAst"
       | "assumptionNoCancelledInsurance"
       | "assumptionNoBankruptcy"
       | "assumptionNoExcessClaims"
@@ -459,6 +598,7 @@ export function LettingWizardPage() {
     > = [
       "assumptionUkResident",
       "assumptionPropertyOwnerResponsibility",
+      "assumptionSixMonthAst",
       "assumptionNoCancelledInsurance",
       "assumptionNoBankruptcy",
       "assumptionNoExcessClaims",
@@ -560,6 +700,7 @@ export function LettingWizardPage() {
     const statementKeys: Array<
       | "assumptionUkResident"
       | "assumptionPropertyOwnerResponsibility"
+      | "assumptionSixMonthAst"
       | "assumptionNoCancelledInsurance"
       | "assumptionNoBankruptcy"
       | "assumptionNoExcessClaims"
@@ -574,6 +715,7 @@ export function LettingWizardPage() {
     > = [
       "assumptionUkResident",
       "assumptionPropertyOwnerResponsibility",
+      "assumptionSixMonthAst",
       "assumptionNoCancelledInsurance",
       "assumptionNoBankruptcy",
       "assumptionNoExcessClaims",
@@ -620,6 +762,44 @@ export function LettingWizardPage() {
       values.propertyRoofFlatPercentage != null &&
       values.propertyWallMaterial != null
     )
+  }, [values])
+
+  const step6Complete = useMemo(() => {
+    const hasCoverStartDate = (values.coverStartDate?.trim()?.length ?? 0) > 0
+    if (!hasCoverStartDate || values.coverType == null) return false
+
+    const buildingsComplete =
+      values.buildingsRebuildBand != null &&
+      (values.buildingsRebuildBand !== "custom" ||
+        (values.buildingsCustomAmount?.trim()?.length ?? 0) > 0) &&
+      values.buildingsAccidentalDamage != null &&
+      (values.buildingsYearsInsured?.trim()?.length ?? 0) > 0 &&
+      (values.buildingsNoClaimsDiscount?.trim()?.length ?? 0) > 0
+
+    const contentsComplete =
+      values.contentsItemsOver1500 != null &&
+      (values.contentsItemsOver1500 === "no" ||
+        ((values.contentsItemCategory?.trim()?.length ?? 0) > 0 &&
+          (values.contentsItemDescription?.trim()?.length ?? 0) > 0 &&
+          (values.contentsItemValue?.trim()?.length ?? 0) > 0 &&
+          values.contentsItemCoverType != null)) &&
+      values.contentsBicyclesOver300 != null &&
+      (values.contentsBicyclesOver300 === "no" ||
+        ((values.bicycleValue?.trim()?.length ?? 0) > 0 &&
+          (values.bicycleMake?.trim()?.length ?? 0) > 0 &&
+          (values.bicycleModel?.trim()?.length ?? 0) > 0 &&
+          values.bicycleRidingArea != null)) &&
+      (values.contentsOtherValue?.trim()?.length ?? 0) > 0 &&
+      values.contentsAccidentalDamage != null &&
+      (values.contentsYearsInsured?.trim()?.length ?? 0) > 0 &&
+      (values.contentsNoClaimsDiscount?.trim()?.length ?? 0) > 0 &&
+      values.contentsAwayFromHome != null
+
+    const addonsComplete = values.addonFamilyLegalProtection != null
+
+    if (values.coverType === "buildings") return buildingsComplete && addonsComplete
+    if (values.coverType === "contents") return contentsComplete && addonsComplete
+    return buildingsComplete && contentsComplete && addonsComplete
   }, [values])
 
   const personalSectionComplete = useMemo(() => {
@@ -697,9 +877,10 @@ export function LettingWizardPage() {
       (step2Complete ? 1 : 0) +
       (step3Complete ? 1 : 0) +
       (step4Complete ? 1 : 0) +
-      (step5Complete ? 1 : 0)
+      (step5Complete ? 1 : 0) +
+      (step6Complete ? 1 : 0)
     )
-  }, [step1Complete, step2Complete, step3Complete, step4Complete, step5Complete])
+  }, [step1Complete, step2Complete, step3Complete, step4Complete, step5Complete, step6Complete])
 
   const overallProgress = useMemo(() => {
     return (completedSteps / 7) * 100
@@ -730,6 +911,7 @@ export function LettingWizardPage() {
       const statementKeys: Array<
         | "assumptionUkResident"
         | "assumptionPropertyOwnerResponsibility"
+        | "assumptionSixMonthAst"
         | "assumptionNoCancelledInsurance"
         | "assumptionNoBankruptcy"
         | "assumptionNoExcessClaims"
@@ -744,6 +926,7 @@ export function LettingWizardPage() {
       > = [
         "assumptionUkResident",
         "assumptionPropertyOwnerResponsibility",
+        "assumptionSixMonthAst",
         "assumptionNoCancelledInsurance",
         "assumptionNoBankruptcy",
         "assumptionNoExcessClaims",
@@ -791,6 +974,61 @@ export function LettingWizardPage() {
         (values.propertyRoofFlatPercentage ? 1 : 0) +
         (values.propertyWallMaterial ? 1 : 0)
       return (answered / total) * 100
+    }
+
+    if (stepIndex === 5) {
+      const includeBuildings = values.coverType === "buildings" || values.coverType === "buildings-contents"
+      const includeContents = values.coverType === "contents" || values.coverType === "buildings-contents"
+      const buildingsTotal = includeBuildings ? 5 : 0
+      const highValueItemExtraTotal = includeContents && values.contentsItemsOver1500 === "yes" ? 4 : 0
+      const bicycleExtraTotal = includeContents && values.contentsBicyclesOver300 === "yes" ? 4 : 0
+      const contentsTotal = includeContents ? 7 + highValueItemExtraTotal + bicycleExtraTotal : 0
+      const total = 2 + buildingsTotal + contentsTotal + 1
+
+      const answered =
+        ((values.coverStartDate?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+        (values.coverType ? 1 : 0) +
+        (includeBuildings
+          ? (values.buildingsRebuildBand ? 1 : 0) +
+            (values.buildingsAccidentalDamage ? 1 : 0) +
+            ((values.buildingsYearsInsured?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+            ((values.buildingsNoClaimsDiscount?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+            (values.buildingsRebuildBand === "custom"
+              ? ((values.buildingsCustomAmount?.trim()?.length ?? 0) > 0 ? 1 : 0)
+              : 1)
+          : 0) +
+        (includeContents
+          ? (values.contentsItemsOver1500 ? 1 : 0) +
+            (values.contentsItemsOver1500 === "yes"
+              ? ((values.contentsItemCategory?.trim()?.length ?? 0) > 0 ? 1 : 0)
+              : 0) +
+            (values.contentsItemsOver1500 === "yes"
+              ? ((values.contentsItemDescription?.trim()?.length ?? 0) > 0 ? 1 : 0)
+              : 0) +
+            (values.contentsItemsOver1500 === "yes"
+              ? ((values.contentsItemValue?.trim()?.length ?? 0) > 0 ? 1 : 0)
+              : 0) +
+            (values.contentsItemsOver1500 === "yes" ? (values.contentsItemCoverType ? 1 : 0) : 0) +
+            (values.contentsBicyclesOver300 ? 1 : 0) +
+            (values.contentsBicyclesOver300 === "yes"
+              ? ((values.bicycleValue?.trim()?.length ?? 0) > 0 ? 1 : 0)
+              : 0) +
+            (values.contentsBicyclesOver300 === "yes"
+              ? ((values.bicycleMake?.trim()?.length ?? 0) > 0 ? 1 : 0)
+              : 0) +
+            (values.contentsBicyclesOver300 === "yes"
+              ? ((values.bicycleModel?.trim()?.length ?? 0) > 0 ? 1 : 0)
+              : 0) +
+            (values.contentsBicyclesOver300 === "yes" ? (values.bicycleRidingArea ? 1 : 0) : 0) +
+            ((values.contentsOtherValue?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+            (values.contentsAccidentalDamage ? 1 : 0) +
+            ((values.contentsYearsInsured?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+            ((values.contentsNoClaimsDiscount?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+            (values.contentsAwayFromHome ? 1 : 0)
+          : 0) +
+        (values.addonFamilyLegalProtection ? 1 : 0)
+
+      return total > 0 ? (answered / total) * 100 : 0
     }
 
     if (stepIndex === 1 && step2Complete) {
@@ -883,6 +1121,29 @@ export function LettingWizardPage() {
     values.propertyWallMaterial,
     values.propertyYearBuilt,
     values.propertyToInsure,
+    values.coverStartDate,
+    values.coverType,
+    values.buildingsRebuildBand,
+    values.buildingsCustomAmount,
+    values.buildingsAccidentalDamage,
+    values.buildingsYearsInsured,
+    values.buildingsNoClaimsDiscount,
+    values.contentsItemsOver1500,
+    values.contentsItemCategory,
+    values.contentsItemDescription,
+    values.contentsItemValue,
+    values.contentsItemCoverType,
+    values.contentsBicyclesOver300,
+    values.bicycleValue,
+    values.bicycleMake,
+    values.bicycleModel,
+    values.bicycleRidingArea,
+    values.contentsOtherValue,
+    values.contentsAccidentalDamage,
+    values.contentsYearsInsured,
+    values.contentsNoClaimsDiscount,
+    values.contentsAwayFromHome,
+    values.addonFamilyLegalProtection,
     values.selectedProduct,
     values.shortTermLettingDays,
     values.sharing,
@@ -897,8 +1158,9 @@ export function LettingWizardPage() {
     if (stepIndex === 2) return step3Complete
     if (stepIndex === 3) return step4Complete
     if (stepIndex === 4) return step5Complete
+    if (stepIndex === 5) return step6Complete
     return false
-  }, [step1Complete, step2Complete, step3Complete, step4Complete, step5Complete, stepIndex])
+  }, [step1Complete, step2Complete, step3Complete, step4Complete, step5Complete, step6Complete, stepIndex])
 
   useEffect(() => {
     if (!helpOpen) setHelpTopic(null)
@@ -929,6 +1191,23 @@ export function LettingWizardPage() {
 
     return { title, body }
   }, [helpTopic])
+
+  const coverStartDateDisplay = useMemo(() => {
+    if (!values.coverStartDate) return ""
+    const [year, month, day] = values.coverStartDate.split("-")
+    if (!year || !month || !day) return values.coverStartDate
+    return `${day}/${month}/${year}`
+  }, [values.coverStartDate])
+
+  const openCoverDatePicker = () => {
+    const input = coverDateInputRef.current as (HTMLInputElement & { showPicker?: () => void }) | null
+    if (!input) return
+    if (typeof input.showPicker === "function") {
+      input.showPicker()
+      return
+    }
+    input.click()
+  }
 
   return (
     <div className="flex h-screen flex-col overflow-hidden overscroll-none bg-neutral-50">
@@ -968,6 +1247,8 @@ export function LettingWizardPage() {
                           ? step4Complete
                           : idx === 4
                             ? step5Complete
+                            : idx === 5
+                              ? step6Complete
                           : false
 
                 return (
@@ -986,7 +1267,7 @@ export function LettingWizardPage() {
                         window.location.hash = ""
                         return
                       }
-                      setStepIndex(idx as 0 | 1 | 2 | 3 | 4)
+                      setStepIndex(idx as 0 | 1 | 2 | 3 | 4 | 5)
                       mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
                     }}
                   >
@@ -1008,7 +1289,7 @@ export function LettingWizardPage() {
             <Button
               type="button"
               variant="outline"
-              className="mt-auto w-full justify-center gap-2 border-border"
+              className="mt-auto h-9 w-full justify-center gap-2 border-border"
               onClick={() => {
                 setHelpOpen(false)
                 setStepIndex(0)
@@ -1049,7 +1330,7 @@ export function LettingWizardPage() {
                   aria-label="Previous step"
                   onClick={() => {
                     if (stepIndex === 0) return
-                    setStepIndex((stepIndex - 1) as 0 | 1 | 2 | 3)
+                    setStepIndex((stepIndex - 1) as 0 | 1 | 2 | 3 | 4)
                     mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
                   }}
                 >
@@ -1069,6 +1350,8 @@ export function LettingWizardPage() {
                               ? "Assumptions"
                               : stepIndex === 4
                                 ? "Property details"
+                                : stepIndex === 5
+                                  ? "Cover"
                                 : ""}
                     </span>
                   </div>
@@ -1080,11 +1363,11 @@ export function LettingWizardPage() {
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8"
-                    disabled={stepIndex === 4}
+                    disabled={stepIndex === 5}
                     aria-label="Next step"
                     onClick={() => {
-                      if (stepIndex >= 4) return
-                      setStepIndex((stepIndex + 1) as 1 | 2 | 3 | 4)
+                      if (stepIndex >= 5) return
+                      setStepIndex((stepIndex + 1) as 1 | 2 | 3 | 4 | 5)
                       mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
                     }}
                   >
@@ -1121,7 +1404,9 @@ export function LettingWizardPage() {
                           ? "Assumptions"
                           : stepIndex === 4
                             ? "Property details"
-                            : "Cover"}
+                            : stepIndex === 5
+                              ? "Cover"
+                              : "Cover"}
                 </CardTitle>
                 <CardDescription>
                   {stepIndex === 0
@@ -1132,7 +1417,9 @@ export function LettingWizardPage() {
                         ? "We have two options for your cover needs, all-in-one covers you for home and host insurance, while top-up is added to your exisiting home insurance plan and covers you for host insurance:"
                         : stepIndex === 3
                           ? "Please check the following statement(s) and change any that are false."
-                      : "Tell us about your property and security details."}
+                      : stepIndex === 4
+                        ? "Tell us about your property and security details."
+                        : "Choose your cover options to finish your quote."}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -1143,7 +1430,8 @@ export function LettingWizardPage() {
                       if (stepIndex === 1 && step2Complete) setStepIndex(2)
                       if (stepIndex === 2 && step3Complete) setStepIndex(3)
                       if (stepIndex === 3 && step4Complete) setStepIndex(4)
-                      if (stepIndex === 4 && step5Complete) window.location.hash = ""
+                      if (stepIndex === 4 && step5Complete) setStepIndex(5)
+                      if (stepIndex === 5 && step6Complete) window.location.hash = ""
                     })}
                     className="space-y-6 text-[14px]"
                   >
@@ -1153,7 +1441,7 @@ export function LettingWizardPage() {
                           control={form.control}
                           name="propertyToInsure"
                           render={({ field }) => (
-                            <FormItem className="space-y-3">
+                            <FormItem className="space-y-2">
                               <QuestionHeader
                                 label="Is the property you wish to insure:"
                                 onHelp={() => {
@@ -1169,7 +1457,7 @@ export function LettingWizardPage() {
                                 >
                                   <label
                                     className={cn(
-                                      "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                      "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                       field.value === "primary" && "border-foreground bg-muted/40"
                                     )}
                                   >
@@ -1178,7 +1466,7 @@ export function LettingWizardPage() {
                                   </label>
                                   <label
                                     className={cn(
-                                      "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                      "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                       field.value === "second" && "border-foreground bg-muted/40"
                                     )}
                                   >
@@ -1187,7 +1475,7 @@ export function LettingWizardPage() {
                                   </label>
                                   <label
                                     className={cn(
-                                      "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                      "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                       field.value === "investment" && "border-foreground bg-muted/40"
                                     )}
                                   >
@@ -1205,7 +1493,7 @@ export function LettingWizardPage() {
                             control={form.control}
                             name="shortTermBasis"
                             render={({ field }) => (
-                              <FormItem className="space-y-3">
+                              <FormItem className="space-y-2">
                                 <QuestionHeader
                                   label="Will you be letting, sharing, or swapping your property on a short-term basis?"
                                   onHelp={() => {
@@ -1221,7 +1509,7 @@ export function LettingWizardPage() {
                                   >
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "yes" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1230,7 +1518,7 @@ export function LettingWizardPage() {
                                     </label>
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "no" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1249,7 +1537,7 @@ export function LettingWizardPage() {
                             control={form.control}
                             name="activity"
                             render={({ field }) => (
-                              <FormItem className="space-y-3">
+                              <FormItem className="space-y-2">
                                 <QuestionHeader
                                   label="Which of the following activities do you want to purchase insurance for?"
                                   onHelp={() => {
@@ -1265,7 +1553,7 @@ export function LettingWizardPage() {
                                   >
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "letting" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1274,7 +1562,7 @@ export function LettingWizardPage() {
                                     </label>
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "swapping" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1293,7 +1581,7 @@ export function LettingWizardPage() {
                             control={form.control}
                             name="sharing"
                             render={({ field }) => (
-                              <FormItem className="space-y-3">
+                              <FormItem className="space-y-2">
                                 <QuestionHeader
                                   label="Are you sharing:"
                                   onHelp={() => {
@@ -1309,7 +1597,7 @@ export function LettingWizardPage() {
                                   >
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "single-bedroom" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1318,7 +1606,7 @@ export function LettingWizardPage() {
                                     </label>
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "entire-property" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1327,7 +1615,7 @@ export function LettingWizardPage() {
                                     </label>
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "annex" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1336,7 +1624,7 @@ export function LettingWizardPage() {
                                     </label>
                                     <label
                                       className={cn(
-                                        "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                        "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                         field.value === "none" && "border-foreground bg-muted/40"
                                       )}
                                     >
@@ -1667,7 +1955,7 @@ export function LettingWizardPage() {
                                     >
                                       <label
                                         className={cn(
-                                          "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                          "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                           field.value === "yes" && "border-foreground bg-muted/40"
                                         )}
                                       >
@@ -1676,7 +1964,7 @@ export function LettingWizardPage() {
                                       </label>
                                       <label
                                         className={cn(
-                                          "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                          "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                           field.value === "no" && "border-foreground bg-muted/40"
                                         )}
                                       >
@@ -1760,7 +2048,7 @@ export function LettingWizardPage() {
                                           <label
                                             key={opt.value}
                                             className={cn(
-                                              "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                              "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                               field.value === opt.value && "border-foreground bg-muted/40"
                                             )}
                                           >
@@ -1827,7 +2115,7 @@ export function LettingWizardPage() {
                                               <label
                                                 key={opt.value}
                                                 className={cn(
-                                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                                   field.value === opt.value && "border-foreground bg-muted/40"
                                                 )}
                                               >
@@ -1863,7 +2151,7 @@ export function LettingWizardPage() {
                                                 <label
                                                   key={opt.value}
                                                   className={cn(
-                                                    "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                                    "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                                     field.value === opt.value && "border-foreground bg-muted/40"
                                                   )}
                                                 >
@@ -1988,7 +2276,7 @@ export function LettingWizardPage() {
                                       >
                                         <label
                                           className={cn(
-                                            "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                            "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                             field.value === "yes" && "border-foreground bg-muted/40"
                                           )}
                                         >
@@ -1997,7 +2285,7 @@ export function LettingWizardPage() {
                                         </label>
                                         <label
                                           className={cn(
-                                            "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                            "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                             field.value === "no" && "border-foreground bg-muted/40"
                                           )}
                                         >
@@ -2078,7 +2366,7 @@ export function LettingWizardPage() {
                                             >
                                               <label
                                                 className={cn(
-                                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                                   field.value === "yes" && "border-foreground bg-muted/40"
                                                 )}
                                               >
@@ -2087,7 +2375,7 @@ export function LettingWizardPage() {
                                               </label>
                                               <label
                                                 className={cn(
-                                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                                   field.value === "no" && "border-foreground bg-muted/40"
                                                 )}
                                               >
@@ -2130,7 +2418,7 @@ export function LettingWizardPage() {
                                       >
                                         <label
                                           className={cn(
-                                            "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                            "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                             field.value === "yes" && "border-foreground bg-muted/40"
                                           )}
                                         >
@@ -2139,7 +2427,7 @@ export function LettingWizardPage() {
                                         </label>
                                         <label
                                           className={cn(
-                                            "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                            "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                             field.value === "no" && "border-foreground bg-muted/40"
                                           )}
                                         >
@@ -2203,7 +2491,7 @@ export function LettingWizardPage() {
                                   </div>
                                 </div>
 
-                                <div className="px-0 py-0 border-0 bg-[#FCFCFC]">
+                                <div className="px-0 py-0 border-0 bg-transparent">
                                   <p className="text-sm text-muted-foreground">
                                     All-in-one is home and host insurance that cover your building and/or
                                     contents, plus guest-related incidents.
@@ -2286,7 +2574,7 @@ export function LettingWizardPage() {
                                   </div>
                                 </div>
 
-                                <div className="px-0 py-0 border-0 bg-[#FCFCFC]">
+                                <div className="px-0 py-0 border-0 bg-transparent">
                                   <p className="text-sm text-muted-foreground">
                                     Top-up is host insurance that's applied to your existing home
                                     insurance to cover guest-related incidents.
@@ -2338,14 +2626,14 @@ export function LettingWizardPage() {
 
                             <div className="mt-4 grid grid-cols-1 gap-3">
                               {[
-                                { value: "more-than-90", label: "More than 90 days" },
-                                { value: "90-or-fewer", label: "90 days of fewer" },
-                                { value: "30-or-fewer", label: "30 days or fewer" },
+                                { value: "more-than-90", label: "More than 90 days", price: "£99.99" },
+                                { value: "90-or-fewer", label: "90 days of fewer", price: "£49.99" },
+                                { value: "30-or-fewer", label: "30 days or fewer", price: "£39.99" },
                               ].map((opt) => (
                                 <label
                                   key={opt.value}
                                   className={cn(
-                                    "flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                    "flex min-h-[46px] cursor-pointer items-center justify-between gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                     values.shortTermLettingDays === opt.value &&
                                       "border-foreground bg-muted/40"
                                   )}
@@ -2366,7 +2654,9 @@ export function LettingWizardPage() {
                                     />
                                     <span className="text-sm">{opt.label}</span>
                                   </div>
-                                  <span className="text-xs text-muted-foreground" />
+                                  <span className="rounded-full border border-border bg-white px-2.5 py-1 text-xs font-medium text-foreground">
+                                    {opt.price}
+                                  </span>
                                 </label>
                               ))}
                             </div>
@@ -2389,6 +2679,10 @@ export function LettingWizardPage() {
                               {
                                 key: "assumptionPropertyOwnerResponsibility",
                                 text: "You are the property owner or have a legal responsibility for the property",
+                              },
+                              {
+                                key: "assumptionSixMonthAst",
+                                text: "You already have a 6-month AST or will within the next 30 days",
                               },
                               {
                                 key: "assumptionNoCancelledInsurance",
@@ -2534,7 +2828,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyType === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -2583,7 +2877,7 @@ export function LettingWizardPage() {
                             value={values.propertyDescription}
                             onValueChange={(v) => form.setValue("propertyDescription", v as any)}
                           >
-                            <SelectTrigger className="h-11">
+                            <SelectTrigger className="h-10">
                               <SelectValue placeholder="Select property description" />
                             </SelectTrigger>
                             <SelectContent>
@@ -2626,7 +2920,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyListed === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -2652,7 +2946,7 @@ export function LettingWizardPage() {
                             value={values.propertyRoofFlatPercentage}
                             onValueChange={(v) => form.setValue("propertyRoofFlatPercentage", v as any)}
                           >
-                            <SelectTrigger className="h-11">
+                            <SelectTrigger className="h-10">
                               <SelectValue placeholder="Select roof flat percentage" />
                             </SelectTrigger>
                             <SelectContent>
@@ -2752,7 +3046,7 @@ export function LettingWizardPage() {
                           <Input
                             value={values.propertyBedrooms ?? ""}
                             onChange={(e) => form.setValue("propertyBedrooms", e.target.value)}
-                            className="h-11"
+                            className="h-10"
                             inputMode="numeric"
                             placeholder="e.g. 2"
                           />
@@ -2765,7 +3059,7 @@ export function LettingWizardPage() {
                           <Input
                             value={values.propertyBathrooms ?? ""}
                             onChange={(e) => form.setValue("propertyBathrooms", e.target.value)}
-                            className="h-11"
+                            className="h-10"
                             inputMode="numeric"
                             placeholder="e.g. 1"
                           />
@@ -2778,7 +3072,7 @@ export function LettingWizardPage() {
                           <Input
                             value={values.propertyTotalRooms ?? ""}
                             onChange={(e) => form.setValue("propertyTotalRooms", e.target.value)}
-                            className="h-11"
+                            className="h-10"
                             inputMode="numeric"
                             placeholder="e.g. 5"
                           />
@@ -2791,7 +3085,7 @@ export function LettingWizardPage() {
                           <Input
                             value={values.propertyFloors ?? ""}
                             onChange={(e) => form.setValue("propertyFloors", e.target.value)}
-                            className="h-11"
+                            className="h-10"
                             inputMode="numeric"
                             placeholder="e.g. 1"
                           />
@@ -2804,7 +3098,7 @@ export function LettingWizardPage() {
                           <Input
                             value={values.propertyYearBuilt ?? ""}
                             onChange={(e) => form.setValue("propertyYearBuilt", e.target.value)}
-                            className="h-11"
+                            className="h-10"
                             inputMode="numeric"
                             placeholder="e.g. 2025"
                           />
@@ -2824,7 +3118,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyOwnLockableFinalDoors === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -2857,7 +3151,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyApprovedLocksFinalDoors === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -2887,7 +3181,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyHasPatioOrFrenchDoors === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -2920,7 +3214,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyPatioOrFrenchDoorsApprovedLocks === opt.value &&
                                     "border-foreground bg-muted/40"
                                 )}
@@ -2953,7 +3247,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyHasKeyOperatedWindowLocks === opt.value &&
                                     "border-foreground bg-muted/40"
                                 )}
@@ -2984,7 +3278,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyHasIntruderAlarm === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -3010,7 +3304,7 @@ export function LettingWizardPage() {
                             value={values.propertyIntruderAlarmType}
                             onValueChange={(v) => form.setValue("propertyIntruderAlarmType", v as any)}
                           >
-                            <SelectTrigger className="h-11">
+                            <SelectTrigger className="h-10">
                               <SelectValue placeholder="Select alarm type" />
                             </SelectTrigger>
                             <SelectContent>
@@ -3040,7 +3334,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   (values.propertyFirePrecautions ?? []).includes(opt.value) &&
                                     "border-foreground bg-muted/40"
                                 )}
@@ -3077,7 +3371,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyOccupiedNightHours === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -3109,7 +3403,7 @@ export function LettingWizardPage() {
                               <label
                                 key={opt.value}
                                 className={cn(
-                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
                                   values.propertyUnoccupied === opt.value && "border-foreground bg-muted/40"
                                 )}
                               >
@@ -3130,18 +3424,376 @@ export function LettingWizardPage() {
                       </div>
                     )}
 
+                    {stepIndex === 5 && (
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="What date would you like your cover to start?" />
+                          <div className="relative">
+                            <input
+                              ref={coverDateInputRef}
+                              type="date"
+                              value={values.coverStartDate ?? ""}
+                              onChange={(e) => form.setValue("coverStartDate", e.target.value)}
+                              className="sr-only"
+                              aria-hidden
+                              tabIndex={-1}
+                            />
+                            <Input
+                              type="text"
+                              readOnly
+                              value={coverStartDateDisplay}
+                              onClick={openCoverDatePicker}
+                              placeholder="dd/mm/yyyy"
+                              className="h-10 cursor-pointer pr-10"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                              onClick={openCoverDatePicker}
+                              aria-label="Choose cover start date"
+                            >
+                              <CalendarDays className="h-5 w-5" aria-hidden />
+                            </Button>
+                          </div>
+                        </div>
+
+                        {showStep6CoverType && (
+                          <div className="space-y-2">
+                            <div className="text-sm font-medium text-foreground">What type of cover do you require?</div>
+                            <div className="grid grid-cols-1 gap-3">
+                              {[
+                                { value: "buildings", label: "Buildings" },
+                                { value: "buildings-contents", label: "Buildings & contents" },
+                                { value: "contents", label: "Contents" },
+                              ].map((opt) => (
+                                <label
+                                  key={opt.value}
+                                  className={cn(
+                                    "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
+                                    values.coverType === opt.value && "border-foreground bg-muted/40"
+                                  )}
+                                >
+                                  <input
+                                    className="h-4 w-4"
+                                    type="radio"
+                                    name="coverType"
+                                    checked={values.coverType === opt.value}
+                                    onChange={() => form.setValue("coverType", opt.value as any)}
+                                    style={{ accentColor: "hsl(var(--foreground))" }}
+                                  />
+                                  <span className="text-sm">{opt.label}</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {showStep6BuildingsSection && (
+                          <div className="space-y-4 border-t border-border pt-6">
+                            <div className="text-[18px] font-semibold text-foreground">Buildings</div>
+                            <div className="space-y-3">
+                              <InlineLabelWithInfo label="What is the rebuild cost of your property?" />
+                              <p className="text-sm text-muted-foreground">
+                                With the help of RICS (Royal Institution of Chartered Surveyors), based on your property&apos;s size and location, we have estimated the rebuild cost to be approximately 292,000. Rebuild costs do not include the value of the land and are generally lower than the property&apos;s market value.
+                              </p>
+                              <div className="grid grid-cols-1 gap-3">
+                                {[
+                                  { value: "163000", label: "£163,000", badge: "Lower" },
+                                  { value: "292000", label: "£292,000", badge: "Estimated" },
+                                  { value: "500000", label: "£500,000", badge: "Higher" },
+                                  { value: "custom", label: "Enter custom amount", badge: "" },
+                                ].map((opt) => (
+                                  <label
+                                    key={opt.value}
+                                    className={cn(
+                                      "flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40",
+                                      values.buildingsRebuildBand === opt.value && "border-foreground bg-muted/40"
+                                    )}
+                                  >
+                                    <input
+                                      className="h-4 w-4"
+                                      type="radio"
+                                      name="buildingsRebuildBand"
+                                      checked={values.buildingsRebuildBand === opt.value}
+                                      onChange={() => form.setValue("buildingsRebuildBand", opt.value as any)}
+                                      style={{ accentColor: "hsl(var(--foreground))" }}
+                                    />
+                                    <span className="text-sm">{opt.label}</span>
+                                    {opt.badge && (
+                                      <span className="rounded-full border border-border bg-white px-2 py-0.5 text-[11px] text-muted-foreground">
+                                        {opt.badge}
+                                      </span>
+                                    )}
+                                  </label>
+                                ))}
+                              </div>
+                              {values.buildingsRebuildBand === "custom" && (
+                                <Input
+                                  value={values.buildingsCustomAmount ?? ""}
+                                  onChange={(e) => form.setValue("buildingsCustomAmount", e.target.value)}
+                                  className="h-10"
+                                  placeholder="£ Enter custom amount"
+                                />
+                              )}
+                            </div>
+
+                            {showStep6BuildingsAccidentalDamage && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="Would you like to add cover for your buildings for accidental damage caused by you or any family members permanently living with you?" />
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                  {[
+                                    { value: "yes-add", label: "Yes, add" },
+                                    { value: "decide-later", label: "No, I'll decide later" },
+                                  ].map((opt) => (
+                                    <label key={opt.value} className={cn("flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40", values.buildingsAccidentalDamage === opt.value && "border-foreground bg-muted/40")}>
+                                      <input className="h-4 w-4" type="radio" name="buildingsAccidentalDamage" checked={values.buildingsAccidentalDamage === opt.value} onChange={() => form.setValue("buildingsAccidentalDamage", opt.value as any)} style={{ accentColor: "hsl(var(--foreground))" }} />
+                                      <span className="text-sm">{opt.label}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {showStep6BuildingsYearsInsured && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="How many years have you continuously held home buildings insurance in your name?" />
+                                <Input value={values.buildingsYearsInsured ?? ""} onChange={(e) => form.setValue("buildingsYearsInsured", e.target.value)} className="h-10" />
+                              </div>
+                            )}
+
+                            {showStep6BuildingsNoClaims && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="How many years no claims discount do you currently have on your buildings?" />
+                                <Input value={values.buildingsNoClaimsDiscount ?? ""} onChange={(e) => form.setValue("buildingsNoClaimsDiscount", e.target.value)} className="h-10" />
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {showStep6ContentsSection && (
+                          <div className="space-y-4 border-t border-border pt-6">
+                            <div className="text-[18px] font-semibold text-foreground">Contents</div>
+
+                            <div className="space-y-2">
+                              <InlineLabelWithInfo label="Do you have any items over £1,500 that you need to specify - to cover inside or when temporarily away from the home?" />
+                              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                {["yes", "no"].map((opt) => (
+                                  <label key={opt} className={cn("flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40", values.contentsItemsOver1500 === opt && "border-foreground bg-muted/40")}>
+                                    <input className="h-4 w-4" type="radio" name="contentsItemsOver1500" checked={values.contentsItemsOver1500 === opt} onChange={() => form.setValue("contentsItemsOver1500", opt as any)} style={{ accentColor: "hsl(var(--foreground))" }} />
+                                    <span className="text-sm">{opt === "yes" ? "Yes" : "No"}</span>
+                                  </label>
+                                ))}
+                              </div>
+                              {values.contentsItemsOver1500 === "yes" && (
+                                <div className="overflow-hidden rounded-xl border border-border">
+                                  <div className="bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">Item 1</div>
+                                  <div className="grid grid-cols-1 md:grid-cols-2">
+                                    <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
+                                      <div className="text-sm font-medium text-foreground">Category</div>
+                                      <Select
+                                        value={values.contentsItemCategory}
+                                        onValueChange={(v) => form.setValue("contentsItemCategory", v)}
+                                      >
+                                        <SelectTrigger className="h-10">
+                                          <SelectValue placeholder="Select category" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="jewellery">Jewellery</SelectItem>
+                                          <SelectItem value="electronics">Electronics</SelectItem>
+                                          <SelectItem value="art">Art</SelectItem>
+                                          <SelectItem value="collectables">Collectables</SelectItem>
+                                          <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
+                                      <div className="text-sm font-medium text-foreground">Item Description</div>
+                                      <Input
+                                        value={values.contentsItemDescription ?? ""}
+                                        onChange={(e) => form.setValue("contentsItemDescription", e.target.value)}
+                                        className="h-10"
+                                      />
+                                    </div>
+                                    <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
+                                      <div className="text-sm font-medium text-foreground">Item Value</div>
+                                      <Input
+                                        value={values.contentsItemValue ?? ""}
+                                        onChange={(e) => form.setValue("contentsItemValue", e.target.value)}
+                                        className="h-10"
+                                        placeholder="£"
+                                      />
+                                    </div>
+                                    <div className="space-y-2 bg-[#FFFFFF] p-4">
+                                      <div className="text-sm font-medium text-foreground">Cover Type</div>
+                                      <Select
+                                        value={values.contentsItemCoverType}
+                                        onValueChange={(v) => form.setValue("contentsItemCoverType", v as any)}
+                                      >
+                                        <SelectTrigger className="h-10">
+                                          <SelectValue placeholder="Select cover type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="inside-home-only">Inside home only</SelectItem>
+                                          <SelectItem value="inside-and-outside-home">Inside and outside of home</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {showStep6ContentsBicycles && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="Would you like to cover any bicycles worth over £300?" />
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                  {["yes", "no"].map((opt) => (
+                                    <label key={opt} className={cn("flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40", values.contentsBicyclesOver300 === opt && "border-foreground bg-muted/40")}>
+                                      <input className="h-4 w-4" type="radio" name="contentsBicyclesOver300" checked={values.contentsBicyclesOver300 === opt} onChange={() => form.setValue("contentsBicyclesOver300", opt as any)} style={{ accentColor: "hsl(var(--foreground))" }} />
+                                      <span className="text-sm">{opt === "yes" ? "Yes" : "No"}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                                {values.contentsBicyclesOver300 === "yes" && (
+                                  <div className="overflow-hidden rounded-xl border border-border">
+                                    <div className="bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">Bike 1</div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2">
+                                      <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
+                                        <div className="text-sm font-medium text-foreground">Bicycle Value</div>
+                                        <Input
+                                          value={values.bicycleValue ?? ""}
+                                          onChange={(e) => form.setValue("bicycleValue", e.target.value)}
+                                          className="h-10"
+                                          placeholder="£"
+                                        />
+                                      </div>
+                                      <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
+                                        <div className="text-sm font-medium text-foreground">Bicycle Make</div>
+                                        <Input
+                                          value={values.bicycleMake ?? ""}
+                                          onChange={(e) => form.setValue("bicycleMake", e.target.value)}
+                                          className="h-10"
+                                        />
+                                      </div>
+                                      <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
+                                        <div className="text-sm font-medium text-foreground">Bicycle Model</div>
+                                        <Input
+                                          value={values.bicycleModel ?? ""}
+                                          onChange={(e) => form.setValue("bicycleModel", e.target.value)}
+                                          className="h-10"
+                                        />
+                                      </div>
+                                      <div className="space-y-2 bg-[#FFFFFF] p-4">
+                                        <div className="text-sm font-medium text-foreground">Where will you be riding?</div>
+                                        <Select
+                                          value={values.bicycleRidingArea}
+                                          onValueChange={(v) => form.setValue("bicycleRidingArea", v as any)}
+                                        >
+                                          <SelectTrigger className="h-10">
+                                            <SelectValue placeholder="Select where" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            <SelectItem value="uk-only">UK only</SelectItem>
+                                            <SelectItem value="worldwide">Worldwide</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {showStep6ContentsOtherValue && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="What is the value of all the other contents in your property that you haven't already told us about?" />
+                                <Input value={values.contentsOtherValue ?? ""} onChange={(e) => form.setValue("contentsOtherValue", e.target.value)} className="h-10" placeholder="£ 7000" />
+                              </div>
+                            )}
+
+                            {showStep6ContentsAccidentalDamage && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="Would you like to add cover for your contents for accidental damage caused by you or any family members permanently living with you?" />
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                  {[
+                                    { value: "yes-add", label: "Yes, add" },
+                                    { value: "decide-later", label: "No, I'll decide later" },
+                                  ].map((opt) => (
+                                    <label key={opt.value} className={cn("flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40", values.contentsAccidentalDamage === opt.value && "border-foreground bg-muted/40")}>
+                                      <input className="h-4 w-4" type="radio" name="contentsAccidentalDamage" checked={values.contentsAccidentalDamage === opt.value} onChange={() => form.setValue("contentsAccidentalDamage", opt.value as any)} style={{ accentColor: "hsl(var(--foreground))" }} />
+                                      <span className="text-sm">{opt.label}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {showStep6ContentsYearsInsured && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="How many years have you continuously held home contents insurance in your name?" />
+                                <Input value={values.contentsYearsInsured ?? ""} onChange={(e) => form.setValue("contentsYearsInsured", e.target.value)} className="h-10" />
+                              </div>
+                            )}
+
+                            {showStep6ContentsNoClaims && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="How many years no claims discount do you have on contents?" />
+                                <Input value={values.contentsNoClaimsDiscount ?? ""} onChange={(e) => form.setValue("contentsNoClaimsDiscount", e.target.value)} className="h-10" />
+                              </div>
+                            )}
+
+                            {showStep6ContentsAwayFromHome && (
+                              <div className="space-y-2">
+                                <InlineLabelWithInfo label="Would you like cover for your belongings when you are away from your home?" />
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                  {["yes", "no"].map((opt) => (
+                                    <label key={opt} className={cn("flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40", values.contentsAwayFromHome === opt && "border-foreground bg-muted/40")}>
+                                      <input className="h-4 w-4" type="radio" name="contentsAwayFromHome" checked={values.contentsAwayFromHome === opt} onChange={() => form.setValue("contentsAwayFromHome", opt as any)} style={{ accentColor: "hsl(var(--foreground))" }} />
+                                      <span className="text-sm">{opt === "yes" ? "Yes" : "No"}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {showStep6Addons && (
+                          <div className="space-y-4 border-t border-border pt-6">
+                            <div className="text-[18px] font-semibold text-foreground">Addons</div>
+                            <div className="space-y-2">
+                              <InlineLabelWithInfo label="Family legal protection (£17.99 per year)" />
+                              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                {[
+                                  { value: "yes-add", label: "Yes, add" },
+                                  { value: "decide-later", label: "No, I'll decide later" },
+                                ].map((opt) => (
+                                  <label key={opt.value} className={cn("flex min-h-[46px] cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-0 hover:bg-muted/40", values.addonFamilyLegalProtection === opt.value && "border-foreground bg-muted/40")}>
+                                    <input className="h-4 w-4" type="radio" name="addonFamilyLegalProtection" checked={values.addonFamilyLegalProtection === opt.value} onChange={() => form.setValue("addonFamilyLegalProtection", opt.value as any)} style={{ accentColor: "hsl(var(--foreground))" }} />
+                                    <span className="text-sm">{opt.label}</span>
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-end pt-2">
                       <div className="flex w-full items-center justify-between gap-3">
                         <Button
                           type="button"
                           variant="outline"
-                          className="border-border"
+                          className="h-9 border-border"
                           disabled={stepIndex === 0}
                           onClick={() => setStepIndex(0)}
                         >
                           Back
                         </Button>
-                        <Button type="submit" size="lg" disabled={!canContinue} className="min-w-24">
+                        <Button type="submit" disabled={!canContinue} className="h-9 min-w-24">
                           Next
                         </Button>
                       </div>
@@ -3165,7 +3817,7 @@ export function LettingWizardPage() {
             <div className="mt-4 flex flex-col gap-3">
               <Button
                 variant="outline"
-                className="w-full justify-center gap-2 border-border"
+                className="h-9 w-full justify-center gap-2 border-border"
                 onClick={() => {
                   setWizardMenuOpen(false)
                   setLoginOpen(true)
@@ -3176,7 +3828,7 @@ export function LettingWizardPage() {
               </Button>
               <Button
                 variant="outline"
-                className="w-full justify-center gap-2 border-border"
+                className="h-9 w-full justify-center gap-2 border-border"
                 onClick={() => {
                   setWizardMenuOpen(false)
                   openCreateAccountModal()
