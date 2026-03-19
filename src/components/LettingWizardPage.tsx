@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { ArrowLeft, ArrowRight, Check, Info, LogIn, Mailbox, Menu, ShieldCheck, ShieldPlus, UserPlus } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Image as ImageIcon, Info, LogIn, Mailbox, Menu, ShieldCheck, ShieldPlus, UserPlus } from "lucide-react"
 
 import { CreateAccountModal } from "@/components/CreateAccountModal"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
@@ -33,15 +33,28 @@ type LettingFormValues = {
   dobDay?: string
   dobMonth?: string
   dobYear?: string
-  maritalStatus?: "single" | "married" | "civil" | "cohabiting" | "divorced" | "widowed" | "separated"
+  maritalStatus?:
+    | "divorced"
+    | "married"
+    | "married-common-law"
+    | "widowed"
+    | "partnered-civil"
+    | "separated"
+    | "single"
+    | "partnered"
   marketingOptIn?: "yes" | "no"
   postcode?: string
   employmentStatus?: "employed" | "self-employed" | "retired" | "other"
   mainOccupation?: string
   businessType?: string
   workPattern?: "full-time" | "part-time"
+  hasAdditionalOccupation?: "yes" | "no"
+  additionalOccupation?: string
+  additionalOccupationBusinessType?: string
   expectedAdults?: string
   claimsLast5Years?: "yes" | "no"
+  claimType?: string
+  claimSettled?: "yes" | "no"
   additionalPolicyholders?: "yes" | "no"
 
   // Step 3: products
@@ -63,6 +76,47 @@ type LettingFormValues = {
   assumptionCompliesWithLocalAuthority?: boolean
   assumptionPermissionToAccessHistory?: boolean
   assumptionNoFalseStatements?: boolean
+
+  // Step 5: property details
+  propertyType?: "flat" | "house" | "townhouse" | "bungalow" | "other"
+  propertyDescription?: string
+  propertyListed?: "yes" | "no"
+  propertyFirePrecautions?: string[]
+  propertyUnoccupied?: "never" | "up-to-30" | "up-to-60" | "over-60"
+  propertyOwnLockableFinalDoors?: "yes" | "no"
+  propertyApprovedLocksFinalDoors?: "yes" | "no"
+  propertyHasPatioOrFrenchDoors?: "yes" | "no"
+  propertyPatioOrFrenchDoorsApprovedLocks?: "yes" | "no"
+  propertyHasKeyOperatedWindowLocks?: "yes" | "no"
+  propertyHasIntruderAlarm?: "yes" | "no"
+  propertyIntruderAlarmType?:
+    | "audible-only"
+    | "bt-abc"
+    | "bt-redcare"
+    | "central-station-direct-line"
+    | "nacoss-ssaib"
+    | "packnet"
+    | "not-covered"
+  propertyBedrooms?: string
+  propertyBathrooms?: string
+  propertyTotalRooms?: string
+  propertyFloors?: string
+  propertyYearBuilt?: string
+  propertyRoofMaterial?: "tile" | "slate" | "concrete" | "other"
+  propertyRoofFlatPercentage?:
+    | "0"
+    | "10"
+    | "20"
+    | "30"
+    | "40"
+    | "50"
+    | "60"
+    | "70"
+    | "80"
+    | "90"
+    | "100"
+  propertyWallMaterial?: "brick" | "stone" | "concrete" | "other"
+  propertyOccupiedNightHours?: "yes" | "no"
 }
 
 type HelpTopic =
@@ -145,6 +199,32 @@ function QuestionHeader({
             className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
             aria-label={`More info: ${label}`}
             onClick={onHelp}
+          >
+            <Info className="h-4 w-4" aria-hidden />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="left">More info</TooltipContent>
+      </Tooltip>
+    </div>
+  )
+}
+
+function InlineLabelWithInfo({
+  label,
+}: {
+  label: string
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-sm font-medium text-foreground">{label}</span>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
+            aria-label={`More info: ${label}`}
           >
             <Info className="h-4 w-4" aria-hidden />
           </Button>
@@ -284,6 +364,79 @@ export function LettingWizardPage() {
   const showShortTerm = stepIndex === 0 && values.propertyToInsure != null
   const showActivity = stepIndex === 0 && showShortTerm && values.shortTermBasis != null
   const showSharing = stepIndex === 0 && showActivity && values.activity != null
+  const showStep5PropertyDescription = stepIndex === 4 && values.propertyType != null
+  const showStep5PropertyListed =
+    showStep5PropertyDescription && (values.propertyDescription?.trim()?.length ?? 0) > 0
+  const showStep5RoofFlatPercentage = showStep5PropertyListed && values.propertyListed != null
+  const showStep5WallMaterial = showStep5RoofFlatPercentage && values.propertyRoofFlatPercentage != null
+  const showStep5RoofMaterial = showStep5WallMaterial && values.propertyWallMaterial != null
+  const showStep5Bedrooms = showStep5RoofMaterial && values.propertyRoofMaterial != null
+  const showStep5Bathrooms = showStep5Bedrooms && (values.propertyBedrooms?.trim()?.length ?? 0) > 0
+  const showStep5TotalRooms = showStep5Bathrooms && (values.propertyBathrooms?.trim()?.length ?? 0) > 0
+  const showStep5Floors = showStep5TotalRooms && (values.propertyTotalRooms?.trim()?.length ?? 0) > 0
+  const showStep5YearBuilt = showStep5Floors && (values.propertyFloors?.trim()?.length ?? 0) > 0
+  const showStep5OwnLockableDoors = showStep5YearBuilt && (values.propertyYearBuilt?.trim()?.length ?? 0) > 0
+  const showStep5ApprovedLocksFinalDoors =
+    showStep5OwnLockableDoors && values.propertyOwnLockableFinalDoors != null
+  const showStep5PatioFrenchDoors =
+    showStep5ApprovedLocksFinalDoors && values.propertyApprovedLocksFinalDoors != null
+  const showStep5PatioFrenchDoorsApprovedLocks =
+    showStep5PatioFrenchDoors && values.propertyHasPatioOrFrenchDoors != null
+  const showStep5KeyOperatedWindowLocks =
+    showStep5PatioFrenchDoorsApprovedLocks &&
+    values.propertyPatioOrFrenchDoorsApprovedLocks != null
+  const showStep5IntruderAlarm =
+    showStep5KeyOperatedWindowLocks && values.propertyHasKeyOperatedWindowLocks != null
+  const showStep5IntruderAlarmType =
+    showStep5IntruderAlarm && values.propertyHasIntruderAlarm === "yes"
+  const showStep5FirePrecautions =
+    showStep5IntruderAlarm &&
+    (values.propertyHasIntruderAlarm === "no" ||
+      (values.propertyHasIntruderAlarm === "yes" && values.propertyIntruderAlarmType != null))
+  const showStep5OccupiedNightHours =
+    showStep5FirePrecautions && (values.propertyFirePrecautions?.length ?? 0) > 0
+  const showStep5Unoccupied =
+    showStep5OccupiedNightHours && values.propertyOccupiedNightHours != null
+
+  const propertyTypeDescriptionSuffix =
+    values.propertyType === "house"
+      ? "house"
+      : values.propertyType === "bungalow"
+        ? "bungalow"
+        : values.propertyType === "townhouse"
+          ? "townhouse"
+          : values.propertyType === "flat"
+            ? "flat"
+            : values.propertyType === "other"
+              ? "property"
+              : "property"
+
+  useEffect(() => {
+    if (values.workPattern !== "part-time") {
+      form.setValue("hasAdditionalOccupation", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("additionalOccupation", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("additionalOccupationBusinessType", "", { shouldDirty: false, shouldTouch: false })
+      return
+    }
+
+    if (values.hasAdditionalOccupation !== "yes") {
+      form.setValue("additionalOccupation", "", { shouldDirty: false, shouldTouch: false })
+      form.setValue("additionalOccupationBusinessType", "", { shouldDirty: false, shouldTouch: false })
+    }
+  }, [form, values.hasAdditionalOccupation, values.workPattern])
+
+  useEffect(() => {
+    if (values.claimsLast5Years !== "yes") {
+      form.setValue("claimType", undefined, { shouldDirty: false, shouldTouch: false })
+      form.setValue("claimSettled", undefined, { shouldDirty: false, shouldTouch: false })
+    }
+  }, [form, values.claimsLast5Years])
+
+  useEffect(() => {
+    if (values.propertyHasIntruderAlarm !== "yes") {
+      form.setValue("propertyIntruderAlarmType", undefined, { shouldDirty: false, shouldTouch: false })
+    }
+  }, [form, values.propertyHasIntruderAlarm])
 
   // Ensure Step 4 statements are defaulted to "True" as soon as the UI appears.
   useEffect(() => {
@@ -362,12 +515,21 @@ export function LettingWizardPage() {
       (values.mainOccupation?.trim()?.length ?? 0) > 0 &&
       (values.businessType?.trim()?.length ?? 0) > 0 &&
       values.workPattern != null &&
+      (values.workPattern !== "part-time" ||
+        (values.hasAdditionalOccupation != null &&
+          (values.hasAdditionalOccupation === "no" ||
+            ((values.additionalOccupation?.trim()?.length ?? 0) > 0 &&
+              (values.additionalOccupationBusinessType?.trim()?.length ?? 0) > 0)))) &&
       (values.expectedAdults?.trim()?.length ?? 0) > 0 &&
       values.claimsLast5Years != null &&
+      (values.claimsLast5Years !== "yes" ||
+        ((values.claimType?.trim()?.length ?? 0) > 0 && values.claimSettled != null)) &&
       values.additionalPolicyholders != null
     )
   }, [
     values.additionalPolicyholders,
+    values.claimSettled,
+    values.claimType,
     values.claimsLast5Years,
     values.dobDay,
     values.dobMonth,
@@ -376,7 +538,10 @@ export function LettingWizardPage() {
     values.employmentStatus,
     values.mainOccupation,
     values.businessType,
+    values.additionalOccupation,
+    values.additionalOccupationBusinessType,
     values.workPattern,
+    values.hasAdditionalOccupation,
     values.expectedAdults,
     values.firstName,
     values.lastName,
@@ -431,6 +596,32 @@ export function LettingWizardPage() {
     return values.assumptionNoFalseStatements === false
   }, [values])
 
+  const step5Complete = useMemo(() => {
+    return (
+      values.propertyType != null &&
+      values.propertyDescription != null &&
+      values.propertyListed != null &&
+      (values.propertyFirePrecautions?.length ?? 0) > 0 &&
+      values.propertyOccupiedNightHours != null &&
+      values.propertyUnoccupied != null &&
+      values.propertyOwnLockableFinalDoors != null &&
+      values.propertyApprovedLocksFinalDoors != null &&
+      values.propertyHasPatioOrFrenchDoors != null &&
+      values.propertyPatioOrFrenchDoorsApprovedLocks != null &&
+      values.propertyHasKeyOperatedWindowLocks != null &&
+      values.propertyHasIntruderAlarm != null &&
+      (values.propertyHasIntruderAlarm !== "yes" || values.propertyIntruderAlarmType != null) &&
+      (values.propertyBedrooms?.trim()?.length ?? 0) > 0 &&
+      (values.propertyBathrooms?.trim()?.length ?? 0) > 0 &&
+      (values.propertyTotalRooms?.trim()?.length ?? 0) > 0 &&
+      (values.propertyFloors?.trim()?.length ?? 0) > 0 &&
+      (values.propertyYearBuilt?.trim()?.length ?? 0) > 0 &&
+      values.propertyRoofMaterial != null &&
+      values.propertyRoofFlatPercentage != null &&
+      values.propertyWallMaterial != null
+    )
+  }, [values])
+
   const personalSectionComplete = useMemo(() => {
     return (
       values.title &&
@@ -470,10 +661,18 @@ export function LettingWizardPage() {
       !!values.employmentStatus &&
       (values.mainOccupation?.trim()?.length ?? 0) > 0 &&
       (values.businessType?.trim()?.length ?? 0) > 0 &&
-      !!values.workPattern,
+      !!values.workPattern &&
+      (values.workPattern !== "part-time" ||
+        (values.hasAdditionalOccupation != null &&
+          (values.hasAdditionalOccupation === "no" ||
+            ((values.additionalOccupation?.trim()?.length ?? 0) > 0 &&
+              (values.additionalOccupationBusinessType?.trim()?.length ?? 0) > 0)))),
     [
+      values.additionalOccupation,
+      values.additionalOccupationBusinessType,
       values.businessType,
       values.employmentStatus,
+      values.hasAdditionalOccupation,
       values.mainOccupation,
       values.workPattern,
     ]
@@ -485,8 +684,11 @@ export function LettingWizardPage() {
   )
 
   const claimsSectionComplete = useMemo(
-    () => !!values.claimsLast5Years,
-    [values.claimsLast5Years]
+    () =>
+      !!values.claimsLast5Years &&
+      (values.claimsLast5Years !== "yes" ||
+        ((values.claimType?.trim()?.length ?? 0) > 0 && !!values.claimSettled)),
+    [values.claimSettled, values.claimType, values.claimsLast5Years]
   )
 
   const completedSteps = useMemo(() => {
@@ -494,9 +696,10 @@ export function LettingWizardPage() {
       (step1Complete ? 1 : 0) +
       (step2Complete ? 1 : 0) +
       (step3Complete ? 1 : 0) +
-      (step4Complete ? 1 : 0)
+      (step4Complete ? 1 : 0) +
+      (step5Complete ? 1 : 0)
     )
-  }, [step1Complete, step2Complete, step3Complete, step4Complete])
+  }, [step1Complete, step2Complete, step3Complete, step4Complete, step5Complete])
 
   const overallProgress = useMemo(() => {
     return (completedSteps / 7) * 100
@@ -563,7 +766,31 @@ export function LettingWizardPage() {
     }
 
     if (stepIndex === 4) {
-      return 0
+      const intruderAlarmTypeTotal = values.propertyHasIntruderAlarm === "yes" ? 1 : 0
+      const total = 20 + intruderAlarmTypeTotal
+      const answered =
+        (values.propertyType ? 1 : 0) +
+        (values.propertyDescription ? 1 : 0) +
+        (values.propertyListed ? 1 : 0) +
+        ((values.propertyFirePrecautions?.length ?? 0) > 0 ? 1 : 0) +
+        (values.propertyOccupiedNightHours ? 1 : 0) +
+        (values.propertyUnoccupied ? 1 : 0) +
+        (values.propertyOwnLockableFinalDoors ? 1 : 0) +
+        (values.propertyApprovedLocksFinalDoors ? 1 : 0) +
+        (values.propertyHasPatioOrFrenchDoors ? 1 : 0) +
+        (values.propertyPatioOrFrenchDoorsApprovedLocks ? 1 : 0) +
+        (values.propertyHasKeyOperatedWindowLocks ? 1 : 0) +
+        (values.propertyHasIntruderAlarm ? 1 : 0) +
+        (values.propertyHasIntruderAlarm === "yes" && values.propertyIntruderAlarmType ? 1 : 0) +
+        ((values.propertyBedrooms?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+        ((values.propertyBathrooms?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+        ((values.propertyTotalRooms?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+        ((values.propertyFloors?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+        ((values.propertyYearBuilt?.trim()?.length ?? 0) > 0 ? 1 : 0) +
+        (values.propertyRoofMaterial ? 1 : 0) +
+        (values.propertyRoofFlatPercentage ? 1 : 0) +
+        (values.propertyWallMaterial ? 1 : 0)
+      return (answered / total) * 100
     }
 
     if (stepIndex === 1 && step2Complete) {
@@ -571,7 +798,14 @@ export function LettingWizardPage() {
     }
 
     // Step 2: treat each required input/question as one unit of progress.
-    const total = 19
+    const additionalOccupationTotal =
+      values.workPattern === "part-time"
+        ? values.hasAdditionalOccupation === "yes"
+          ? 3
+          : 1
+        : 0
+    const claimsFollowUpTotal = values.claimsLast5Years === "yes" ? 2 : 0
+    const total = 18 + additionalOccupationTotal + claimsFollowUpTotal
     const answered =
       (values.title ? 1 : 0) +
       ((values.firstName?.trim()?.length ?? 0) > 0 ? 1 : 0) +
@@ -588,8 +822,17 @@ export function LettingWizardPage() {
       ((values.mainOccupation?.trim()?.length ?? 0) > 0 ? 1 : 0) +
       ((values.businessType?.trim()?.length ?? 0) > 0 ? 1 : 0) +
       (values.workPattern ? 1 : 0) +
+      (values.workPattern === "part-time" ? (values.hasAdditionalOccupation ? 1 : 0) : 0) +
+      (values.workPattern === "part-time" && values.hasAdditionalOccupation === "yes"
+        ? ((values.additionalOccupation?.trim()?.length ?? 0) > 0 ? 1 : 0)
+        : 0) +
+      (values.workPattern === "part-time" && values.hasAdditionalOccupation === "yes"
+        ? ((values.additionalOccupationBusinessType?.trim()?.length ?? 0) > 0 ? 1 : 0)
+        : 0) +
       ((values.expectedAdults?.trim()?.length ?? 0) > 0 ? 1 : 0) +
       (values.claimsLast5Years ? 1 : 0) +
+      (values.claimsLast5Years === "yes" ? ((values.claimType?.trim()?.length ?? 0) > 0 ? 1 : 0) : 0) +
+      (values.claimsLast5Years === "yes" ? (values.claimSettled ? 1 : 0) : 0) +
       (values.additionalPolicyholders ? 1 : 0)
 
     return (answered / total) * 100
@@ -597,6 +840,8 @@ export function LettingWizardPage() {
     stepIndex,
     values.activity,
     values.additionalPolicyholders,
+    values.claimSettled,
+    values.claimType,
     values.claimsLast5Years,
     values.dobDay,
     values.dobMonth,
@@ -605,7 +850,10 @@ export function LettingWizardPage() {
     values.employmentStatus,
     values.mainOccupation,
     values.businessType,
+    values.additionalOccupation,
+    values.additionalOccupationBusinessType,
     values.workPattern,
+    values.hasAdditionalOccupation,
     values.expectedAdults,
     values.firstName,
     values.lastName,
@@ -613,6 +861,27 @@ export function LettingWizardPage() {
     values.marketingOptIn,
     values.mobile,
     values.postcode,
+    values.propertyApprovedLocksFinalDoors,
+    values.propertyBathrooms,
+    values.propertyBedrooms,
+    values.propertyDescription,
+    values.propertyFloors,
+    values.propertyHasIntruderAlarm,
+    values.propertyHasKeyOperatedWindowLocks,
+    values.propertyHasPatioOrFrenchDoors,
+    values.propertyFirePrecautions,
+    values.propertyOccupiedNightHours,
+    values.propertyIntruderAlarmType,
+    values.propertyListed,
+    values.propertyOwnLockableFinalDoors,
+    values.propertyPatioOrFrenchDoorsApprovedLocks,
+    values.propertyRoofFlatPercentage,
+    values.propertyRoofMaterial,
+    values.propertyTotalRooms,
+    values.propertyType,
+    values.propertyUnoccupied,
+    values.propertyWallMaterial,
+    values.propertyYearBuilt,
     values.propertyToInsure,
     values.selectedProduct,
     values.shortTermLettingDays,
@@ -627,8 +896,9 @@ export function LettingWizardPage() {
     if (stepIndex === 1) return step2Complete
     if (stepIndex === 2) return step3Complete
     if (stepIndex === 3) return step4Complete
+    if (stepIndex === 4) return step5Complete
     return false
-  }, [step1Complete, step2Complete, step3Complete, step4Complete, stepIndex])
+  }, [step1Complete, step2Complete, step3Complete, step4Complete, step5Complete, stepIndex])
 
   useEffect(() => {
     if (!helpOpen) setHelpTopic(null)
@@ -696,6 +966,8 @@ export function LettingWizardPage() {
                         ? step3Complete
                         : idx === 3
                           ? step4Complete
+                          : idx === 4
+                            ? step5Complete
                           : false
 
                 return (
@@ -860,7 +1132,7 @@ export function LettingWizardPage() {
                         ? "We have two options for your cover needs, all-in-one covers you for home and host insurance, while top-up is added to your exisiting home insurance plan and covers you for host insurance:"
                         : stepIndex === 3
                           ? "Please check the following statement(s) and change any that are false."
-                          : "Property details coming soon."}
+                      : "Tell us about your property and security details."}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -871,6 +1143,7 @@ export function LettingWizardPage() {
                       if (stepIndex === 1 && step2Complete) setStepIndex(2)
                       if (stepIndex === 2 && step3Complete) setStepIndex(3)
                       if (stepIndex === 3 && step4Complete) setStepIndex(4)
+                      if (stepIndex === 4 && step5Complete) window.location.hash = ""
                     })}
                     className="space-y-6 text-[14px]"
                   >
@@ -1348,13 +1621,14 @@ export function LettingWizardPage() {
                                         <SelectValue placeholder="Select" />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        <SelectItem value="single">Single</SelectItem>
-                                        <SelectItem value="married">Married</SelectItem>
-                                        <SelectItem value="civil">Civil partnership</SelectItem>
-                                        <SelectItem value="cohabiting">Cohabiting</SelectItem>
-                                        <SelectItem value="separated">Separated</SelectItem>
                                         <SelectItem value="divorced">Divorced</SelectItem>
+                                        <SelectItem value="married">Married</SelectItem>
+                                        <SelectItem value="married-common-law">Married - Common Law</SelectItem>
                                         <SelectItem value="widowed">Widowed</SelectItem>
+                                        <SelectItem value="partnered-civil">Partnered - Civil</SelectItem>
+                                        <SelectItem value="separated">Separated</SelectItem>
+                                        <SelectItem value="single">Single</SelectItem>
+                                        <SelectItem value="partnered">Partnered</SelectItem>
                                       </SelectContent>
                                     </Select>
                                   </FormItem>
@@ -1566,6 +1840,95 @@ export function LettingWizardPage() {
                                       </FormItem>
                                     )}
                                   />
+
+                                  {values.workPattern === "part-time" && (
+                                    <FormField
+                                      control={form.control}
+                                      name="hasAdditionalOccupation"
+                                      render={({ field }) => (
+                                        <FormItem className="space-y-2">
+                                          <div className="text-sm text-foreground font-medium">
+                                            Do you have an additional occupation?
+                                          </div>
+                                          <FormControl>
+                                            <RadioGroup
+                                              onValueChange={field.onChange}
+                                              value={field.value}
+                                              className="grid grid-cols-1 gap-2 md:grid-cols-2"
+                                            >
+                                              {[
+                                                { value: "yes", label: "Yes" },
+                                                { value: "no", label: "No" },
+                                              ].map((opt) => (
+                                                <label
+                                                  key={opt.value}
+                                                  className={cn(
+                                                    "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                                    field.value === opt.value && "border-foreground bg-muted/40"
+                                                  )}
+                                                >
+                                                  <RadioGroupItem value={opt.value} />
+                                                  <span className="text-sm">{opt.label}</span>
+                                                </label>
+                                              ))}
+                                            </RadioGroup>
+                                          </FormControl>
+                                        </FormItem>
+                                      )}
+                                    />
+                                  )}
+
+                                  {values.workPattern === "part-time" && values.hasAdditionalOccupation === "yes" && (
+                                    <>
+                                      <FormField
+                                        control={form.control}
+                                        name="additionalOccupation"
+                                        render={({ field }) => (
+                                          <FormItem className="space-y-2">
+                                            <div className="flex items-center justify-between gap-3">
+                                              <div className="text-sm text-foreground font-medium">
+                                                What is your additional occupation?
+                                              </div>
+                                              <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                  <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
+                                                    aria-label="Additional occupation help"
+                                                  >
+                                                    <Info className="h-4 w-4" aria-hidden />
+                                                  </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent side="top" className="max-w-xs text-xs leading-relaxed">
+                                                  Please type the first few letters of the occupation and we will search for the closest match. Avoid using abbreviations, jargon, and slang. If your specific occupation is not listed, please choose the closest match.
+                                                </TooltipContent>
+                                              </Tooltip>
+                                            </div>
+                                            <FormControl>
+                                              <Input {...field} />
+                                            </FormControl>
+                                          </FormItem>
+                                        )}
+                                      />
+
+                                      <FormField
+                                        control={form.control}
+                                        name="additionalOccupationBusinessType"
+                                        render={({ field }) => (
+                                          <FormItem className="space-y-2">
+                                            <div className="text-sm text-foreground font-medium">
+                                              What type of business is your additional occupation?
+                                            </div>
+                                            <FormControl>
+                                              <Input {...field} />
+                                            </FormControl>
+                                          </FormItem>
+                                        )}
+                                      />
+                                    </>
+                                  )}
                                 </>
                               )}
                             </div>
@@ -1577,18 +1940,17 @@ export function LettingWizardPage() {
                             <div
                               className="text-sm font-semibold text-foreground"
                             >
-                              Guests
+                              Residents
                             </div>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                              How many adults normally live at the property / What is the expected average number of adults who stay at the property at any one time?
+                            </p>
                             <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                               <FormField
                                 control={form.control}
                                 name="expectedAdults"
                                 render={({ field }) => (
                                   <FormItem className="space-y-2 md:col-span-2">
-                                    <div className="text-sm font-medium text-foreground">
-                                      What is the expected average number of adults who stay at the property at any one
-                                      time?
-                                    </div>
                                     <FormControl>
                                       <Input inputMode="numeric" {...field} />
                                     </FormControl>
@@ -1610,7 +1972,7 @@ export function LettingWizardPage() {
                               Claims
                             </div>
                             <p className="mt-1 text-sm text-muted-foreground">
-                              Have you, or any additional policyholders, had any claims in the last 5 years?
+                              Have you or anyone who normally lives with you, suffered any loss, damage or liability anywhere during the last five years, whether insured or not?
                             </p>
                             <div className="mt-4">
                               <FormField
@@ -1647,6 +2009,99 @@ export function LettingWizardPage() {
                                   </FormItem>
                                 )}
                               />
+
+                              {values.claimsLast5Years === "yes" && (
+                                <div className="mt-4 space-y-4">
+                                  <FormField
+                                    control={form.control}
+                                    name="claimType"
+                                    render={({ field }) => (
+                                      <FormItem className="space-y-2">
+                                        <div className="text-sm font-medium text-foreground">Claim type</div>
+                                        <Select value={field.value} onValueChange={field.onChange}>
+                                          <SelectTrigger className="h-10">
+                                            <SelectValue placeholder="Select claim type" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            <SelectItem value="accidental-damage">Accidental Damage</SelectItem>
+                                            <SelectItem value="accidental-loss">Accidental Loss</SelectItem>
+                                            <SelectItem value="aerials-and-masts">Aerials And Masts</SelectItem>
+                                            <SelectItem value="aircraft-and-other-aerial-devices">Aircraft And Other Aerial Devices</SelectItem>
+                                            <SelectItem value="burst-pipes">Burst Pipes</SelectItem>
+                                            <SelectItem value="escape-of-oil">Escape Of Oil</SelectItem>
+                                            <SelectItem value="escape-of-water">Escape Of Water</SelectItem>
+                                            <SelectItem value="explosion">Explosion</SelectItem>
+                                            <SelectItem value="falling-trees">Falling Trees</SelectItem>
+                                            <SelectItem value="fire">Fire</SelectItem>
+                                            <SelectItem value="fire-arson">Fire (Arson)</SelectItem>
+                                            <SelectItem value="flood">Flood</SelectItem>
+                                            <SelectItem value="freezer-contents">Freezer Contents</SelectItem>
+                                            <SelectItem value="impact">Impact</SelectItem>
+                                            <SelectItem value="liability">Liability</SelectItem>
+                                            <SelectItem value="lightning">Lightning</SelectItem>
+                                            <SelectItem value="loss-of-currency-credit-cards">Loss of Currency/Credit Cards</SelectItem>
+                                            <SelectItem value="malicious-damage">Malicious Damage</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                            <SelectItem value="personal-injury">Personal Injury</SelectItem>
+                                            <SelectItem value="replacement-of-locks">Replacement Of Locks</SelectItem>
+                                            <SelectItem value="riot">Riot</SelectItem>
+                                            <SelectItem value="sanitary-ware">Sanitary Ware</SelectItem>
+                                            <SelectItem value="smoke">Smoke</SelectItem>
+                                            <SelectItem value="storm">Storm</SelectItem>
+                                            <SelectItem value="subsidence-ground-heave-landslip">Subsidence, Ground Heave, Landslip</SelectItem>
+                                            <SelectItem value="subterranean-fire">Subterranean Fire</SelectItem>
+                                            <SelectItem value="theft-or-attempted-theft">Theft Or Attempted Theft</SelectItem>
+                                            <SelectItem value="trace-and-access">Trace and Access</SelectItem>
+                                            <SelectItem value="underground-services">Underground Services</SelectItem>
+                                            <SelectItem value="vandalism">Vandalism</SelectItem>
+                                            <SelectItem value="weight-of-snow">Weight Of Snow</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </FormItem>
+                                    )}
+                                  />
+
+                                  {values.claimType && (
+                                    <FormField
+                                      control={form.control}
+                                      name="claimSettled"
+                                      render={({ field }) => (
+                                        <FormItem className="space-y-2">
+                                          <div className="text-sm text-foreground font-medium">
+                                            Has the claim been settled?
+                                          </div>
+                                          <FormControl>
+                                            <RadioGroup
+                                              onValueChange={field.onChange}
+                                              value={field.value}
+                                              className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+                                            >
+                                              <label
+                                                className={cn(
+                                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                                  field.value === "yes" && "border-foreground bg-muted/40"
+                                                )}
+                                              >
+                                                <RadioGroupItem value="yes" />
+                                                <span className="text-sm">Yes</span>
+                                              </label>
+                                              <label
+                                                className={cn(
+                                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                                  field.value === "no" && "border-foreground bg-muted/40"
+                                                )}
+                                              >
+                                                <RadioGroupItem value="no" />
+                                                <span className="text-sm">No</span>
+                                              </label>
+                                            </RadioGroup>
+                                          </FormControl>
+                                        </FormItem>
+                                      )}
+                                    />
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}
@@ -1659,7 +2114,7 @@ export function LettingWizardPage() {
                               Additional policyholders
                             </div>
                             <p className="mt-1 text-sm text-muted-foreground">
-                              Do you wish to add any additional policyholders?
+                              Do you wish to add an additional policyholder?
                             </p>
                             <div className="mt-4">
                               <FormField
@@ -2065,13 +2520,613 @@ export function LettingWizardPage() {
                     )}
 
                     {stepIndex === 4 && (
-                      <div className="rounded-xl border border-border bg-white p-4">
-                        <div className="text-sm font-semibold text-foreground">
-                          Property details
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">Property type</div>
+                          <div className="grid grid-cols-1 gap-3">
+                            {[
+                              { value: "flat", label: "Flat" },
+                              { value: "house", label: "House" },
+                              { value: "townhouse", label: "Townhouse" },
+                              { value: "bungalow", label: "Bungalow" },
+                              { value: "other", label: "Other" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyType === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyType"
+                                  checked={values.propertyType === opt.value}
+                                    onChange={() => {
+                                      form.setValue("propertyType", opt.value as any)
+                                      form.setValue("propertyDescription", undefined)
+                                      form.setValue("propertyListed", undefined)
+                                      form.setValue("propertyRoofFlatPercentage", undefined)
+                                      form.setValue("propertyWallMaterial", undefined)
+                                      form.setValue("propertyRoofMaterial", undefined)
+                                      form.setValue("propertyBedrooms", "")
+                                      form.setValue("propertyBathrooms", "")
+                                      form.setValue("propertyTotalRooms", "")
+                                      form.setValue("propertyFloors", "")
+                                      form.setValue("propertyYearBuilt", "")
+                                      form.setValue("propertyOwnLockableFinalDoors", undefined)
+                                      form.setValue("propertyApprovedLocksFinalDoors", undefined)
+                                      form.setValue("propertyHasPatioOrFrenchDoors", undefined)
+                                      form.setValue("propertyPatioOrFrenchDoorsApprovedLocks", undefined)
+                                      form.setValue("propertyHasKeyOperatedWindowLocks", undefined)
+                                      form.setValue("propertyHasIntruderAlarm", undefined)
+                                      form.setValue("propertyIntruderAlarmType", undefined)
+                                      form.setValue("propertyFirePrecautions", [])
+                                      form.setValue("propertyOccupiedNightHours", undefined)
+                                      form.setValue("propertyUnoccupied", undefined)
+                                    }}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
                         </div>
-                        <p className="mt-2 text-sm text-muted-foreground">
-                          This step is coming soon.
-                        </p>
+
+                        {showStep5PropertyDescription && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">
+                            Select the best description of your property:
+                          </div>
+                          <Select
+                            value={values.propertyDescription}
+                            onValueChange={(v) => form.setValue("propertyDescription", v as any)}
+                          >
+                            <SelectTrigger className="h-11">
+                              <SelectValue placeholder="Select property description" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {values.propertyType === "flat" ? (
+                                <>
+                                  <SelectItem value="flat">Flat</SelectItem>
+                                  <SelectItem value="apartment">Apartment</SelectItem>
+                                </>
+                              ) : values.propertyType === "other" ? (
+                                <SelectItem value="other">Other</SelectItem>
+                              ) : (
+                                <>
+                                  <SelectItem value={`detached-${propertyTypeDescriptionSuffix}`}>
+                                    Detached {propertyTypeDescriptionSuffix}
+                                  </SelectItem>
+                                  <SelectItem value={`semi-detached-${propertyTypeDescriptionSuffix}`}>
+                                    Semi-detached {propertyTypeDescriptionSuffix}
+                                  </SelectItem>
+                                  <SelectItem value={`mid-terraced-${propertyTypeDescriptionSuffix}`}>
+                                    Mid-terraced {propertyTypeDescriptionSuffix}
+                                  </SelectItem>
+                                  <SelectItem value={`end-terraced-${propertyTypeDescriptionSuffix}`}>
+                                    End-terraced {propertyTypeDescriptionSuffix}
+                                  </SelectItem>
+                                </>
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        )}
+
+                        {showStep5PropertyListed && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">Is your property listed?</div>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyListed === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyListed"
+                                  checked={values.propertyListed === opt.value}
+                                  onChange={() => form.setValue("propertyListed", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5RoofFlatPercentage && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="What percentage of your roof is flat?" />
+                          <Select
+                            value={values.propertyRoofFlatPercentage}
+                            onValueChange={(v) => form.setValue("propertyRoofFlatPercentage", v as any)}
+                          >
+                            <SelectTrigger className="h-11">
+                              <SelectValue placeholder="Select roof flat percentage" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="0">0%</SelectItem>
+                              <SelectItem value="10">10%</SelectItem>
+                              <SelectItem value="20">20%</SelectItem>
+                              <SelectItem value="30">30%</SelectItem>
+                              <SelectItem value="40">40%</SelectItem>
+                              <SelectItem value="50">50%</SelectItem>
+                              <SelectItem value="60">60%</SelectItem>
+                              <SelectItem value="70">70%</SelectItem>
+                              <SelectItem value="80">80%</SelectItem>
+                              <SelectItem value="90">90%</SelectItem>
+                              <SelectItem value="100">100%</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        )}
+
+                        {showStep5WallMaterial && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="What material are the walls mainly built of?" />
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "brick", label: "Brick" },
+                              { value: "stone", label: "Stone" },
+                              { value: "concrete", label: "Concrete" },
+                              { value: "other", label: "Other" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "overflow-hidden rounded-xl border border-border bg-white hover:bg-muted/40",
+                                  values.propertyWallMaterial === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <div className="flex h-36 items-center justify-center border-b border-border bg-[#E5E7EB]">
+                                  <ImageIcon className="h-7 w-7 text-muted-foreground" aria-hidden />
+                                </div>
+                                <div className="flex cursor-pointer items-center gap-3 px-4 py-3">
+                                  <input
+                                    className="h-4 w-4"
+                                    type="radio"
+                                    name="propertyWallMaterial"
+                                    checked={values.propertyWallMaterial === opt.value}
+                                    onChange={() => form.setValue("propertyWallMaterial", opt.value as any)}
+                                    style={{ accentColor: "hsl(var(--foreground))" }}
+                                  />
+                                  <span className="text-sm">{opt.label}</span>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5RoofMaterial && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="What material is the roof mainly built of?" />
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "tile", label: "Tile" },
+                              { value: "slate", label: "Slate" },
+                              { value: "concrete", label: "Concrete" },
+                              { value: "other", label: "Other" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "overflow-hidden rounded-xl border border-border bg-white hover:bg-muted/40",
+                                  values.propertyRoofMaterial === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <div className="flex h-36 items-center justify-center border-b border-border bg-[#E5E7EB]">
+                                  <ImageIcon className="h-7 w-7 text-muted-foreground" aria-hidden />
+                                </div>
+                                <div className="flex cursor-pointer items-center gap-3 px-4 py-3">
+                                  <input
+                                    className="h-4 w-4"
+                                    type="radio"
+                                    name="propertyRoofMaterial"
+                                    checked={values.propertyRoofMaterial === opt.value}
+                                    onChange={() => form.setValue("propertyRoofMaterial", opt.value as any)}
+                                    style={{ accentColor: "hsl(var(--foreground))" }}
+                                  />
+                                  <span className="text-sm">{opt.label}</span>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5Bedrooms && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Number of bedrooms" />
+                          <Input
+                            value={values.propertyBedrooms ?? ""}
+                            onChange={(e) => form.setValue("propertyBedrooms", e.target.value)}
+                            className="h-11"
+                            inputMode="numeric"
+                            placeholder="e.g. 2"
+                          />
+                        </div>
+                        )}
+
+                        {showStep5Bathrooms && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Number of bathrooms" />
+                          <Input
+                            value={values.propertyBathrooms ?? ""}
+                            onChange={(e) => form.setValue("propertyBathrooms", e.target.value)}
+                            className="h-11"
+                            inputMode="numeric"
+                            placeholder="e.g. 1"
+                          />
+                        </div>
+                        )}
+
+                        {showStep5TotalRooms && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Total number of rooms" />
+                          <Input
+                            value={values.propertyTotalRooms ?? ""}
+                            onChange={(e) => form.setValue("propertyTotalRooms", e.target.value)}
+                            className="h-11"
+                            inputMode="numeric"
+                            placeholder="e.g. 5"
+                          />
+                        </div>
+                        )}
+
+                        {showStep5Floors && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">Number of floors</div>
+                          <Input
+                            value={values.propertyFloors ?? ""}
+                            onChange={(e) => form.setValue("propertyFloors", e.target.value)}
+                            className="h-11"
+                            inputMode="numeric"
+                            placeholder="e.g. 1"
+                          />
+                        </div>
+                        )}
+
+                        {showStep5YearBuilt && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="To the best of your knowledge, in what year was the property built?" />
+                          <Input
+                            value={values.propertyYearBuilt ?? ""}
+                            onChange={(e) => form.setValue("propertyYearBuilt", e.target.value)}
+                            className="h-11"
+                            inputMode="numeric"
+                            placeholder="e.g. 2025"
+                          />
+                        </div>
+                        )}
+
+                        {showStep5OwnLockableDoors && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">
+                            Does the property have its own lockable front, back, and any other final exit doors?
+                          </div>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyOwnLockableFinalDoors === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyOwnLockableFinalDoors"
+                                  checked={values.propertyOwnLockableFinalDoors === opt.value}
+                                  onChange={() => form.setValue("propertyOwnLockableFinalDoors", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5ApprovedLocksFinalDoors && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Does the property have approved locks on all final exit doors?" />
+                          <p className="text-xs italic text-muted-foreground">
+                            What do we mean by approved locks? Click on the info button to learn more.
+                          </p>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyApprovedLocksFinalDoors === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyApprovedLocksFinalDoors"
+                                  checked={values.propertyApprovedLocksFinalDoors === opt.value}
+                                  onChange={() => form.setValue("propertyApprovedLocksFinalDoors", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5PatioFrenchDoors && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Does the property have patio or french doors?" />
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyHasPatioOrFrenchDoors === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyHasPatioOrFrenchDoors"
+                                  checked={values.propertyHasPatioOrFrenchDoors === opt.value}
+                                  onChange={() => form.setValue("propertyHasPatioOrFrenchDoors", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5PatioFrenchDoorsApprovedLocks && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Do the patio or french doors have approved locks?" />
+                          <p className="text-xs italic text-muted-foreground">
+                            What do we mean by approved locks? Click on the info button to learn more.
+                          </p>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyPatioOrFrenchDoorsApprovedLocks === opt.value &&
+                                    "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyPatioOrFrenchDoorsApprovedLocks"
+                                  checked={values.propertyPatioOrFrenchDoorsApprovedLocks === opt.value}
+                                  onChange={() =>
+                                    form.setValue("propertyPatioOrFrenchDoorsApprovedLocks", opt.value as any)
+                                  }
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5KeyOperatedWindowLocks && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Are there key operated locks on all accessible windows?" />
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyHasKeyOperatedWindowLocks === opt.value &&
+                                    "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyHasKeyOperatedWindowLocks"
+                                  checked={values.propertyHasKeyOperatedWindowLocks === opt.value}
+                                  onChange={() => form.setValue("propertyHasKeyOperatedWindowLocks", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5IntruderAlarm && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">Is the property fitted with an intruder alarm?</div>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyHasIntruderAlarm === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyHasIntruderAlarm"
+                                  checked={values.propertyHasIntruderAlarm === opt.value}
+                                  onChange={() => form.setValue("propertyHasIntruderAlarm", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5IntruderAlarmType && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">What type of intruder alarm is fitted?</div>
+                          <Select
+                            value={values.propertyIntruderAlarmType}
+                            onValueChange={(v) => form.setValue("propertyIntruderAlarmType", v as any)}
+                          >
+                            <SelectTrigger className="h-11">
+                              <SelectValue placeholder="Select alarm type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="audible-only">Audible Only</SelectItem>
+                              <SelectItem value="bt-abc">BT ABC</SelectItem>
+                              <SelectItem value="bt-redcare">BT Redcare</SelectItem>
+                              <SelectItem value="central-station-direct-line">Central Station Direct Line</SelectItem>
+                              <SelectItem value="nacoss-ssaib">NACOSS/SSAIB</SelectItem>
+                              <SelectItem value="packnet">Packnet</SelectItem>
+                              <SelectItem value="not-covered">Not Covered By Any Other Item On The List</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        )}
+
+                        {showStep5FirePrecautions && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">What fire precautions do you have in place?</div>
+                          <p className="text-xs italic text-muted-foreground">Please select all that apply</p>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "smoke-alarm", label: "Smoke Alarm" },
+                              { value: "automatic-fire-alarm", label: "Automatic Fire Alarm" },
+                              { value: "fire-blanket", label: "Fire Blanket" },
+                              { value: "fire-extinguisher", label: "Fire Extinguisher" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  (values.propertyFirePrecautions ?? []).includes(opt.value) &&
+                                    "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="checkbox"
+                                  name="propertyFirePrecautions"
+                                  checked={(values.propertyFirePrecautions ?? []).includes(opt.value)}
+                                  onChange={(e) => {
+                                    const current = values.propertyFirePrecautions ?? []
+                                    const next = e.target.checked
+                                      ? [...current, opt.value]
+                                      : current.filter((v) => v !== opt.value)
+                                    form.setValue("propertyFirePrecautions", next)
+                                  }}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5OccupiedNightHours && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-foreground">Is the property occupied during night hours?</div>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {[
+                              { value: "yes", label: "Yes" },
+                              { value: "no", label: "No" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyOccupiedNightHours === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyOccupiedNightHours"
+                                  checked={values.propertyOccupiedNightHours === opt.value}
+                                  onChange={() => form.setValue("propertyOccupiedNightHours", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
+
+                        {showStep5Unoccupied && (
+                        <div className="space-y-2">
+                          <InlineLabelWithInfo label="Is the property left unoccupied at any time?" />
+                          <div className="grid grid-cols-1 gap-3">
+                            {[
+                              { value: "never", label: "Never" },
+                              { value: "up-to-30", label: "Up to 30 days in a row each year" },
+                              { value: "up-to-60", label: "Up to 60 days in a row each year" },
+                              { value: "over-60", label: "Over 60 days in a row each year" },
+                            ].map((opt) => (
+                              <label
+                                key={opt.value}
+                                className={cn(
+                                  "flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 hover:bg-muted/40",
+                                  values.propertyUnoccupied === opt.value && "border-foreground bg-muted/40"
+                                )}
+                              >
+                                <input
+                                  className="h-4 w-4"
+                                  type="radio"
+                                  name="propertyUnoccupied"
+                                  checked={values.propertyUnoccupied === opt.value}
+                                  onChange={() => form.setValue("propertyUnoccupied", opt.value as any)}
+                                  style={{ accentColor: "hsl(var(--foreground))" }}
+                                />
+                                <span className="text-sm">{opt.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        )}
                       </div>
                     )}
 
