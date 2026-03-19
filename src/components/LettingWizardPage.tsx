@@ -2494,8 +2494,7 @@ export function LettingWizardPage() {
 
                     {stepIndex === 2 && (
                       <div className="space-y-6">
-                        <div className="grid grid-cols-1 gap-4 items-stretch lg:grid-cols-2">
-                          <div className="lg:col-span-2 grid grid-cols-1 gap-4 items-stretch lg:grid-cols-2">
+                        <div className="rounded-xl border border-border bg-[#FCFCFC] p-4 grid grid-cols-1 gap-4 items-stretch lg:grid-cols-2">
                               <label
                                 className={cn(
                                 "relative flex h-full cursor-pointer flex-col gap-3 rounded-xl border border-border bg-white px-4 pt-4 pb-4 transition-colors",
@@ -2553,8 +2552,8 @@ export function LettingWizardPage() {
                                       "Includes additional cover for damage and theft",
                                     ].map((text) => (
                                       <li key={text} className="flex items-start gap-3 text-sm text-muted-foreground">
-                                        <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#000000]">
-                                          <Check className="h-3.5 w-3.5 text-white" aria-hidden />
+                                        <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full border border-[#000000] bg-white">
+                                          <Check className="h-3.5 w-3.5 text-[#000000]" aria-hidden />
                                         </span>
                                         <span>{text}</span>
                                       </li>
@@ -2643,8 +2642,8 @@ export function LettingWizardPage() {
                                       "Trusted by our customers and on hand to help",
                                     ].map((text) => (
                                       <li key={text} className="flex items-start gap-3 text-sm text-muted-foreground">
-                                        <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#000000]">
-                                          <Check className="h-3.5 w-3.5 text-white" aria-hidden />
+                                        <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full border border-[#000000] bg-white">
+                                          <Check className="h-3.5 w-3.5 text-[#000000]" aria-hidden />
                                         </span>
                                         <span>{text}</span>
                                       </li>
@@ -2673,7 +2672,6 @@ export function LettingWizardPage() {
                                   onChange={() => form.setValue("selectedProduct", "top-up")}
                                 />
                               </label>
-                          </div>
                         </div>
 
                         {values.selectedProduct && (
