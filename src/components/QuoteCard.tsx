@@ -329,7 +329,7 @@ export function QuoteCard({
                   <span
                     className={
                       legalCover
-                        ? "inline-flex items-center gap-1 rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
+                        ? "inline-flex items-center gap-1 rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-[#1E1E1E]"
                         : "rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground"
                     }
                   >
@@ -399,7 +399,7 @@ export function QuoteCard({
                   <span
                     className={
                       homeEmergency
-                        ? "inline-flex items-center gap-1 rounded-md border border-transparent bg-button px-2 py-0.5 text-xs font-medium text-white"
+                        ? "inline-flex items-center gap-1 rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-[#1E1E1E]"
                         : "rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-xs font-medium text-muted-foreground"
                     }
                   >

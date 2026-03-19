@@ -10,18 +10,26 @@ import { Label } from "@/components/ui/label"
 import { Navbar } from "@/components/Navbar"
 import confetti from "canvas-confetti"
 import { FileText, KeyRound, Mail, Shield, Zap } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 interface PurchaseConfirmedProps {
   onSkip?: () => void
 }
 
+const CREATE_ACCOUNT_PREFILL_STORAGE_KEY = "quote-card:create-account-prefill"
+
+type CreateAccountPrefill = {
+  name?: string
+  email?: string
+  mobile?: string
+}
+
 /** Simple illustration of a prepopulated form (static, non-interactive). */
-function FormIllustration() {
+function FormIllustration({ prefill }: { prefill: CreateAccountPrefill }) {
   const rows = [
-    { label: "Full name", value: "John Smith" },
-    { label: "Email", value: "john.smith@example.com" },
-    { label: "Mobile", value: "07700 900123" },
+    { label: "Full name", value: prefill.name || "—" },
+    { label: "Email", value: prefill.email || "—" },
+    { label: "Mobile", value: prefill.mobile || "—" },
   ]
   return (
     <div
@@ -47,6 +55,8 @@ function FormIllustration() {
 }
 
 export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
+  const [prefill, setPrefill] = useState<CreateAccountPrefill>({})
+
   useEffect(() => {
     const fire = () => {
       confetti({
@@ -57,6 +67,20 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
     }
     const t = setTimeout(fire, 300)
     return () => clearTimeout(t)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const raw = window.localStorage.getItem(CREATE_ACCOUNT_PREFILL_STORAGE_KEY)
+    if (!raw) return
+
+    try {
+      const parsed = JSON.parse(raw) as CreateAccountPrefill
+      setPrefill(parsed ?? {})
+    } catch {
+      setPrefill({})
+    }
   }, [])
 
   return (
@@ -83,7 +107,7 @@ export function PurchaseConfirmed({ onSkip }: PurchaseConfirmedProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <FormIllustration />
+            <FormIllustration prefill={prefill} />
 
             <div className="space-y-3">
               <Button variant="default" size="lg" className="w-full gap-1.5">

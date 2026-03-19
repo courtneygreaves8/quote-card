@@ -317,6 +317,12 @@ export function LettingWizardPage() {
     email?: string
     mobile?: string
   }>({})
+  const [additionalItems, setAdditionalItems] = useState<
+    Array<{ category: string; description: string; value: string; coverType: string }>
+  >([])
+  const [additionalBikes, setAdditionalBikes] = useState<
+    Array<{ value: string; make: string; model: string; ridingArea: string }>
+  >([])
   const [stepIndex, setStepIndex] = useState<0 | 1 | 2 | 3 | 4 | 5>(() => {
     if (typeof window === "undefined") return 0
     return window.location.hash === "#letting-about" ? 1 : 0
@@ -338,6 +344,31 @@ export function LettingWizardPage() {
     }
 
     setCreateAccountOpen(true)
+  }
+
+  const updateAdditionalItem = (
+    index: number,
+    patch: Partial<{ category: string; description: string; value: string; coverType: string }>
+  ) => {
+    setAdditionalItems((prev) => prev.map((item, idx) => (idx === index ? { ...item, ...patch } : item)))
+  }
+
+  const updateAdditionalBike = (
+    index: number,
+    patch: Partial<{ value: string; make: string; model: string; ridingArea: string }>
+  ) => {
+    setAdditionalBikes((prev) => prev.map((bike, idx) => (idx === index ? { ...bike, ...patch } : bike)))
+  }
+
+  const formatMoneyInput = (raw: string) => {
+    const digitsOnly = raw.replace(/[^\d]/g, "")
+    if (!digitsOnly) return ""
+
+    const n = Number.parseInt(digitsOnly, 10)
+    if (Number.isNaN(n)) return ""
+
+    const formatted = new Intl.NumberFormat("en-GB").format(n)
+    return `£${formatted}`
   }
 
   const mainScrollRef = useRef<HTMLElement | null>(null)
@@ -434,10 +465,8 @@ export function LettingWizardPage() {
     values.buildingsRebuildBand != null &&
     (values.buildingsRebuildBand !== "custom" ||
       (values.buildingsCustomAmount?.trim()?.length ?? 0) > 0)
-  const showStep6BuildingsYearsInsured =
-    showStep6BuildingsAccidentalDamage && values.buildingsAccidentalDamage != null
   const showStep6BuildingsNoClaims =
-    showStep6BuildingsYearsInsured && (values.buildingsYearsInsured?.trim()?.length ?? 0) > 0
+    showStep6BuildingsAccidentalDamage && values.buildingsAccidentalDamage != null
 
   const showStep6ContentsSection =
     showStep6CoverType &&
@@ -564,6 +593,7 @@ export function LettingWizardPage() {
       form.setValue("contentsItemDescription", "", { shouldDirty: false, shouldTouch: false })
       form.setValue("contentsItemValue", "", { shouldDirty: false, shouldTouch: false })
       form.setValue("contentsItemCoverType", undefined, { shouldDirty: false, shouldTouch: false })
+      setAdditionalItems([])
     }
   }, [form, values.contentsItemsOver1500])
 
@@ -573,6 +603,7 @@ export function LettingWizardPage() {
       form.setValue("bicycleMake", "", { shouldDirty: false, shouldTouch: false })
       form.setValue("bicycleModel", "", { shouldDirty: false, shouldTouch: false })
       form.setValue("bicycleRidingArea", undefined, { shouldDirty: false, shouldTouch: false })
+      setAdditionalBikes([])
     }
   }, [form, values.contentsBicyclesOver300])
 
@@ -773,7 +804,6 @@ export function LettingWizardPage() {
       (values.buildingsRebuildBand !== "custom" ||
         (values.buildingsCustomAmount?.trim()?.length ?? 0) > 0) &&
       values.buildingsAccidentalDamage != null &&
-      (values.buildingsYearsInsured?.trim()?.length ?? 0) > 0 &&
       (values.buildingsNoClaimsDiscount?.trim()?.length ?? 0) > 0
 
     const contentsComplete =
@@ -979,7 +1009,7 @@ export function LettingWizardPage() {
     if (stepIndex === 5) {
       const includeBuildings = values.coverType === "buildings" || values.coverType === "buildings-contents"
       const includeContents = values.coverType === "contents" || values.coverType === "buildings-contents"
-      const buildingsTotal = includeBuildings ? 5 : 0
+      const buildingsTotal = includeBuildings ? 4 : 0
       const highValueItemExtraTotal = includeContents && values.contentsItemsOver1500 === "yes" ? 4 : 0
       const bicycleExtraTotal = includeContents && values.contentsBicyclesOver300 === "yes" ? 4 : 0
       const contentsTotal = includeContents ? 7 + highValueItemExtraTotal + bicycleExtraTotal : 0
@@ -991,7 +1021,6 @@ export function LettingWizardPage() {
         (includeBuildings
           ? (values.buildingsRebuildBand ? 1 : 0) +
             (values.buildingsAccidentalDamage ? 1 : 0) +
-            ((values.buildingsYearsInsured?.trim()?.length ?? 0) > 0 ? 1 : 0) +
             ((values.buildingsNoClaimsDiscount?.trim()?.length ?? 0) > 0 ? 1 : 0) +
             (values.buildingsRebuildBand === "custom"
               ? ((values.buildingsCustomAmount?.trim()?.length ?? 0) > 0 ? 1 : 0)
@@ -1307,12 +1336,12 @@ export function LettingWizardPage() {
           className="min-w-0 min-h-0 flex-1 overflow-y-auto overscroll-y-contain"
           ref={mainScrollRef}
         >
-          <div className="sticky top-0 z-10 border-b border-border bg-white/95 relative">
+          <div className="sticky top-0 z-10 border-b border-border py-1.5 bg-white/95 relative">
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute right-4 top-2 h-8 w-8 sm:right-6"
+              className="absolute right-4 top-[calc(50%-6px)] h-8 w-8 -translate-y-1/2 sm:right-6"
               aria-label="Wizard menu"
               onClick={() => setWizardMenuOpen(true)}
             >
@@ -2472,7 +2501,7 @@ export function LettingWizardPage() {
                                     </div>
                                     <div className="flex flex-col">
                                       <div
-                                        className="text-sm font-semibold text-foreground"
+                                        className="text-[18px] font-semibold text-foreground"
                                       >
                                         All-in-one
                                       </div>
@@ -2492,34 +2521,41 @@ export function LettingWizardPage() {
                                 </div>
 
                                 <div className="px-0 py-0 border-0 bg-transparent">
-                                  <p className="text-sm text-muted-foreground">
+                                  <p className="text-sm leading-relaxed text-muted-foreground">
                                     All-in-one is home and host insurance that cover your building and/or
                                     contents, plus guest-related incidents.
                                   </p>
 
-                                  <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
-                                    <li>Tailor your full home insurance package your way</li>
-                                    <li>All the great benefits of our top-up cover</li>
-                                    <li>Includes additional cover for damage and theft</li>
+                                  <Separator className="my-4" />
+
+                                  <ul className="mt-0 w-full space-y-2">
+                                    {[
+                                      "Tailor your full home insurance package",
+                                      "All the great benefits of our top-up cover",
+                                      "Includes additional cover for damage and theft",
+                                    ].map((text) => (
+                                      <li key={text} className="flex items-start gap-3 text-sm text-muted-foreground">
+                                        <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#000000]">
+                                          <Check className="h-3.5 w-3.5 text-white" aria-hidden />
+                                        </span>
+                                        <span>{text}</span>
+                                      </li>
+                                    ))}
                                   </ul>
                                 </div>
 
-                                <button
+                                <Button
                                   type="button"
-                                  className={cn(
-                                    "mt-auto flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium mt-4",
-                                    values.selectedProduct === "all-in-one"
-                                      ? "border-foreground bg-foreground text-background hover:bg-foreground"
-                                      : "border-border bg-white text-foreground hover:bg-muted/40"
-                                  )}
+                                  className={cn("mt-auto mt-4 h-10 w-full rounded-xl text-sm font-medium", values.selectedProduct === "all-in-one" ? "bg-foreground text-background hover:bg-foreground" : "border border-border bg-white text-foreground hover:bg-muted/40")}
                                   onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()
                                     form.setValue("selectedProduct", "all-in-one")
                                   }}
                                 >
-                                  {values.selectedProduct === "all-in-one" ? "Selected" : "Select"}
-                                </button>
+                                  {values.selectedProduct === "all-in-one" ? "Selected Plan" : "Select Plan"}
+                                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                                </Button>
 
                                 {/* Hidden radio for accessibility */}
                                 <input
@@ -2555,7 +2591,7 @@ export function LettingWizardPage() {
                                     </div>
                                     <div className="flex flex-col">
                                       <div
-                                        className="text-sm font-semibold text-foreground"
+                                        className="text-[18px] font-semibold text-foreground"
                                       >
                                         Top-up
                                       </div>
@@ -2564,9 +2600,9 @@ export function LettingWizardPage() {
 
                                   <div
                                     className={cn(
-                                      "rounded-full border bg-white px-3 py-1 text-xs font-medium",
+                                      "rounded-full border bg-white px-3 py-1 text-xs font-semibold",
                                       values.selectedProduct === "top-up"
-                                        ? "border-border text-foreground"
+                                        ? "border-foreground text-foreground"
                                         : "border-border text-muted-foreground"
                                     )}
                                   >
@@ -2575,34 +2611,41 @@ export function LettingWizardPage() {
                                 </div>
 
                                 <div className="px-0 py-0 border-0 bg-transparent">
-                                  <p className="text-sm text-muted-foreground">
+                                  <p className="text-sm leading-relaxed text-muted-foreground">
                                     Top-up is host insurance that's applied to your existing home
                                     insurance to cover guest-related incidents.
                                   </p>
 
-                                  <ul className="mt-2 w-full list-disc space-y-1 pl-4 text-sm text-muted-foreground">
-                                    <li>Flexible cover to fit your sharing needs</li>
-                                    <li>Bespoke cover for guest damage and theft</li>
-                                    <li>Trusted by our customers and on hand to help</li>
+                                  <Separator className="my-4" />
+
+                                  <ul className="mt-0 w-full space-y-2">
+                                    {[
+                                      "Flexible cover to fit your sharing needs",
+                                      "Bespoke cover for guest damage and theft",
+                                      "Trusted by our customers and on hand to help",
+                                    ].map((text) => (
+                                      <li key={text} className="flex items-start gap-3 text-sm text-muted-foreground">
+                                        <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#000000]">
+                                          <Check className="h-3.5 w-3.5 text-white" aria-hidden />
+                                        </span>
+                                        <span>{text}</span>
+                                      </li>
+                                    ))}
                                   </ul>
                                 </div>
 
-                                <button
+                                <Button
                                   type="button"
-                                  className={cn(
-                                    "mt-auto flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium",
-                                    values.selectedProduct === "top-up"
-                                      ? "border-foreground bg-foreground text-background hover:bg-foreground"
-                                      : "border-border bg-white text-foreground hover:bg-muted/40"
-                                  )}
+                                  className={cn("mt-auto mt-4 h-10 w-full rounded-xl text-sm font-medium", values.selectedProduct === "top-up" ? "bg-foreground text-background hover:bg-foreground" : "border border-border bg-white text-foreground hover:bg-muted/40")}
                                   onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()
                                     form.setValue("selectedProduct", "top-up")
                                   }}
                                 >
-                                  {values.selectedProduct === "top-up" ? "Selected" : "Select"}
-                                </button>
+                                  {values.selectedProduct === "top-up" ? "Selected Plan" : "Select Plan"}
+                                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                                </Button>
 
                                 <input
                                   className="sr-only"
@@ -3427,7 +3470,7 @@ export function LettingWizardPage() {
                     {stepIndex === 5 && (
                       <div className="space-y-6">
                         <div className="space-y-2">
-                          <InlineLabelWithInfo label="What date would you like your cover to start?" />
+                          <div className="text-sm font-medium text-foreground">What date would you like your cover to start?</div>
                           <div className="relative">
                             <input
                               ref={coverDateInputRef}
@@ -3556,12 +3599,7 @@ export function LettingWizardPage() {
                               </div>
                             )}
 
-                            {showStep6BuildingsYearsInsured && (
-                              <div className="space-y-2">
-                                <InlineLabelWithInfo label="How many years have you continuously held home buildings insurance in your name?" />
-                                <Input value={values.buildingsYearsInsured ?? ""} onChange={(e) => form.setValue("buildingsYearsInsured", e.target.value)} className="h-10" />
-                              </div>
-                            )}
+                        
 
                             {showStep6BuildingsNoClaims && (
                               <div className="space-y-2">
@@ -3587,60 +3625,120 @@ export function LettingWizardPage() {
                                 ))}
                               </div>
                               {values.contentsItemsOver1500 === "yes" && (
-                                <div className="overflow-hidden rounded-xl border border-border">
-                                  <div className="bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">Item 1</div>
-                                  <div className="grid grid-cols-1 md:grid-cols-2">
-                                    <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
-                                      <div className="text-sm font-medium text-foreground">Category</div>
-                                      <Select
-                                        value={values.contentsItemCategory}
-                                        onValueChange={(v) => form.setValue("contentsItemCategory", v)}
-                                      >
-                                        <SelectTrigger className="h-10">
-                                          <SelectValue placeholder="Select category" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="jewellery">Jewellery</SelectItem>
-                                          <SelectItem value="electronics">Electronics</SelectItem>
-                                          <SelectItem value="art">Art</SelectItem>
-                                          <SelectItem value="collectables">Collectables</SelectItem>
-                                          <SelectItem value="other">Other</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                    </div>
-                                    <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
-                                      <div className="text-sm font-medium text-foreground">Item Description</div>
-                                      <Input
-                                        value={values.contentsItemDescription ?? ""}
-                                        onChange={(e) => form.setValue("contentsItemDescription", e.target.value)}
-                                        className="h-10"
-                                      />
-                                    </div>
-                                    <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
-                                      <div className="text-sm font-medium text-foreground">Item Value</div>
-                                      <Input
-                                        value={values.contentsItemValue ?? ""}
-                                        onChange={(e) => form.setValue("contentsItemValue", e.target.value)}
-                                        className="h-10"
-                                        placeholder="£"
-                                      />
-                                    </div>
-                                    <div className="space-y-2 bg-[#FFFFFF] p-4">
-                                      <div className="text-sm font-medium text-foreground">Cover Type</div>
-                                      <Select
-                                        value={values.contentsItemCoverType}
-                                        onValueChange={(v) => form.setValue("contentsItemCoverType", v as any)}
-                                      >
-                                        <SelectTrigger className="h-10">
-                                          <SelectValue placeholder="Select cover type" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="inside-home-only">Inside home only</SelectItem>
-                                          <SelectItem value="inside-and-outside-home">Inside and outside of home</SelectItem>
-                                        </SelectContent>
-                                      </Select>
+                                <div className="space-y-3">
+                                  <div className="overflow-hidden rounded-xl border border-border">
+                                    <div className="border-b border-border bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">Item 1</div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2">
+                                      <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
+                                        <div className="text-sm font-medium text-foreground">Category</div>
+                                        <Select
+                                          value={values.contentsItemCategory}
+                                          onValueChange={(v) => form.setValue("contentsItemCategory", v)}
+                                        >
+                                          <SelectTrigger className="h-10">
+                                            <SelectValue placeholder="Select category" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            <SelectItem value="jewellery">Jewellery</SelectItem>
+                                            <SelectItem value="electronics">Electronics</SelectItem>
+                                            <SelectItem value="art">Art</SelectItem>
+                                            <SelectItem value="collectables">Collectables</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
+                                      <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
+                                        <div className="text-sm font-medium text-foreground">Item Description</div>
+                                        <Input
+                                          value={values.contentsItemDescription ?? ""}
+                                          onChange={(e) => form.setValue("contentsItemDescription", e.target.value)}
+                                          className="h-10"
+                                        />
+                                      </div>
+                                      <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
+                                        <div className="text-sm font-medium text-foreground">Item Value</div>
+                                        <Input
+                                          value={values.contentsItemValue ?? ""}
+                                          onChange={(e) =>
+                                            form.setValue("contentsItemValue", formatMoneyInput(e.target.value))
+                                          }
+                                          className="h-10"
+                                          placeholder="£"
+                                        />
+                                      </div>
+                                      <div className="space-y-2 bg-[#FFFFFF] p-4">
+                                        <div className="text-sm font-medium text-foreground">Cover Type</div>
+                                        <Select
+                                          value={values.contentsItemCoverType}
+                                          onValueChange={(v) => form.setValue("contentsItemCoverType", v as any)}
+                                        >
+                                          <SelectTrigger className="h-10">
+                                            <SelectValue placeholder="Select cover type" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            <SelectItem value="inside-home-only">Inside home only</SelectItem>
+                                            <SelectItem value="inside-and-outside-home">Inside and outside of home</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
                                     </div>
                                   </div>
+                                  {additionalItems.map((item, idx) => (
+                                    <div key={`extra-item-${idx}`} className="overflow-hidden rounded-xl border border-border">
+                                      <div className="border-b border-border bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">
+                                        Item {idx + 2}
+                                      </div>
+                                      <div className="grid grid-cols-1 md:grid-cols-2">
+                                        <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
+                                          <div className="text-sm font-medium text-foreground">Category</div>
+                                          <Input value={item.category} onChange={(e) => updateAdditionalItem(idx, { category: e.target.value })} className="h-10" />
+                                        </div>
+                                        <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
+                                          <div className="text-sm font-medium text-foreground">Item Description</div>
+                                          <Input value={item.description} onChange={(e) => updateAdditionalItem(idx, { description: e.target.value })} className="h-10" />
+                                        </div>
+                                        <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
+                                          <div className="text-sm font-medium text-foreground">Item Value</div>
+                                          <Input
+                                            value={item.value}
+                                            onChange={(e) =>
+                                              updateAdditionalItem(idx, { value: formatMoneyInput(e.target.value) })
+                                            }
+                                            className="h-10"
+                                            placeholder="£"
+                                          />
+                                        </div>
+                                        <div className="space-y-2 bg-[#FFFFFF] p-4">
+                                          <div className="text-sm font-medium text-foreground">Cover Type</div>
+                                          <Select
+                                            value={item.coverType}
+                                            onValueChange={(v) => updateAdditionalItem(idx, { coverType: v })}
+                                          >
+                                            <SelectTrigger className="h-10">
+                                              <SelectValue placeholder="Select cover type" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectItem value="inside-home-only">Inside home only</SelectItem>
+                                              <SelectItem value="inside-and-outside-home">Inside and outside of home</SelectItem>
+                                            </SelectContent>
+                                          </Select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="h-9"
+                                    onClick={() =>
+                                      setAdditionalItems((prev) => [
+                                        ...prev,
+                                        { category: "", description: "", value: "", coverType: "" },
+                                      ])
+                                    }
+                                  >
+                                    Add another item
+                                  </Button>
                                 </div>
                               )}
                             </div>
@@ -3657,50 +3755,112 @@ export function LettingWizardPage() {
                                   ))}
                                 </div>
                                 {values.contentsBicyclesOver300 === "yes" && (
-                                  <div className="overflow-hidden rounded-xl border border-border">
-                                    <div className="bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">Bike 1</div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2">
-                                      <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
-                                        <div className="text-sm font-medium text-foreground">Bicycle Value</div>
-                                        <Input
-                                          value={values.bicycleValue ?? ""}
-                                          onChange={(e) => form.setValue("bicycleValue", e.target.value)}
-                                          className="h-10"
-                                          placeholder="£"
-                                        />
-                                      </div>
-                                      <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
-                                        <div className="text-sm font-medium text-foreground">Bicycle Make</div>
-                                        <Input
-                                          value={values.bicycleMake ?? ""}
-                                          onChange={(e) => form.setValue("bicycleMake", e.target.value)}
-                                          className="h-10"
-                                        />
-                                      </div>
-                                      <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
-                                        <div className="text-sm font-medium text-foreground">Bicycle Model</div>
-                                        <Input
-                                          value={values.bicycleModel ?? ""}
-                                          onChange={(e) => form.setValue("bicycleModel", e.target.value)}
-                                          className="h-10"
-                                        />
-                                      </div>
-                                      <div className="space-y-2 bg-[#FFFFFF] p-4">
-                                        <div className="text-sm font-medium text-foreground">Where will you be riding?</div>
-                                        <Select
-                                          value={values.bicycleRidingArea}
-                                          onValueChange={(v) => form.setValue("bicycleRidingArea", v as any)}
-                                        >
-                                          <SelectTrigger className="h-10">
-                                            <SelectValue placeholder="Select where" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                            <SelectItem value="uk-only">UK only</SelectItem>
-                                            <SelectItem value="worldwide">Worldwide</SelectItem>
-                                          </SelectContent>
-                                        </Select>
+                                  <div className="space-y-3">
+                                    <div className="overflow-hidden rounded-xl border border-border">
+                                      <div className="border-b border-border bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">Bike 1</div>
+                                      <div className="grid grid-cols-1 md:grid-cols-2">
+                                        <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
+                                          <div className="text-sm font-medium text-foreground">Bicycle Value</div>
+                                          <Input
+                                            value={values.bicycleValue ?? ""}
+                                            onChange={(e) =>
+                                              form.setValue("bicycleValue", formatMoneyInput(e.target.value))
+                                            }
+                                            className="h-10"
+                                            placeholder="£"
+                                          />
+                                        </div>
+                                        <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
+                                          <div className="text-sm font-medium text-foreground">Bicycle Make</div>
+                                          <Input
+                                            value={values.bicycleMake ?? ""}
+                                            onChange={(e) => form.setValue("bicycleMake", e.target.value)}
+                                            className="h-10"
+                                          />
+                                        </div>
+                                        <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
+                                          <div className="text-sm font-medium text-foreground">Bicycle Model</div>
+                                          <Input
+                                            value={values.bicycleModel ?? ""}
+                                            onChange={(e) => form.setValue("bicycleModel", e.target.value)}
+                                            className="h-10"
+                                          />
+                                        </div>
+                                        <div className="space-y-2 bg-[#FFFFFF] p-4">
+                                          <div className="text-sm font-medium text-foreground">Where will you be riding?</div>
+                                          <Select
+                                            value={values.bicycleRidingArea}
+                                            onValueChange={(v) => form.setValue("bicycleRidingArea", v as any)}
+                                          >
+                                            <SelectTrigger className="h-10">
+                                              <SelectValue placeholder="Select where" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectItem value="uk-only">UK only</SelectItem>
+                                              <SelectItem value="worldwide">Worldwide</SelectItem>
+                                            </SelectContent>
+                                          </Select>
+                                        </div>
                                       </div>
                                     </div>
+                                    {additionalBikes.map((bike, idx) => (
+                                      <div key={`extra-bike-${idx}`} className="overflow-hidden rounded-xl border border-border">
+                                        <div className="border-b border-border bg-muted/50 px-4 py-2 text-sm font-semibold text-foreground">
+                                          Bike {idx + 2}
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2">
+                                          <div className="space-y-2 border-b border-border bg-white p-4 md:border-r">
+                                            <div className="text-sm font-medium text-foreground">Bicycle Value</div>
+                                            <Input
+                                              value={bike.value}
+                                              onChange={(e) =>
+                                                updateAdditionalBike(idx, {
+                                                  value: formatMoneyInput(e.target.value),
+                                                })
+                                              }
+                                              className="h-10"
+                                              placeholder="£"
+                                            />
+                                          </div>
+                                          <div className="space-y-2 border-b border-border bg-[#FFFFFF] p-4">
+                                            <div className="text-sm font-medium text-foreground">Bicycle Make</div>
+                                            <Input value={bike.make} onChange={(e) => updateAdditionalBike(idx, { make: e.target.value })} className="h-10" />
+                                          </div>
+                                          <div className="space-y-2 border-b border-border bg-white p-4 md:border-b-0 md:border-r">
+                                            <div className="text-sm font-medium text-foreground">Bicycle Model</div>
+                                            <Input value={bike.model} onChange={(e) => updateAdditionalBike(idx, { model: e.target.value })} className="h-10" />
+                                          </div>
+                                          <div className="space-y-2 bg-[#FFFFFF] p-4">
+                                            <div className="text-sm font-medium text-foreground">Where will you be riding?</div>
+                                            <Select
+                                              value={bike.ridingArea}
+                                              onValueChange={(v) => updateAdditionalBike(idx, { ridingArea: v })}
+                                            >
+                                              <SelectTrigger className="h-10">
+                                                <SelectValue placeholder="Select where" />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                <SelectItem value="uk-only">UK only</SelectItem>
+                                                <SelectItem value="worldwide">Worldwide</SelectItem>
+                                              </SelectContent>
+                                            </Select>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      className="h-9"
+                                      onClick={() =>
+                                        setAdditionalBikes((prev) => [
+                                          ...prev,
+                                          { value: "", make: "", model: "", ridingArea: "" },
+                                        ])
+                                      }
+                                    >
+                                      Add another bike
+                                    </Button>
                                   </div>
                                 )}
                               </div>
@@ -3709,7 +3869,14 @@ export function LettingWizardPage() {
                             {showStep6ContentsOtherValue && (
                               <div className="space-y-2">
                                 <InlineLabelWithInfo label="What is the value of all the other contents in your property that you haven't already told us about?" />
-                                <Input value={values.contentsOtherValue ?? ""} onChange={(e) => form.setValue("contentsOtherValue", e.target.value)} className="h-10" placeholder="£ 7000" />
+                                <Input
+                                  value={values.contentsOtherValue ?? ""}
+                                  onChange={(e) =>
+                                    form.setValue("contentsOtherValue", formatMoneyInput(e.target.value))
+                                  }
+                                  className="h-10"
+                                  placeholder="£ 7000"
+                                />
                               </div>
                             )}
 
@@ -3779,6 +3946,34 @@ export function LettingWizardPage() {
                             </div>
                           </div>
                         )}
+                      </div>
+                    )}
+
+                    {stepIndex === 0 && (
+                      <div className="space-y-3 rounded-xl border border-border bg-white p-4">
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          Pikl Insurance Services may use or share your information or any named person on the quote
+                          or policy with insurers and lenders including at quotation, renewal and for certain policy
+                          amendments.
+                        </p>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          This sharing is done to assess your insurance application, perform checks with external
+                          databases for fraud prevention and provide you with their best premium, payment options and to
+                          assess whether credit is affordable.
+                        </p>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          Please note that any search via a credit reference agency (CRA) will appear on your credit
+                          report but will be clearly marked as a quotation rather than a credit application for monthly
+                          instalments.
+                        </p>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          The way in which CRAs use and share your information is explained in more detail in the Credit
+                          Reference Agency Information Notice
+                        </p>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          By pressing next you confirm that you agree with Pikl&apos;s Terms of Business, Website Terms of
+                          Use and that you have read our Privacy Policy.
+                        </p>
                       </div>
                     )}
 
