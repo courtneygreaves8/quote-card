@@ -31,7 +31,6 @@ const FIELDS = [
     label: "Full name",
     inputId: "create-account-modal-name",
     type: "text" as const,
-    value: "John Smith",
     placeholder: "Your full name",
   },
   {
@@ -39,7 +38,6 @@ const FIELDS = [
     label: "Email",
     inputId: "create-account-modal-email",
     type: "email" as const,
-    value: "john.smith@example.com",
     placeholder: "you@example.com",
   },
   {
@@ -47,7 +45,6 @@ const FIELDS = [
     label: "Mobile number",
     inputId: "create-account-modal-mobile",
     type: "tel" as const,
-    value: "07700 900123",
     placeholder: "07XXX XXXXXX",
   },
 ]
@@ -63,7 +60,7 @@ export function CreateAccountModal({
   const getInitialValues = useCallback(() => {
     return FIELDS.map((field) => {
       const prefillValue = prefill?.[field.id as keyof typeof prefill]
-      return prefillValue && prefillValue.trim().length > 0 ? prefillValue : field.value
+      return prefillValue && prefillValue.trim().length > 0 ? prefillValue : ""
     })
   }, [prefill])
 

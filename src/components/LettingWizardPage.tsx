@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { ArrowLeft, ArrowRight, Check, Info, Mailbox, Menu, ShieldCheck, ShieldPlus } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Info, LogIn, Mailbox, Menu, ShieldCheck, ShieldPlus, UserPlus } from "lucide-react"
 
+import { CreateAccountModal } from "@/components/CreateAccountModal"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
+import { LoginModal } from "@/components/LoginModal"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -201,10 +203,36 @@ function TrueFalseToggle({
 export function LettingWizardPage() {
   const [helpOpen, setHelpOpen] = useState(false)
   const [helpTopic, setHelpTopic] = useState<HelpTopic | null>(null)
+  const [wizardMenuOpen, setWizardMenuOpen] = useState(false)
+  const [createAccountOpen, setCreateAccountOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
+  const [createAccountPrefill, setCreateAccountPrefill] = useState<{
+    name?: string
+    email?: string
+    mobile?: string
+  }>({})
   const [stepIndex, setStepIndex] = useState<0 | 1 | 2 | 3 | 4>(() => {
     if (typeof window === "undefined") return 0
     return window.location.hash === "#letting-about" ? 1 : 0
   })
+
+  const openCreateAccountModal = () => {
+    if (typeof window !== "undefined") {
+      const raw = window.localStorage.getItem(CREATE_ACCOUNT_PREFILL_STORAGE_KEY)
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw) as { name?: string; email?: string; mobile?: string }
+          setCreateAccountPrefill(parsed ?? {})
+        } catch {
+          setCreateAccountPrefill({})
+        }
+      } else {
+        setCreateAccountPrefill({})
+      }
+    }
+
+    setCreateAccountOpen(true)
+  }
 
   const mainScrollRef = useRef<HTMLElement | null>(null)
 
@@ -690,11 +718,13 @@ export function LettingWizardPage() {
                       mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
                     }}
                   >
-                    <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-border text-[11px]">
+                    <span className="mr-2 inline-flex h-5 w-5 items-center justify-center text-[11px]">
                       {isComplete ? (
-                        <Check className="h-[4px] w-[4px]" aria-hidden />
+                        <Check className="h-3 w-3" aria-hidden />
                       ) : (
-                        idx + 1
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-border">
+                          {idx + 1}
+                        </span>
                       )}
                     </span>
                     {step}
@@ -731,6 +761,7 @@ export function LettingWizardPage() {
               size="icon"
               className="absolute right-4 top-2 h-8 w-8 sm:right-6"
               aria-label="Wizard menu"
+              onClick={() => setWizardMenuOpen(true)}
             >
               <Menu className="h-4 w-4" aria-hidden />
             </Button>
@@ -2069,6 +2100,51 @@ export function LettingWizardPage() {
       </div>
 
       <HelpFloatingButton />
+
+      <Sheet open={wizardMenuOpen} onOpenChange={setWizardMenuOpen}>
+        <SheetContent side="right" className="w-full max-w-xs bg-white p-0">
+          <div className="p-6">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="mt-4 flex flex-col gap-3">
+              <Button
+                variant="outline"
+                className="w-full justify-center gap-2 border-border"
+                onClick={() => {
+                  setWizardMenuOpen(false)
+                  setLoginOpen(true)
+                }}
+              >
+                <LogIn className="h-4 w-4" />
+                Login
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-center gap-2 border-border"
+                onClick={() => {
+                  setWizardMenuOpen(false)
+                  openCreateAccountModal()
+                }}
+              >
+                <UserPlus className="h-4 w-4" />
+                Create account
+              </Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      <LoginModal
+        open={loginOpen}
+        onOpenChange={setLoginOpen}
+        onCreateAccount={openCreateAccountModal}
+      />
+      <CreateAccountModal
+        open={createAccountOpen}
+        onOpenChange={setCreateAccountOpen}
+        prefill={createAccountPrefill}
+      />
 
       <Sheet open={helpOpen} onOpenChange={setHelpOpen}>
         <SheetContent side="right" className="flex h-full w-full max-w-md flex-col bg-white p-0">
