@@ -7,6 +7,8 @@ import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { LAYOUT_PADDING_X } from "@/lib/constants"
 import { LogIn, Menu, Rocket, UserPlus } from "lucide-react"
 
+const CREATE_ACCOUNT_PREFILL_STORAGE_KEY = "quote-card:create-account-prefill"
+
 interface NavbarProps {
   activeLayout?: "default" | "alt"
   onSelectLayout?: (variant: "default" | "alt") => void
@@ -19,9 +21,32 @@ export function Navbar({
   onBrandClick,
 }: NavbarProps) {
   const [createAccountOpen, setCreateAccountOpen] = useState(false)
+  const [createAccountPrefill, setCreateAccountPrefill] = useState<{
+    name?: string
+    email?: string
+    mobile?: string
+  }>({})
   const [loginOpen, setLoginOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+
+  const openCreateAccountModal = () => {
+    if (typeof window !== "undefined") {
+      const raw = window.localStorage.getItem(CREATE_ACCOUNT_PREFILL_STORAGE_KEY)
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw) as { name?: string; email?: string; mobile?: string }
+          setCreateAccountPrefill(parsed ?? {})
+        } catch {
+          setCreateAccountPrefill({})
+        }
+      } else {
+        setCreateAccountPrefill({})
+      }
+    }
+
+    setCreateAccountOpen(true)
+  }
 
   return (
     <>
@@ -72,7 +97,7 @@ export function Navbar({
               variant="outline"
               size="sm"
               className="gap-1.5 border-border"
-              onClick={() => setCreateAccountOpen(true)}
+              onClick={openCreateAccountModal}
             >
               <UserPlus className="h-4 w-4" />
               Create account
@@ -94,11 +119,12 @@ export function Navbar({
       <LoginModal
         open={loginOpen}
         onOpenChange={setLoginOpen}
-        onCreateAccount={() => setCreateAccountOpen(true)}
+        onCreateAccount={openCreateAccountModal}
       />
       <CreateAccountModal
         open={createAccountOpen}
         onOpenChange={setCreateAccountOpen}
+        prefill={createAccountPrefill}
       />
       <HelpModal open={helpOpen} onOpenChange={setHelpOpen} />
       {/* Mobile nav menu */}
@@ -136,7 +162,7 @@ export function Navbar({
               className="w-full justify-center gap-1.5 border-border"
               onClick={() => {
                 setNavOpen(false)
-                setCreateAccountOpen(true)
+                openCreateAccountModal()
               }}
             >
               <UserPlus className="h-4 w-4" />

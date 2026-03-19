@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { ArrowLeft, ArrowRight, Check, Info, Mailbox, ShieldCheck, ShieldPlus } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Info, Mailbox, Menu, ShieldCheck, ShieldPlus } from "lucide-react"
 
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { Button } from "@/components/ui/button"
@@ -69,7 +69,8 @@ type HelpTopic =
   | "activity"
   | "sharing"
 
-const STEPS = ["Your letting", "About you", "Our products", "Assumptions", "Property details", "Cover"] as const
+const STEPS = ["Your letting", "About you", "Our products", "Assumptions", "Property details", "Cover", "Quotes"] as const
+const CREATE_ACCOUNT_PREFILL_STORAGE_KEY = "quote-card:create-account-prefill"
 
 function DonutProgress({
   value,
@@ -233,6 +234,25 @@ export function LettingWizardPage() {
   })
 
   const values = form.watch()
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const first = values.firstName?.trim() ?? ""
+    const last = values.lastName?.trim() ?? ""
+    const fullName = [first, last].filter(Boolean).join(" ").trim()
+    const email = values.email?.trim() ?? ""
+    const mobile = values.mobile?.trim() ?? ""
+
+    window.localStorage.setItem(
+      CREATE_ACCOUNT_PREFILL_STORAGE_KEY,
+      JSON.stringify({
+        name: fullName,
+        email,
+        mobile,
+      })
+    )
+  }, [values.firstName, values.lastName, values.email, values.mobile])
   const showShortTerm = stepIndex === 0 && values.propertyToInsure != null
   const showActivity = stepIndex === 0 && showShortTerm && values.shortTermBasis != null
   const showSharing = stepIndex === 0 && showActivity && values.activity != null
@@ -451,7 +471,7 @@ export function LettingWizardPage() {
   }, [step1Complete, step2Complete, step3Complete, step4Complete])
 
   const overallProgress = useMemo(() => {
-    return (completedSteps / 6) * 100
+    return (completedSteps / 7) * 100
   }, [completedSteps])
 
   const pageProgress = useMemo(() => {
@@ -613,7 +633,7 @@ export function LettingWizardPage() {
   }, [helpTopic])
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-neutral-50">
+    <div className="flex h-screen flex-col overflow-hidden overscroll-none bg-neutral-50">
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <aside
           className={cn(
@@ -627,7 +647,7 @@ export function LettingWizardPage() {
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-foreground">Overall progress</div>
                 <div className="text-xs text-muted-foreground">
-                  {completedSteps}/6 steps complete
+                  {completedSteps}/7 steps complete
                 </div>
               </div>
               <DonutProgress value={overallProgress} />
@@ -638,7 +658,7 @@ export function LettingWizardPage() {
             <nav className="flex w-full flex-1 flex-col gap-1 overflow-y-auto">
               {STEPS.map((step, idx) => {
                 const active = idx === stepIndex
-                const enabled = idx <= 4 || idx === 5
+                const enabled = idx <= 5 || idx === 6
                 const isComplete =
                   idx === 0
                     ? step1Complete
@@ -662,7 +682,7 @@ export function LettingWizardPage() {
                     disabled={!enabled}
                     onClick={() => {
                       if (!enabled) return
-                      if (idx === 5) {
+                      if (idx === 6) {
                         window.location.hash = ""
                         return
                       }
@@ -701,13 +721,22 @@ export function LettingWizardPage() {
         </aside>
 
         <main
-          className="min-w-0 min-h-0 flex-1 overflow-y-auto"
+          className="min-w-0 min-h-0 flex-1 overflow-y-auto overscroll-y-contain"
           ref={mainScrollRef}
         >
-          <div className="sticky top-0 z-10 border-b border-border bg-white/95">
+          <div className="sticky top-0 z-10 border-b border-border bg-white/95 relative">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="absolute right-4 top-2 h-8 w-8 sm:right-6"
+              aria-label="Wizard menu"
+            >
+              <Menu className="h-4 w-4" aria-hidden />
+            </Button>
             <div className="mx-auto w-full max-w-[968px] px-4 py-2 sm:px-6">
               {/* Step title with prev/next arrows */}
-              <div className="flex items-center gap-2 pb-1">
+              <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 pb-1">
                 <Button
                   type="button"
                   variant="ghost"
@@ -724,7 +753,7 @@ export function LettingWizardPage() {
                   <ArrowLeft className="h-4 w-4" aria-hidden />
                 </Button>
 
-                <div className="flex flex-1 items-center justify-center">
+                <div className="flex items-center justify-center">
                   <div className="inline-flex items-center bg-white">
                     <span className="text-sm font-semibold text-foreground">
                       {stepIndex === 0
@@ -742,21 +771,23 @@ export function LettingWizardPage() {
                   </div>
                 </div>
 
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  disabled={stepIndex === 4}
-                  aria-label="Next step"
-                  onClick={() => {
-                    if (stepIndex >= 4) return
-                    setStepIndex((stepIndex + 1) as 1 | 2 | 3 | 4)
-                    mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
-                  }}
-                >
-                  <ArrowRight className="h-4 w-4" aria-hidden />
-                </Button>
+                <div className="flex items-center justify-end">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    disabled={stepIndex === 4}
+                    aria-label="Next step"
+                    onClick={() => {
+                      if (stepIndex >= 4) return
+                      setStepIndex((stepIndex + 1) as 1 | 2 | 3 | 4)
+                      mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+                    }}
+                  >
+                    <ArrowRight className="h-4 w-4" aria-hidden />
+                  </Button>
+                </div>
               </div>
 
               <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">

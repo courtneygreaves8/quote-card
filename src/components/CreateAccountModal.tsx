@@ -18,6 +18,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 interface CreateAccountModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  prefill?: {
+    name?: string
+    email?: string
+    mobile?: string
+  }
 }
 
 const FIELDS = [
@@ -53,19 +58,27 @@ const inputBaseClassName =
 export function CreateAccountModal({
   open,
   onOpenChange,
+  prefill,
 }: CreateAccountModalProps) {
+  const getInitialValues = useCallback(() => {
+    return FIELDS.map((field) => {
+      const prefillValue = prefill?.[field.id as keyof typeof prefill]
+      return prefillValue && prefillValue.trim().length > 0 ? prefillValue : field.value
+    })
+  }, [prefill])
+
   const [progressStep, setProgressStep] = useState(0)
-  const [values, setValues] = useState<string[]>(() => FIELDS.map((f) => f.value))
+  const [values, setValues] = useState<string[]>(() => getInitialValues())
   const progressCleanupRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     if (!open) {
       setProgressStep(0)
-      setValues(FIELDS.map((f) => f.value))
+      setValues(getInitialValues())
       progressCleanupRef.current?.()
       progressCleanupRef.current = null
     }
-  }, [open])
+  }, [getInitialValues, open])
 
   const runProgress = useCallback(() => {
     setProgressStep(1)
