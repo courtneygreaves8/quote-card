@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { ArrowLeft, ArrowRight, Check, Info, Mail, ShieldCheck, ShieldPlus } from "lucide-react"
 
-import { Navbar } from "@/components/Navbar"
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -70,14 +69,7 @@ type HelpTopic =
   | "activity"
   | "sharing"
 
-const STEPS = [
-  "Your letting",
-  "About you",
-  "Our products",
-  "Assumptions",
-  "Property details",
-  "Cover",
-] as const
+const STEPS = ["Your letting", "About you", "Our products", "Assumptions", "Property details", "Cover"] as const
 
 function DonutProgress({
   value,
@@ -622,15 +614,6 @@ export function LettingWizardPage() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-neutral-50">
-      <Navbar
-        activeLayout="alt"
-        onBrandClick={() => {
-          setHelpOpen(false)
-          setStepIndex(0)
-          window.location.hash = "#letting"
-          mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
-        }}
-      />
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <aside
           className={cn(
@@ -649,7 +632,9 @@ export function LettingWizardPage() {
               </div>
               <DonutProgress value={overallProgress} />
             </div>
+
             <Separator className="mb-4" />
+
             <nav className="flex w-full flex-1 flex-col gap-1 overflow-y-auto">
               {STEPS.map((step, idx) => {
                 const active = idx === stepIndex
@@ -664,6 +649,7 @@ export function LettingWizardPage() {
                         : idx === 3
                           ? step4Complete
                           : false
+
                 return (
                   <Button
                     key={step}
@@ -681,6 +667,7 @@ export function LettingWizardPage() {
                         return
                       }
                       setStepIndex(idx as 0 | 1 | 2 | 3 | 4)
+                      mainScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
                     }}
                   >
                     <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-border text-[11px]">
@@ -738,10 +725,7 @@ export function LettingWizardPage() {
                 </Button>
 
                 <div className="flex flex-1 items-center justify-center">
-                  <div className="inline-flex items-center gap-2 bg-white">
-                    <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-border text-xs font-semibold text-foreground">
-                      {stepIndex + 1}
-                    </span>
+                  <div className="inline-flex items-center bg-white">
                     <span className="text-sm font-semibold text-foreground">
                       {stepIndex === 0
                         ? "Your letting"
@@ -811,7 +795,7 @@ export function LettingWizardPage() {
                     : stepIndex === 1
                       ? "Pikl will only contact you regarding your quote, new policy or policy renewal."
                       : stepIndex === 2
-                        ? "Select a product and tell us how much short-term letting you plan to do."
+                        ? "We have two options for your cover needs, all-in-one covers you for home and host insurance, while top-up is added to your exisiting home insurance plan and covers you for host insurance:"
                         : stepIndex === 3
                           ? "Please check the following statement(s) and change any that are false."
                           : "Property details coming soon."}
@@ -1656,19 +1640,11 @@ export function LettingWizardPage() {
 
                     {stepIndex === 2 && (
                       <div className="space-y-6">
-                        <div className="rounded-xl border border-border bg-white p-4">
-                          <div className="text-sm font-semibold text-foreground">
-                            Our Products
-                          </div>
-                          <p className="mt-2 text-sm text-muted-foreground">
-                            We have two options for your cover needs, all-in-one covers you for home and host insurance, while top-up is added to your exisiting home insurance plan and covers you for host insurance:
-                          </p>
-
-                          <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-                            <div className="lg:col-span-2 grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-4 items-stretch lg:grid-cols-2">
+                          <div className="lg:col-span-2 grid grid-cols-1 gap-4 items-stretch lg:grid-cols-2">
                               <label
                                 className={cn(
-                                  "relative flex cursor-pointer flex-col gap-3 rounded-xl border border-border bg-white px-4 py-4 transition-colors hover:bg-muted/40",
+                                "relative flex h-full cursor-pointer flex-col gap-3 rounded-xl border border-border bg-white px-4 pt-4 pb-4 transition-colors",
                                   values.selectedProduct === "all-in-one" &&
                                     "border-foreground bg-muted/40"
                                 )}
@@ -1734,7 +1710,7 @@ export function LettingWizardPage() {
                                 <button
                                   type="button"
                                   className={cn(
-                                    "mt-3 flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium",
+                                    "mt-auto flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium mt-4",
                                     values.selectedProduct === "all-in-one"
                                       ? "border-foreground bg-foreground text-background hover:bg-foreground"
                                       : "border-border bg-white text-foreground hover:bg-muted/40"
@@ -1762,7 +1738,7 @@ export function LettingWizardPage() {
 
                               <label
                                 className={cn(
-                                  "relative flex cursor-pointer flex-col gap-3 rounded-xl border border-border bg-white px-4 py-4 transition-colors hover:bg-muted/40",
+                                  "relative flex h-full cursor-pointer flex-col gap-3 rounded-xl border border-border bg-white px-4 pt-4 pb-4 transition-colors",
                                   values.selectedProduct === "top-up" &&
                                     "border-foreground bg-muted/40"
                                 )}
@@ -1813,7 +1789,7 @@ export function LettingWizardPage() {
                                   )}
                                 >
                                   <p className="text-sm text-muted-foreground">
-                                    Top-up is host insurance that supplies alongside your existing home
+                                    Top-up is host insurance that's applied to your existing home
                                     insurance to cover guest-related incidents.
                                   </p>
 
@@ -1827,7 +1803,7 @@ export function LettingWizardPage() {
                                 <button
                                   type="button"
                                   className={cn(
-                                    "mt-3 flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium",
+                                    "mt-auto flex h-10 w-full items-center justify-center rounded-xl border text-sm font-medium",
                                     values.selectedProduct === "top-up"
                                       ? "border-foreground bg-foreground text-background hover:bg-foreground"
                                       : "border-border bg-white text-foreground hover:bg-muted/40"
@@ -1849,7 +1825,6 @@ export function LettingWizardPage() {
                                   onChange={() => form.setValue("selectedProduct", "top-up")}
                                 />
                               </label>
-                            </div>
                           </div>
                         </div>
 
@@ -2032,7 +2007,7 @@ export function LettingWizardPage() {
                                     e.target.checked
                                   )
                                 }
-                                className="h-4 w-4 rounded border-border"
+                                className="h-4 w-4 rounded-xl border-border"
                                 aria-label="Tick to confirm there are no false statements"
                                 style={{ accentColor: "hsl(var(--purchase))" }}
                               />
