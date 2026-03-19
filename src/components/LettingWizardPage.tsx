@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { ArrowLeft, ArrowRight, Check, Info, Mail, ShieldCheck, ShieldPlus } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Info, Mailbox, ShieldCheck, ShieldPlus } from "lucide-react"
 
 import { HelpFloatingButton } from "@/components/HelpFloatingButton"
 import { Button } from "@/components/ui/button"
@@ -695,7 +695,7 @@ export function LettingWizardPage() {
               }}
             >
               <ArrowLeft className="h-4 w-4" aria-hidden />
-              Back to Pikl
+              Back to Pikl.com
             </Button>
           </div>
         </aside>
@@ -774,7 +774,7 @@ export function LettingWizardPage() {
               <CardHeader>
                 <CardTitle
                   className={cn(
-                    "text-xl font-semibold"
+                    "text-[18px] font-semibold"
                   )}
                 >
                   {stepIndex === 0
@@ -1305,7 +1305,9 @@ export function LettingWizardPage() {
                         {personalSectionComplete && (
                           <div className="rounded-xl border border-border bg-white p-4">
                               <div className="flex items-center gap-2">
-                                <Mail className="h-4 w-4 text-foreground" aria-hidden />
+                                <div className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-[#FCFCFC]">
+                                  <Mailbox className="h-4 w-4 text-foreground" aria-hidden />
+                                </div>
                                 <div
                                   className="text-sm font-semibold text-foreground"
                                 >
@@ -1652,7 +1654,7 @@ export function LettingWizardPage() {
                               >
                                 {/* Ensure selecting the whole card updates RHF value */}
                                 <div className="flex items-start justify-between gap-3">
-                                  <div className="flex items-start gap-3">
+                                  <div className="flex flex-col items-start gap-2">
                                     <div
                                       className={cn(
                                         "flex h-10 w-10 items-center justify-center rounded-lg border border-border",
@@ -1664,13 +1666,10 @@ export function LettingWizardPage() {
                                       <ShieldCheck className="h-5 w-5 text-foreground" aria-hidden />
                                     </div>
                                     <div className="flex flex-col">
-                                      <div className="text-sm font-medium text-muted-foreground">
-                                        All-in-one
-                                      </div>
                                       <div
                                         className="text-sm font-semibold text-foreground"
                                       >
-                                        Home & Host Cover
+                                        All-in-one
                                       </div>
                                     </div>
                                   </div>
@@ -1683,18 +1682,11 @@ export function LettingWizardPage() {
                                         : "border-border text-muted-foreground"
                                     )}
                                   >
-                                    Full cover
+                                    Home & Host
                                   </div>
                                 </div>
 
-                                <div
-                                  className={cn(
-                                    "rounded-2xl border border-border px-4 py-3",
-                                    values.selectedProduct === "all-in-one"
-                                      ? "bg-[#FFFFFF]"
-                                      : "bg-[#FCFCFC]"
-                                  )}
-                                >
+                                <div className="px-0 py-0 border-0 bg-[#FCFCFC]">
                                   <p className="text-sm text-muted-foreground">
                                     All-in-one is home and host insurance that cover your building and/or
                                     contents, plus guest-related incidents.
@@ -1745,7 +1737,7 @@ export function LettingWizardPage() {
                                 onClick={() => form.setValue("selectedProduct", "top-up")}
                               >
                                 <div className="flex items-start justify-between gap-3">
-                                  <div className="flex items-start gap-3">
+                                  <div className="flex flex-col items-start gap-2">
                                     <div
                                       className={cn(
                                         "flex h-10 w-10 items-center justify-center rounded-lg border border-border",
@@ -1757,13 +1749,10 @@ export function LettingWizardPage() {
                                       <ShieldPlus className="h-5 w-5 text-foreground" aria-hidden />
                                     </div>
                                     <div className="flex flex-col">
-                                      <div className="text-sm font-medium text-muted-foreground">
-                                        Top-up
-                                      </div>
                                       <div
                                         className="text-sm font-semibold text-foreground"
                                       >
-                                        Host Cover
+                                        Top-up
                                       </div>
                                     </div>
                                   </div>
@@ -1776,18 +1765,11 @@ export function LettingWizardPage() {
                                         : "border-border text-muted-foreground"
                                     )}
                                   >
-                                    Top-up cover
+                                    Host-only
                                   </div>
                                 </div>
 
-                                <div
-                                  className={cn(
-                                    "rounded-2xl border border-border px-4 py-3",
-                                    values.selectedProduct === "top-up"
-                                      ? "bg-[#FFFFFF]"
-                                      : "bg-[#FCFCFC]"
-                                  )}
-                                >
+                                <div className="px-0 py-0 border-0 bg-[#FCFCFC]">
                                   <p className="text-sm text-muted-foreground">
                                     Top-up is host insurance that's applied to your existing home
                                     insurance to cover guest-related incidents.

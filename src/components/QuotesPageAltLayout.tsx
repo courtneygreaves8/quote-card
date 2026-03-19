@@ -155,7 +155,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                 id="alt-layout-mobile-heading"
                 className="mb-4 hidden max-[1295px]:block"
               >
-                <h1 className="text-xl max-[767px]:text-2xl max-[480px]:text-xl font-bold tracking-tight text-foreground">
+                <h1 className="text-[20px] max-[767px]:text-[20px] max-[480px]:text-[20px] font-bold tracking-tight text-foreground">
                   We have {visibleQuoteCount} quote{visibleQuoteCount === 1 ? "" : "s"} for you.
                 </h1>
                 <p className="mt-1 text-base max-[480px]:text-sm text-muted-foreground">
@@ -528,7 +528,7 @@ export function QuotesPageAltLayout(props: QuotesPageAltLayoutProps) {
                   className="mb-8 flex w-full flex-col gap-4 min-[960px]:flex-row min-[960px]:items-start min-[960px]:justify-between"
                 >
                   <div className="min-w-0 flex-1">
-                    <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                    <h1 className="text-[20px] font-bold tracking-tight text-foreground">
                       We've found {visibleQuoteCount} quote{visibleQuoteCount === 1 ? "" : "s"} for you.
                     </h1>
                     <p className="mt-1 text-muted-foreground">
